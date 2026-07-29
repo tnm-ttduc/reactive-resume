@@ -15,6 +15,6 @@ describe("getTrustedOrigins", () => {
 	});
 
 	it("does not add a loopback alias for non-localhost app URLs", () => {
-		expect(getTrustedOrigins("https://example.com")).not.toContain("https://localhost");
+		expect(getTrustedOrigins("https://example.com")).toEqual(["https://example.com"]);
 	});
 });

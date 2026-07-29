@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { getAppUrl } from "@/libs/app-url";
 import { createRootStructuredDataScript, getCanonicalRootUrl } from "@/libs/seo";
 import { AiSpotlight } from "./-sections/ai-spotlight";
 import { Faq } from "./-sections/faq";
@@ -13,7 +14,7 @@ import { Workflow } from "./-sections/workflow";
 export const Route = createFileRoute("/_home/")({
 	component: RouteComponent,
 	head: () => {
-		const appUrl = typeof window !== "undefined" ? window.location.origin : "http://localhost:3000";
+		const appUrl = getAppUrl();
 		const canonicalUrl = getCanonicalRootUrl(appUrl);
 
 		return {

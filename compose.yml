@@ -87,8 +87,8 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - path: .env.example
-        required: false
+      - path: .env
+        required: true
     volumes:
       - ./data:/app/data
     depends_on:

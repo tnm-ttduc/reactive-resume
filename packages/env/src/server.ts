@@ -2,6 +2,7 @@ import { isAbsolute, join } from "node:path";
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
 import { findWorkspaceRoot } from "@reactive-resume/utils/monorepo.node";
+import { isReleaseSafeAppUrl } from "./app-url";
 
 const workspaceRoot = findWorkspaceRoot();
 
@@ -18,7 +19,9 @@ if (workspaceRoot) {
 export const env = createEnv({
 	server: {
 		// Application
-		APP_URL: z.url({ protocol: /https?/ }),
+		APP_URL: z
+			.url({ protocol: /https?/ })
+			.refine(isReleaseSafeAppUrl, "APP_URL must use the deployed application hostname in production, not localhost"),
 		SERVER_PORT: z.coerce.number().int().min(1).max(65535).default(3001),
 
 		// Database

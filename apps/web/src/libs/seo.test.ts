@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { appUrlPlaceholder } from "./app-url";
 import {
 	createNoindexFollowMeta,
 	createRootStructuredDataScript,
@@ -7,8 +8,8 @@ import {
 } from "./seo";
 
 describe("getCanonicalRootUrl", () => {
-	it("uses the production root when no origin is available", () => {
-		expect(getCanonicalRootUrl()).toBe("http://localhost:3000/");
+	it("uses the runtime-replaceable app URL when no browser origin is available", () => {
+		expect(getCanonicalRootUrl()).toBe(`${appUrlPlaceholder}/`);
 	});
 
 	it("normalizes an app origin to the root URL", () => {

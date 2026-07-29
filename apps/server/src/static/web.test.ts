@@ -15,7 +15,13 @@ vi.mock("@hono/node-server/serve-static", () => ({
 	serveStatic: vi.fn(() => vi.fn()),
 }));
 
-const { handleWebApp } = await import("./web");
+vi.mock("@reactive-resume/env/server", () => ({
+	env: {
+		APP_URL: "https://hr.internal.example/",
+	},
+}));
+
+const { handleWebApp, injectRuntimeAppUrl } = await import("./web");
 
 describe("web app fallback classification", () => {
 	beforeEach(() => {
@@ -24,12 +30,23 @@ describe("web app fallback classification", () => {
 	});
 
 	it("serves the shell for the root app route without noindex", async () => {
+		vi.mocked(fs.readFile).mockResolvedValue(
+			'<link rel="canonical" href="https://app.tnm.invalid/"><meta property="og:url" content="https://app.tnm.invalid">',
+		);
 		const response = await handleWebApp(new Request("https://example.com/"));
 
 		expect(response.status).toBe(200);
 		expect(response.headers.get("Content-Type")).toBe("text/html; charset=UTF-8");
 		expect(response.headers.get("X-Robots-Tag")).toBeNull();
-		expect(await response.text()).toBe("<html>app</html>");
+		expect(await response.text()).toBe(
+			'<link rel="canonical" href="https://hr.internal.example/"><meta property="og:url" content="https://hr.internal.example">',
+		);
+	});
+
+	it("replaces every build-time URL placeholder with the normalized runtime APP_URL", () => {
+		expect(
+			injectRuntimeAppUrl("https://app.tnm.invalid/ https://app.tnm.invalid/og.png", "https://hr.internal.example/"),
+		).toBe("https://hr.internal.example/ https://hr.internal.example/og.png");
 	});
 
 	it.each(["/", "/alice/resume"])("sets framing and report-only CSP security headers on %s", async (pathname) => {

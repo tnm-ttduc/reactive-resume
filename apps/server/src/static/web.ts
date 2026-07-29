@@ -2,6 +2,9 @@ import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { serveStatic } from "@hono/node-server/serve-static";
+import { env } from "@reactive-resume/env/server";
+
+const appUrlPlaceholder = "https://app.tnm.invalid";
 
 function resolveWebDistPath() {
 	const candidates = [
@@ -31,7 +34,11 @@ const reservedPublicResumeSegments = new Set([
 	"templates",
 ]);
 
-export const serveWebDistStatic = serveStatic({ root: staticRoot });
+export const serveWebDistStatic = serveStatic({
+	root: staticRoot,
+	// The root HTML must pass through handleWebApp so runtime APP_URL values can be injected.
+	rewriteRequestPath: (pathname) => (pathname === "/" ? "/__tnm_runtime_index__" : pathname),
+});
 
 function isAssetPath(pathname: string): boolean {
 	return pathname.split("/").pop()?.includes(".") ?? false;
@@ -83,6 +90,10 @@ function notFoundResponse(options: { head?: boolean; noindex?: boolean } = {}) {
 	});
 }
 
+export function injectRuntimeAppUrl(html: string, appUrl: string): string {
+	return html.replaceAll(appUrlPlaceholder, appUrl.replace(/\/+$/, ""));
+}
+
 // ponytail: GET and HEAD share the same routing logic; method determines body presence
 export async function handleWebApp(request: Request) {
 	const isHead = request.method === "HEAD";
@@ -97,6 +108,6 @@ export async function handleWebApp(request: Request) {
 
 	if (isHead) return new Response(null, { status: 200, headers });
 
-	const html = await fs.readFile(indexHtmlPath, "utf-8");
+	const html = injectRuntimeAppUrl(await fs.readFile(indexHtmlPath, "utf-8"), env.APP_URL);
 	return new Response(html, { headers });
 }

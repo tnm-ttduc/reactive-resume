@@ -25,6 +25,7 @@ import { CommandPalette } from "@/features/command-palette";
 import { ThemeProvider } from "@/features/theme/provider";
 import { ConfirmDialogProvider } from "@/hooks/use-confirm";
 import { PromptDialogProvider } from "@/hooks/use-prompt";
+import { getAppUrl } from "@/libs/app-url";
 import { getSession } from "@/libs/auth/session";
 import { getLocale, isRTL, loadLocale } from "@/libs/locale";
 import { client } from "@/libs/orpc/client";
@@ -48,7 +49,7 @@ const description =
 export const Route = createRootRouteWithContext<RouterContext>()({
 	component: RootComponent,
 	head: () => {
-		const appUrl = typeof window !== "undefined" ? window.location.origin : "http://localhost:3000";
+		const appUrl = getAppUrl();
 
 		return {
 			links: [

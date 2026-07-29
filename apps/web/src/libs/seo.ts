@@ -1,11 +1,10 @@
-const productionRootUrl = "http://localhost:3000/";
+import { getAppUrl } from "./app-url";
+
 const appName = "TNM HR Platform";
 
 type JsonLd = Record<string, unknown>;
 
-export const getCanonicalRootUrl = (origin?: string): string => {
-	if (!origin) return productionRootUrl;
-
+export const getCanonicalRootUrl = (origin = getAppUrl()): string => {
 	const url = new URL(origin);
 	url.pathname = "/";
 	url.search = "";
