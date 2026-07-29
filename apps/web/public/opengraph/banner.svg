@@ -1,4 +1,5 @@
 <svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>TNM HR Platform</title>
   <rect width="1280" height="720" fill="#09090B"/>
   <circle cx="640" cy="280" r="112" fill="#FAFAFA"/>
   <path d="M564 238H716V268H655V354H625V268H564V238Z" fill="#09090B"/>
