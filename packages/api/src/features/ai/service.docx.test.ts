@@ -85,6 +85,7 @@ function createDocxBase64(text: string): string {
 	return Buffer.concat([local, central, eocd]).toString("base64");
 }
 
+vi.resetModules();
 const { aiService } = await import("./service");
 
 describe("AI DOCX parsing", () => {
