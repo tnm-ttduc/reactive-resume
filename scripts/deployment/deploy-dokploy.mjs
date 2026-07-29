@@ -30,7 +30,7 @@ function parsePositiveInteger(name, fallback) {
 }
 
 function normalizeBaseUrl(value) {
-	return value.replace(/\/+$/, "");
+	return value.replace(/\/+$/, "").replace(/\/api$/, "");
 }
 
 function getConfig() {

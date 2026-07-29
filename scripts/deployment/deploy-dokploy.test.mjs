@@ -78,7 +78,7 @@ test("updates the image, deploys, waits, and verifies health", async (context) =
 		DOKPLOY_APPLICATION_ID: "app-123",
 		DOKPLOY_IMAGE: "ghcr.io/tnm/platform@sha256:abc",
 		DOKPLOY_POLL_INTERVAL_MS: "10",
-		DOKPLOY_URL: baseUrl,
+		DOKPLOY_URL: `${baseUrl}/api`,
 	});
 
 	assert.equal(result.code, 0, result.stderr);

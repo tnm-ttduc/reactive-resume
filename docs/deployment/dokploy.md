@@ -131,7 +131,7 @@ after migrations follow an expand-migrate-contract strategy and concurrent start
 The helper never reads a checked-in secret file and never prints the API key or registry password.
 
 ```bash
-export DOKPLOY_URL="https://dokploy.example.com"
+export DOKPLOY_URL="https://dokploy.example.com/api"
 export DOKPLOY_API_KEY="<api-key>"
 export DOKPLOY_APPLICATION_ID="<application-id>"
 export DOKPLOY_IMAGE="ghcr.io/owner/repository@sha256:<digest>"
