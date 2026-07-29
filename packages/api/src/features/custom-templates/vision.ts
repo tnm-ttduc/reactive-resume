@@ -190,7 +190,7 @@ export function parseTemplateVisionBlueprint(text: string): TemplateVisionBluepr
 	return templateVisionBlueprintSchema.parse(normalizeVisionBlueprintEnvelope(envelope));
 }
 
-export async function buildVisionFileParts(source: VisionSource): Promise<FilePart[]> {
+async function buildVisionFileParts(source: VisionSource): Promise<FilePart[]> {
 	if (source.mediaType !== "application/pdf") {
 		return [
 			{

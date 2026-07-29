@@ -96,7 +96,10 @@ function getEnvironmentProvider(): RunnableAiProvider | null {
 	if (configuredValues === 0) return null;
 	if (configuredValues !== 3) throw new Error("AI_ENV_PROVIDER_INCOMPLETE");
 
-	const normalizedBaseURL = resolveAiBaseUrl({ provider: "openai-compatible", baseURL });
+	const normalizedBaseURL = resolveAiBaseUrl(
+		{ provider: "openai-compatible", baseURL },
+		{ allowUnsafe: env.FLAG_ALLOW_UNSAFE_AI_BASE_URL },
+	);
 	const timestamp = new Date(0);
 
 	return {
@@ -128,7 +131,10 @@ function normalizeBaseUrl(input: { provider: AIProvider; baseURL?: string | null
 	const trimmed = input.baseURL?.trim() ?? "";
 	if (!trimmed) return null;
 
-	return resolveAiBaseUrl({ provider: input.provider, baseURL: trimmed });
+	return resolveAiBaseUrl(
+		{ provider: input.provider, baseURL: trimmed },
+		{ allowUnsafe: env.FLAG_ALLOW_UNSAFE_AI_BASE_URL },
+	);
 }
 
 function orderByLastUsedAtDescNullsLast() {

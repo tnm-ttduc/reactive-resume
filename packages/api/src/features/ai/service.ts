@@ -37,6 +37,7 @@ import {
 	resumePatchProposalToolOutputSchema,
 } from "@reactive-resume/ai/tools/patch-proposal";
 import { aiProviderSchema } from "@reactive-resume/ai/types";
+import { env } from "@reactive-resume/env/server";
 import { applyResumePatches } from "@reactive-resume/resume/patch";
 import { resumeAnalysisSchema } from "@reactive-resume/schema/resume/analysis";
 import { supportsProviderNativeWebSearch } from "./capabilities";
@@ -92,7 +93,7 @@ const ZIP_DEFLATED_METHOD = 8;
 
 export function getModel(input: GetModelInput) {
 	const { provider, model, apiKey } = input;
-	const baseURL = resolveAiBaseUrl(input);
+	const baseURL = resolveAiBaseUrl(input, { allowUnsafe: env.FLAG_ALLOW_UNSAFE_AI_BASE_URL });
 
 	return match(provider)
 		.with("openai", () => createOpenAI({ apiKey, baseURL }).chat(model))
@@ -263,7 +264,10 @@ function normalizeNonStreamingSseBody(responseText: string): string | undefined 
 export function getAgentModel(input: GetModelInput) {
 	if (!supportsProviderNativeWebSearch(input)) return getModel(input);
 
-	return createOpenAI({ apiKey: input.apiKey, baseURL: resolveAiBaseUrl(input) }).responses(input.model);
+	return createOpenAI({
+		apiKey: input.apiKey,
+		baseURL: resolveAiBaseUrl(input, { allowUnsafe: env.FLAG_ALLOW_UNSAFE_AI_BASE_URL }),
+	}).responses(input.model);
 }
 
 const aiCredentialsSchema = z.object({

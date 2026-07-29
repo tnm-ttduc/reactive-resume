@@ -11,9 +11,6 @@ const LAST_KNOWN = {
 // ponytail: file-based disk cache replaced with module-level memo; LAST_KNOWN fallbacks cover restarts
 const memCache = new Map<string, { value: number; cachedAt: number }>();
 
-/** Clear all cached statistics. Exposed for test isolation only. */
-export const clearStatisticsCache = () => memCache.clear();
-
 const getCached = (key: string): number | null => {
 	const entry = memCache.get(key);
 	if (!entry || Date.now() - entry.cachedAt >= CACHE_DURATION_MS) return null;
