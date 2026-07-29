@@ -1,9 +1,9 @@
 ---
 title: "Using the MCP Server"
-description: "Connect Reactive Resume to AI tools like Claude Desktop, Cursor, and Codex through the Model Context Protocol to edit and manage resumes via chat."
+description: "Connect TNM HR Platform to AI tools like Claude Desktop, Cursor, and Codex through the Model Context Protocol to edit and manage resumes via chat."
 ---
 
-The Reactive Resume MCP server lets you manage and modify your resumes and job applications through any MCP-compatible AI tool - Claude Desktop, Cursor, Codex, and more. It connects to the Reactive Resume API and exposes tools for resume editing, Application Tracker workflows, and AI-assisted job application tasks using natural language.
+The TNM HR Platform MCP server lets you manage and modify your resumes and job applications through any MCP-compatible AI tool - Claude Desktop, Cursor, Codex, and more. It connects to the TNM HR Platform API and exposes tools for resume editing, Application Tracker workflows, and AI-assisted job application tasks using natural language.
 
 ## What is MCP?
 
@@ -13,7 +13,7 @@ The [Model Context Protocol (MCP)](https://modelcontextprotocol.io) is a standar
 
 <Steps>
   <Step title="Choose your authentication method">
-    Reactive Resume MCP supports two authentication methods:
+    TNM HR Platform MCP supports two authentication methods:
 
     - **OAuth2 (recommended):** best user experience for clients that support MCP OAuth.
     - **API key (fallback):** works in all clients that can send custom headers.
@@ -23,7 +23,7 @@ The [Model Context Protocol (MCP)](https://modelcontextprotocol.io) is a standar
   </Step>
 
   <Step title="If using API key, create one">
-    Head over to [https://rxresu.me](https://rxresu.me) (or your self-hosted instance), sign in, and navigate to **Settings → API Keys**. Click **Create a new API key**, give it a name, and copy the secret — it's only shown once.
+    Head over to [http://localhost:3000](http://localhost:3000) (or your self-hosted instance), sign in, and navigate to **Settings → API Keys**. Click **Create a new API key**, give it a name, and copy the secret — it's only shown once.
 
     For the full walkthrough, see [Using the API](/guides/using-the-api).
 
@@ -45,8 +45,8 @@ Most OAuth-capable clients only need the MCP URL:
 ```json
 {
   "mcpServers": {
-    "reactive-resume": {
-      "url": "https://rxresu.me/mcp"
+    "tnm-hr-platform": {
+      "url": "http://localhost:3000/mcp"
     }
   }
 }
@@ -61,8 +61,8 @@ If OAuth is not supported in your client, send `x-api-key`:
 ```json
 {
   "mcpServers": {
-    "reactive-resume": {
-      "url": "https://rxresu.me/mcp",
+    "tnm-hr-platform": {
+      "url": "http://localhost:3000/mcp",
       "headers": {
         "x-api-key": "your-api-key"
       }
@@ -80,9 +80,9 @@ If your client only supports `command` / `args` (for example, local-only Claude 
 ```json
 {
   "mcpServers": {
-    "reactive-resume": {
+    "tnm-hr-platform": {
       "command": "npx",
-      "args": ["mcp-remote", "https://rxresu.me/mcp", "--header", "x-api-key:your-api-key"]
+      "args": ["mcp-remote", "http://localhost:3000/mcp", "--header", "x-api-key:your-api-key"]
     }
   }
 }
@@ -99,9 +99,9 @@ If your client only supports `command` / `args` (for example, local-only Claude 
 | Codex             | `~/.codex/config.toml` or `.codex/config.toml` ([docs](https://developers.openai.com/codex/mcp)) |
 | Other MCP clients | Refer to the client's documentation                                                              |
 
-## Authentication Details (How Reactive Resume MCP Works)
+## Authentication Details (How TNM HR Platform MCP Works)
 
-Reactive Resume MCP accepts authentication in this order:
+TNM HR Platform MCP accepts authentication in this order:
 
 1. **Bearer token (OAuth2 access token)** via `Authorization: Bearer <token>`
 2. **API key fallback** via `x-api-key: <key>`
@@ -114,9 +114,9 @@ This lets OAuth-capable MCP clients discover and complete the OAuth flow automat
 
 ### OAuth2 flow used by this server
 
-Reactive Resume is configured as an OAuth authorization server for MCP clients:
+TNM HR Platform is configured as an OAuth authorization server for MCP clients:
 
-- The MCP endpoint is `https://rxresu.me/mcp`.
+- The MCP endpoint is `http://localhost:3000/mcp`.
 - OAuth discovery metadata is exposed under `/.well-known/*` endpoints.
 - The login/authorization route is `/auth/oauth`.
 - If the user is not signed in, `/auth/oauth` redirects to `/auth/login`, then resumes OAuth.
@@ -132,8 +132,8 @@ Reactive Resume is configured as an OAuth authorization server for MCP clients:
 ```json
 {
   "mcpServers": {
-    "reactive-resume": {
-      "url": "https://rxresu.me/mcp"
+    "tnm-hr-platform": {
+      "url": "http://localhost:3000/mcp"
     }
   }
 }
@@ -144,8 +144,8 @@ Reactive Resume is configured as an OAuth authorization server for MCP clients:
 ```json
 {
   "mcpServers": {
-    "reactive-resume": {
-      "url": "https://rxresu.me/mcp",
+    "tnm-hr-platform": {
+      "url": "http://localhost:3000/mcp",
       "headers": {
         "x-api-key": "your-api-key"
       }
@@ -159,26 +159,26 @@ Reactive Resume is configured as an OAuth authorization server for MCP clients:
 Add server:
 
 ```bash
-codex mcp add reactive-resume --url https://rxresu.me/mcp
+codex mcp add tnm-hr-platform --url http://localhost:3000/mcp
 ```
 
 Then log in with OAuth:
 
 ```bash
-codex mcp login reactive-resume
+codex mcp login tnm-hr-platform
 ```
 
 API key fallback (`config.toml`):
 
 ```toml
-[mcp_servers."reactive-resume"]
-url = "https://rxresu.me/mcp"
+[mcp_servers."tnm-hr-platform"]
+url = "http://localhost:3000/mcp"
 http_headers = { "x-api-key" = "your-api-key" }
 ```
 
 ### Claude (web app custom connector)
 
-Add `https://rxresu.me/mcp` as a custom remote MCP connector, then connect with OAuth in Claude's connector UI.
+Add `http://localhost:3000/mcp` as a custom remote MCP connector, then connect with OAuth in Claude's connector UI.
 
 ### Claude Desktop (local config file)
 
@@ -194,7 +194,7 @@ Use `mcp-remote` bridge with API key (example shown above in **Method 2**).
 
 ## Self-Hosting
 
-If you're running a self-hosted Reactive Resume instance, replace `https://rxresu.me/mcp` with your instance URL:
+If you're running a self-hosted TNM HR Platform instance, replace `http://localhost:3000/mcp` with your instance URL:
 
 ```json
 {
@@ -346,7 +346,7 @@ For a complete workflow and prompt library, see [Managing applications with MCP]
 | OAuth login opens but fails redirect/callback                 | Confirm your client's MCP OAuth callback settings and retry the connection                                                     |
 | "API error (401)"                                             | Your API key is invalid or expired. Create a new one in **Settings → API Keys**                                                |
 | "API error (404)"                                             | The resume ID doesn't exist. Use `list_resumes` to find valid IDs                                                             |
-| "API error (403)"                                             | The resume is locked. Unlock it in the Reactive Resume dashboard                                                               |
+| "API error (403)"                                             | The resume is locked. Unlock it in the TNM HR Platform dashboard                                                               |
 | Connection refused                                            | Check that the URL is correct and the instance is running                                                                      |
 | "ReferenceError: File is not defined" when using `mcp-remote` | You're running Node.js 18. `mcp-remote` requires **Node.js 20 or later** — upgrade with `nvm use 20` or `nvm alias default 20` |
 | "Application documents must be PDF files"                     | `attach_application_document` only accepts `contentType: "application/pdf"` and base64-encoded PDF bytes                       |

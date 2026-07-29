@@ -27,7 +27,7 @@ export const Horizontal = () => (
 		</div>
 		<Separator />
 		<span style={{ color: "var(--muted-foreground)" }}>
-			Building resume tooling at Reactive Resume. Open-source enthusiast.
+			Building resume tooling at TNM HR Platform. Open-source enthusiast.
 		</span>
 	</div>
 );

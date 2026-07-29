@@ -1,14 +1,14 @@
 {
 	"$schema": "https://mintlify.com/docs.json",
 	"theme": "mint",
-	"name": "Reactive Resume",
+	"name": "TNM HR Platform",
 	"favicon": "/favicon.svg",
 	"description": "A privacy-minded resume builder that is customizable, portable, open-source, and free to use.",
 	"seo": {
 		"indexing": "navigable",
 		"metatags": {
-			"canonical": "https://docs.rxresu.me",
-			"og:image": "https://rxresu.me/opengraph/banner.jpg"
+			"canonical": "/",
+			"og:image": "/opengraph/banner.jpg"
 		}
 	},
 	"fonts": {
@@ -32,12 +32,7 @@
 				"groups": [
 					{
 						"group": "Getting Started",
-						"pages": [
-							"getting-started/index",
-							"getting-started/quickstart",
-							"guides/checking-service-status",
-							"guides/accessing-the-previous-version"
-						]
+						"pages": ["getting-started/index", "getting-started/quickstart"]
 					},
 					{
 						"group": "Account",
@@ -111,11 +106,7 @@
 					},
 					{
 						"group": "Contributing",
-						"pages": ["contributing/architecture", "contributing/development", "contributing/translations"]
-					},
-					{
-						"group": "Community",
-						"pages": ["community/sponsors", "community/spotlight"]
+						"pages": ["contributing/architecture", "contributing/development"]
 					},
 					{
 						"group": "Legal",
@@ -124,55 +115,19 @@
 				]
 			},
 			{
-				"icon": "clock",
-				"tab": "Changelog",
-				"pages": ["changelog/index"]
-			},
-			{
 				"icon": "code",
 				"tab": "API Reference",
 				"openapi": "/spec.json"
 			}
 		],
-		"global": {
-			"anchors": [
-				{
-					"icon": "link",
-					"anchor": "Reactive Resume",
-					"href": "https://rxresu.me"
-				},
-				{
-					"icon": "github",
-					"anchor": "Source Code",
-					"href": "https://github.com/amruthpillai/reactive-resume"
-				}
-			]
-		}
+		"global": { "anchors": [] }
 	},
 	"logo": {
 		"light": "/logo/light.svg",
 		"dark": "/logo/dark.svg"
 	},
-	"navbar": {
-		"links": [
-			{
-				"label": "Support",
-				"href": "https://github.com/amruthpillai/reactive-resume/issues"
-			}
-		],
-		"primary": {
-			"type": "button",
-			"label": "Get Started",
-			"href": "https://rxresu.me"
-		}
-	},
+	"navbar": { "links": [] },
 	"contextual": {
 		"options": ["copy", "view"]
-	},
-	"footer": {
-		"socials": {
-			"website": "https://rxresu.me",
-			"github": "https://github.com/amruthpillai/reactive-resume"
-		}
 	}
 }

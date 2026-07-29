@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Reactive Resume provides security updates for version `5.0.x` and newer.
+TNM HR Platform provides security updates for version `5.0.x` and newer.
 Earlier major versions are no longer supported.
 
 | Version | Supported          |
@@ -19,8 +19,8 @@ privately instead of opening a public issue.
 Preferred reporting channels:
 
 - Use GitHub's private vulnerability reporting for this repository.
-- If that is unavailable, email `hello@amruthpillai.com` with the subject
-  `Security Vulnerability: Reactive Resume`.
+- If private reporting is unavailable, contact your TNM HR Platform administrator through your organization's approved
+  security channel.
 
 Please include as much detail as possible, including:
 

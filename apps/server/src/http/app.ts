@@ -14,6 +14,7 @@ import { handleLlms, handleRobots, handleSitemap } from "../static/seo";
 import { handleUpload } from "../static/uploads";
 import { handleWebApp, serveWebDistStatic } from "../static/web";
 import { handleAuth, handleOAuth } from "./auth";
+import { handleCustomTemplateSource } from "./custom-template-source";
 import { handleHealth } from "./health";
 import { handleResumePdfDownload } from "./resume-pdf";
 
@@ -28,6 +29,7 @@ export function createApp() {
 	app.all("/api/auth/*", (c) => handleAuth(c.req.raw));
 	app.get("/api/health", () => handleHealth());
 	app.get("/api/resumes/:id/pdf", (c) => handleResumePdfDownload(c.req.raw, c.req.param("id")));
+	app.get("/api/custom-templates/:id/source", (c) => handleCustomTemplateSource(c.req.raw, c.req.param("id")));
 	app.get("/api/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/schema.json", () => handleSchemaJson());

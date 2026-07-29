@@ -1,20 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createRootStructuredDataScript, getCanonicalRootUrl } from "@/libs/seo";
-import { DonationBanner } from "./-sections/donate";
+import { AiSpotlight } from "./-sections/ai-spotlight";
 import { Faq } from "./-sections/faq";
 import { Features } from "./-sections/features";
+import { FinalCta } from "./-sections/final-cta";
 import { Footer } from "./-sections/footer";
 import { Hero } from "./-sections/hero";
-import { Prefooter } from "./-sections/prefooter";
-import { Sponsors } from "./-sections/sponsors";
 import { Statistics } from "./-sections/statistics";
 import { Templates } from "./-sections/templates";
-import { Testimonials } from "./-sections/testimonials";
+import { Workflow } from "./-sections/workflow";
 
 export const Route = createFileRoute("/_home/")({
 	component: RouteComponent,
 	head: () => {
-		const appUrl = typeof window !== "undefined" ? window.location.origin : "https://rxresu.me";
+		const appUrl = typeof window !== "undefined" ? window.location.origin : "http://localhost:3000";
 		const canonicalUrl = getCanonicalRootUrl(appUrl);
 
 		return {
@@ -25,8 +24,6 @@ export const Route = createFileRoute("/_home/")({
 });
 
 function RouteComponent() {
-	const { flags } = Route.useRouteContext();
-
 	return (
 		<main id="main-content" className="relative">
 			<Hero />
@@ -34,13 +31,12 @@ function RouteComponent() {
 			<div className="container mx-auto px-4 sm:px-6 lg:px-12">
 				<div className="border-border border-x [&>section:first-child]:border-t-0 [&>section]:border-border [&>section]:border-t">
 					<Statistics />
-					<Sponsors show={flags.showSponsors} />
 					<Features />
+					<Workflow />
+					<AiSpotlight />
 					<Templates />
-					<Testimonials />
-					<DonationBanner />
+					<FinalCta />
 					<Faq />
-					<Prefooter />
 					<Footer />
 				</div>
 			</div>

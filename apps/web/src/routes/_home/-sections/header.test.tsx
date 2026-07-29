@@ -20,9 +20,6 @@ vi.mock("@tanstack/react-router", () => ({
 		</a>
 	),
 }));
-vi.mock("@/components/input/github-stars-button", () => ({
-	GithubStarsButton: () => <div data-testid="github-stars-button" />,
-}));
 vi.mock("@/features/locale/combobox", () => ({
 	LocaleCombobox: ({ render: renderProp }: LocaleComboboxProps) => renderProp,
 }));
@@ -46,7 +43,7 @@ describe("Header", () => {
 		const { container } = renderHeader();
 		const home = Array.from(container.querySelectorAll("a")).find((a) => a.getAttribute("href") === "/");
 		expect(home).toBeDefined();
-		expect(home?.getAttribute("aria-label")).toBe("Reactive Resume - Go to homepage");
+		expect(home?.getAttribute("aria-label")).toBe("TNM HR Platform - Go to homepage");
 	});
 
 	it("renders a dashboard link with the documented aria-label", () => {
@@ -55,10 +52,9 @@ describe("Header", () => {
 		expect(dashboard).toBeDefined();
 	});
 
-	it("includes ThemeToggleButton and GithubStarsButton in the navigation", () => {
+	it("includes ThemeToggleButton in the navigation", () => {
 		const { getByTestId } = renderHeader();
 		expect(getByTestId("theme-toggle")).toBeInTheDocument();
-		expect(getByTestId("github-stars-button")).toBeInTheDocument();
 	});
 
 	it("labels the navigation landmark", () => {

@@ -1,15 +1,22 @@
 import z from "zod";
 import { apiKeyDialogSchemas } from "./api-key/schema";
 import { authDialogSchemas } from "./auth/schema";
+import { candidateDialogSchemas } from "./candidate/schema";
 import { resumeDialogSchemas } from "./resume/schema";
 
 export const dialogSchemaRegistries = [
 	{ domain: "auth", schemas: authDialogSchemas },
 	{ domain: "api-key", schemas: apiKeyDialogSchemas },
+	{ domain: "candidate", schemas: candidateDialogSchemas },
 	{ domain: "resume", schemas: resumeDialogSchemas },
 ] as const;
 
-const dialogSchemaEntries = [...authDialogSchemas, ...apiKeyDialogSchemas, ...resumeDialogSchemas] as const;
+const dialogSchemaEntries = [
+	...authDialogSchemas,
+	...apiKeyDialogSchemas,
+	...candidateDialogSchemas,
+	...resumeDialogSchemas,
+] as const;
 
 export const dialogTypeSchema = z.discriminatedUnion("type", dialogSchemaEntries);
 

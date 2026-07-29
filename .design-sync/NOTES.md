@@ -1,6 +1,6 @@
 # design-sync notes — @reactive-resume/ui
 
-Syncs to Claude Design project **Reactive Resume** (`3c0f6556-050a-41e5-9886-c3f1ea950517`).
+Syncs to Claude Design project **TNM HR Platform** (`3c0f6556-050a-41e5-9886-c3f1ea950517`).
 
 ## Repo shape / build
 

@@ -110,7 +110,12 @@ export function getModel(input: GetModelInput) {
 		.with("cerebras", () => createCerebras({ apiKey, baseURL }).languageModel(model))
 		.with("perplexity", () => createPerplexity({ apiKey, baseURL }).languageModel(model))
 		.with("openai-compatible", () =>
-			createOpenAICompatible({ name: "openai-compatible", apiKey, baseURL }).languageModel(model),
+			createOpenAICompatible({
+				name: "openai-compatible",
+				apiKey,
+				baseURL,
+				fetch: normalizeOpenAiCompatibleFetch,
+			}).languageModel(model),
 		)
 		.with("ollama", () => {
 			const ollama = createOllama({
@@ -122,6 +127,137 @@ export function getModel(input: GetModelInput) {
 			return ollama.languageModel(model);
 		})
 		.exhaustive();
+}
+
+function isStreamingRequest(init?: RequestInit) {
+	if (typeof init?.body !== "string") return false;
+
+	try {
+		return (JSON.parse(init.body) as { stream?: unknown }).stream === true;
+	} catch {
+		return false;
+	}
+}
+
+async function normalizeOpenAiCompatibleFetch(input: RequestInfo | URL, init?: RequestInit) {
+	const response = await fetch(input, init);
+	if (!response.ok || isStreamingRequest(init)) return response;
+
+	const contentType = response.headers.get("content-type")?.toLowerCase() ?? "";
+	if (!contentType.includes("text/event-stream")) return response;
+
+	const responseText = await response.text();
+	const jsonText = normalizeNonStreamingSseBody(responseText);
+	if (!jsonText) return new Response(responseText, response);
+
+	const headers = new Headers(response.headers);
+	headers.set("content-type", "application/json");
+	headers.delete("content-length");
+	headers.delete("content-encoding");
+
+	return new Response(jsonText, {
+		status: response.status,
+		statusText: response.statusText,
+		headers,
+	});
+}
+
+type OpenAiChunkChoice = {
+	index?: number;
+	delta?: {
+		role?: string;
+		content?: string;
+	};
+	finish_reason?: string | null;
+};
+
+type OpenAiCompletionChunk = {
+	id?: string;
+	object?: string;
+	created?: number;
+	model?: string;
+	choices?: OpenAiChunkChoice[];
+	usage?: unknown;
+};
+
+/**
+ * Some OpenAI-compatible gateways return an SSE stream even when the request
+ * explicitly sets `stream: false`. Convert those chunks into the regular
+ * chat-completion JSON shape expected by the AI SDK.
+ */
+function normalizeNonStreamingSseBody(responseText: string): string | undefined {
+	const singlePayload = responseText
+		.replace(/(?:\r?\n)?data:\s*\[DONE\]\s*$/i, "")
+		.replace(/^data:\s*/i, "")
+		.trim();
+	try {
+		JSON.parse(singlePayload);
+		return singlePayload;
+	} catch {
+		// Continue below: the response may contain multiple SSE chunks.
+	}
+
+	const dataLines = responseText
+		.split(/\r?\n/)
+		.map((line) => line.trim())
+		.filter((line) => line.startsWith("data:"))
+		.map((line) => line.slice(5).trim())
+		.filter((line) => line && line !== "[DONE]");
+
+	if (dataLines.length === 0) {
+		return undefined;
+	}
+
+	let events: OpenAiCompletionChunk[];
+	try {
+		events = dataLines.map((line) => JSON.parse(line) as OpenAiCompletionChunk);
+	} catch {
+		return undefined;
+	}
+
+	if (events.length === 1 && events[0]?.object !== "chat.completion.chunk") {
+		return JSON.stringify(events[0]);
+	}
+
+	const first = events[0];
+	const choiceIndexes = new Set<number>();
+	for (const event of events) {
+		for (const choice of event.choices ?? []) choiceIndexes.add(choice.index ?? 0);
+	}
+
+	const choices = [...choiceIndexes]
+		.sort((left, right) => left - right)
+		.map((index) => {
+			let role = "assistant";
+			let content = "";
+			let finishReason: string | null = null;
+
+			for (const event of events) {
+				const choice = event.choices?.find((candidate) => (candidate.index ?? 0) === index);
+				if (!choice) continue;
+				if (choice.delta?.role) role = choice.delta.role;
+				if (typeof choice.delta?.content === "string") content += choice.delta.content;
+				if (choice.finish_reason != null) finishReason = choice.finish_reason;
+			}
+
+			return {
+				index,
+				message: { role, content },
+				finish_reason: finishReason,
+			};
+		});
+
+	if (choices.length === 0) return undefined;
+
+	const last = events.at(-1);
+	return JSON.stringify({
+		id: first?.id ?? last?.id ?? "",
+		object: "chat.completion",
+		created: first?.created ?? last?.created ?? 0,
+		model: first?.model ?? last?.model ?? "",
+		choices,
+		...(last?.usage !== undefined ? { usage: last.usage } : {}),
+	});
 }
 
 export function getAgentModel(input: GetModelInput) {
@@ -186,31 +322,80 @@ function buildResumeParsingMessages({ userPrompt, file, mediaType }: BuildResume
 	];
 }
 
-function buildResumeParsingTextMessages({ userPrompt, text }: { userPrompt: string; text: string }): ModelMessage[] {
+function buildResumeParsingTextMessages({
+	userPrompt,
+	text,
+	sourceLabel,
+}: {
+	userPrompt: string;
+	text: string;
+	sourceLabel: string;
+}): ModelMessage[] {
 	return [
 		{
 			role: "user",
 			content: [
 				{
 					type: "text",
-					text: `${userPrompt}\n\nThe Microsoft Word file has been converted to plain text below.\n\n${text}`,
+					text: `${userPrompt}\n\nThe ${sourceLabel} file has been converted to plain text below.\n\n${text}`,
 				},
 			],
 		},
 	];
 }
 
+type PdfTextItem = { str: string; hasEOL?: boolean };
+
+function isPdfTextItem(item: unknown): item is PdfTextItem {
+	return typeof item === "object" && item !== null && "str" in item && typeof item.str === "string";
+}
+
+async function extractPdfText(file: z.infer<typeof fileInputSchema>): Promise<string> {
+	const { getDocument } = await import("pdfjs-dist/legacy/build/pdf.mjs");
+	const loadingTask = getDocument({
+		data: new Uint8Array(Buffer.from(file.data, "base64")),
+		useSystemFonts: true,
+	});
+	const document = await loadingTask.promise;
+
+	try {
+		const pages: string[] = [];
+		for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber++) {
+			const page = await document.getPage(pageNumber);
+			const content = await page.getTextContent();
+			const pageText = content.items
+				.map((item) => {
+					if (!isPdfTextItem(item)) return "";
+					return `${item.str}${item.hasEOL ? "\n" : " "}`;
+				})
+				.join("")
+				.replace(/[ \t]+\n/g, "\n")
+				.replace(/\n{3,}/g, "\n\n")
+				.trim();
+			if (pageText) pages.push(pageText);
+		}
+
+		return pages.join("\n\n").trim();
+	} finally {
+		await loadingTask.destroy();
+	}
+}
+
 async function parsePdf(input: ParsePdfInput): Promise<ResumeData> {
 	const model = getModel(input);
+	const text = await extractPdfText(input.file);
+	const messages = text
+		? buildResumeParsingTextMessages({ userPrompt: pdfParserUserPrompt, text, sourceLabel: "PDF" })
+		: buildResumeParsingMessages({
+				userPrompt: pdfParserUserPrompt,
+				file: input.file,
+				mediaType: "application/pdf",
+			});
 
 	const result = await generateText({
 		model,
 		system: buildResumeParsingSystemPrompt(pdfParserSystemPrompt),
-		messages: buildResumeParsingMessages({
-			userPrompt: pdfParserUserPrompt,
-			file: input.file,
-			mediaType: "application/pdf",
-		}),
+		messages,
 	}).catch((error: unknown) => logAndRethrow("Failed to generate the text with the model", error));
 
 	return parseAndValidateResumeJson(result.text);
@@ -321,7 +506,11 @@ async function parseDocx(input: ParseDocxInput): Promise<ResumeData> {
 	const model = getModel(input);
 	const messages =
 		input.mediaType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-			? buildResumeParsingTextMessages({ userPrompt: docxParserUserPrompt, text: extractDocxText(input.file) })
+			? buildResumeParsingTextMessages({
+					userPrompt: docxParserUserPrompt,
+					text: extractDocxText(input.file),
+					sourceLabel: "Microsoft Word",
+				})
 			: buildResumeParsingMessages({
 					userPrompt: docxParserUserPrompt,
 					file: input.file,

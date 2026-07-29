@@ -1,10 +1,10 @@
 name: ✨ Feature Request
 
-description: Suggest an feature or idea that you would like to see in Reactive Resume
+description: Suggest a feature or idea that you would like to see in TNM HR Platform
 
 title: "[Feature] <title>"
 labels: [enhancement, v5, needs triage]
-assignees: "AmruthPillai"
+assignees: ""
 
 body:
   - type: checkboxes
@@ -18,6 +18,6 @@ body:
   - type: textarea
     attributes:
       label: Feature Description
-      description: A detailed description of the feature you would like to see in Reactive Resume. Please provide as much detail as possible as it will help me implement the feature faster.
+      description: Describe the feature you would like to see in TNM HR Platform and the problem it would solve.
     validations:
       required: true

@@ -99,14 +99,18 @@ export function Templates() {
 				viewport={{ once: true }}
 				transition={{ duration: 0.35 }}
 			>
-				<h2 className="font-semibold text-2xl tracking-tight md:text-4xl xl:text-5xl">
-					<Trans>Templates</Trans>
+				<p className="font-semibold text-primary text-xs uppercase tracking-[0.2em]">
+					<Trans>Designed to be read</Trans>
+				</p>
+
+				<h2 className="max-w-3xl text-balance font-semibold text-3xl tracking-tight md:text-5xl">
+					<Trans>A strong first impression, in every format.</Trans>
 				</h2>
 
 				<p className="max-w-2xl text-muted-foreground leading-relaxed">
 					<Trans>
-						Explore our diverse selection of templates, each designed to fit different styles, professions, and
-						personalities. Reactive Resume currently offers 12 templates, with more on the way.
+						Start with a professional template, then fine-tune the typography, spacing, color, and structure until it
+						feels unmistakably yours.
 					</Trans>
 				</p>
 			</m.div>

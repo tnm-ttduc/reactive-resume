@@ -3,6 +3,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { onError } from "@orpc/client";
 import { createRouterClient } from "@orpc/server";
 import router from "@reactive-resume/api/routers";
+import { env } from "@reactive-resume/env/server";
 import { MCP_TOOL_NAME, registerPrompts, registerResources, registerTools } from "@reactive-resume/mcp";
 import { appVersion } from "../app-version";
 import { getRequestLocale } from "../rpc/locale";
@@ -25,20 +26,20 @@ function createRequestClient(request: Request): RouterClient<typeof router> {
 export async function createMcpServer(request: Request) {
 	const server = new McpServer(
 		{
-			name: "reactive-resume",
+			name: "tnm-hr-platform",
 			version: appVersion,
-			title: "Reactive Resume",
-			websiteUrl: "https://rxresu.me",
+			title: "TNM HR Platform",
+			websiteUrl: env.APP_URL,
 			description:
-				"Reactive Resume is a free and open-source resume builder. Use this MCP server to interact with your resume using an LLM of your choice.",
+				"TNM HR Platform helps users create and manage resumes. Use this MCP server to interact with resume data using an LLM of your choice.",
 			icons: [
 				{
-					src: "https://rxresu.me/icon/light.svg",
+					src: `${env.APP_URL}/icon/light.svg`,
 					mimeType: "image/svg+xml",
 					theme: "light",
 				},
 				{
-					src: "https://rxresu.me/icon/dark.svg",
+					src: `${env.APP_URL}/icon/dark.svg`,
 					mimeType: "image/svg+xml",
 					theme: "dark",
 				},
@@ -46,7 +47,7 @@ export async function createMcpServer(request: Request) {
 		},
 		{
 			instructions: [
-				"You are connected to Reactive Resume over MCP.",
+				"You are connected to TNM HR Platform over MCP.",
 				"Authenticate with OAuth (recommended) or an API key (`x-api-key`).",
 				`Discover resume IDs with \`${MCP_TOOL_NAME.listResumes}\` (not \`resources/list\`).`,
 				`List distinct tags with \`${MCP_TOOL_NAME.listResumeTags}\`.`,

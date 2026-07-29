@@ -22,37 +22,17 @@ const renderFooter = () =>
 	);
 
 describe("Footer", () => {
-	it("renders Resources and Community link group headings", () => {
+	it("renders the TNM HR Platform brand", () => {
 		renderFooter();
-		expect(screen.getByText("Resources")).toBeInTheDocument();
-		expect(screen.getByText("Community")).toBeInTheDocument();
+		expect(screen.getByText("TNM HR Platform")).toBeInTheDocument();
 	});
 
-	it("renders the documented resource links", () => {
+	it("does not render upstream promotional or community links", () => {
 		const { container } = renderFooter();
-		const text = container.textContent ?? "";
-		for (const label of ["Documentation", "Sponsorships", "Source Code", "Changelog"]) {
-			expect(text, label).toContain(label);
-		}
+		expect(container.querySelectorAll("a")).toHaveLength(0);
 	});
 
-	it("renders the documented community links", () => {
-		const { container } = renderFooter();
-		const text = container.textContent ?? "";
-		for (const label of ["Report an issue", "Translations", "Subreddit", "Discord"]) {
-			expect(text, label).toContain(label);
-		}
-	});
-
-	it("renders social media icon links to GitHub, LinkedIn, and X", () => {
-		const { container } = renderFooter();
-		const hrefs = Array.from(container.querySelectorAll<HTMLAnchorElement>("a")).map((a) => a.href);
-		expect(hrefs.some((h) => h.includes("github.com/amruthpillai/reactive-resume"))).toBe(true);
-		expect(hrefs.some((h) => h.includes("linkedin.com/in/amruthpillai"))).toBe(true);
-		expect(hrefs.some((h) => h.includes("x.com/KingOKings"))).toBe(true);
-	});
-
-	it("includes Reactive Resume version copy via Copyright", () => {
+	it("includes TNM HR Platform version copy via Copyright", () => {
 		renderFooter();
 		// The version is wrapped in <bdi> for RTL isolation, so it is its own text node.
 		expect(screen.getByText("9.9.9")).toBeInTheDocument();

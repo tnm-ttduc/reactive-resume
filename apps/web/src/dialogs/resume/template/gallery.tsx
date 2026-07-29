@@ -32,13 +32,15 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 
 	function onSelectTemplate(template: Template) {
 		const previousTemplate = resume.data.metadata.template;
-		if (template === previousTemplate) {
+		const previousCustomTemplate = resume.data.metadata.customTemplate;
+		if (template === previousTemplate && !previousCustomTemplate) {
 			closeDialog();
 			return;
 		}
 
 		updateResumeData((draft) => {
 			draft.metadata.template = template;
+			delete draft.metadata.customTemplate;
 		});
 
 		closeDialog();
@@ -49,6 +51,7 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 				onClick: () => {
 					updateResumeData((draft) => {
 						draft.metadata.template = previousTemplate;
+						if (previousCustomTemplate) draft.metadata.customTemplate = previousCustomTemplate;
 					});
 				},
 			},

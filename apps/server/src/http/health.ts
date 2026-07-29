@@ -46,7 +46,7 @@ export async function handleHealth() {
 	const status = [database, storage].some((check) => check.status === "unhealthy") ? "unhealthy" : "healthy";
 
 	const checks = {
-		service: "reactive-resume",
+		service: "tnm-hr-platform",
 		version: process.env.npm_package_version,
 		status,
 		timestamp: new Date().toISOString(),

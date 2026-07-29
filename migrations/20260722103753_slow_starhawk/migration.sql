@@ -1,0 +1,1 @@
+ALTER TABLE "custom_template" ADD COLUMN "compiler_report" jsonb;

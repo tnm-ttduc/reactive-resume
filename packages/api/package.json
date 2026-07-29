@@ -6,6 +6,8 @@
 	"exports": {
 		"./context": "./src/context.ts",
 		"./features/flags": "./src/features/flags/index.ts",
+		"./features/custom-templates/source": "./src/features/custom-templates/source.ts",
+		"./features/custom-templates/worker": "./src/features/custom-templates/import-job.ts",
 		"./features/resume/export": "./src/features/resume/export.ts",
 		"./features/storage": "./src/features/storage/index.ts",
 		"./routers": "./src/routers/index.ts"
@@ -32,6 +34,7 @@
 		"@ai-sdk/togetherai": "^3.0.7",
 		"@ai-sdk/xai": "^4.0.9",
 		"@aws-sdk/client-s3": "^3.1081.0",
+		"@napi-rs/canvas": "1.0.2",
 		"@orpc/client": "^1.14.7",
 		"@orpc/experimental-ratelimit": "^1.14.7",
 		"@orpc/server": "^1.14.7",
@@ -51,6 +54,7 @@
 		"es-toolkit": "^1.49.0",
 		"ioredis": "^5.11.1",
 		"ollama-ai-provider-v2": "^4.0.1",
+		"pdfjs-dist": "6.1.200",
 		"react": "^19.2.7",
 		"resumable-stream": "^2.2.12",
 		"sharp": "^0.35.3",

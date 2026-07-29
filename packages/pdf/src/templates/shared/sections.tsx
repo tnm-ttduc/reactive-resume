@@ -69,6 +69,7 @@ type SectionItemsProps = {
 type SectionItemProps = {
 	children: ReactNode;
 	style?: StyleInput;
+	keepTogether?: boolean;
 };
 
 type InlineItemHeaderProps = {
@@ -123,9 +124,17 @@ type SectionProps = {
 	section: string;
 	placement: TemplatePlacement;
 	showHeading?: boolean;
+	titleOverride?: string;
+	itemLayoutOverride?: {
+		columns?: number;
+		rowGap?: number;
+		columnGap?: number;
+	};
 };
 
 const SectionItemsContext = createContext<SectionItemsContextValue>({ itemStyle: undefined, useTimeline: false });
+const SectionTitleOverrideContext = createContext<string | undefined>(undefined);
+const SectionItemLayoutOverrideContext = createContext<SectionProps["itemLayoutOverride"]>(undefined);
 const SECTION_ITEM_PLACEHOLDER_KEYS = [
 	"placeholder-1",
 	"placeholder-2",
@@ -208,7 +217,8 @@ const SectionShell = ({ sectionId, title, showHeading = true, children }: Sectio
 	const sectionHeadingStyle = useTemplateStyle("sectionHeading");
 	const sectionHeadingContainerStyle = useTemplateStyle("sectionHeadingContainer");
 	const sectionHeadingRuleStyle = useSectionStyleRule("heading");
-	const sectionTitle = getResumeSectionTitle(data, sectionId, title);
+	const titleOverride = use(SectionTitleOverrideContext);
+	const sectionTitle = titleOverride ?? getResumeSectionTitle(data, sectionId, title);
 	const sectionIcon = getResumeSectionIcon(data, sectionId);
 	const showIcon = Boolean(sectionIcon) && !data.metadata.page.hideSectionIcons;
 	const { keepTogether, startOnNewPage } = getSectionBreaks(data, sectionId);
@@ -259,15 +269,16 @@ const SectionShell = ({ sectionId, title, showHeading = true, children }: Sectio
 const SectionItems = ({ children, columns = 1 }: SectionItemsProps) => {
 	const data = useRender();
 	const placement = useTemplatePlacement();
+	const layoutOverride = use(SectionItemLayoutOverrideContext);
 	const sectionTimeline = useTemplateFeature("sectionTimeline");
 	const sectionItemsStyle = useTemplateStyle("sectionItems");
 	const timelineItemsStyle = useTemplateFeatureStyle("sectionTimeline", "items");
 	const timelineLineStyle = useTemplateFeatureStyle("sectionTimeline", "line");
 	const metrics = getTemplateMetrics(data.metadata.page);
 	const layout = getSectionItemsLayout({
-		columns,
-		rowGap: metrics.itemGapY,
-		columnGap: metrics.itemGapX,
+		columns: layoutOverride?.columns ?? columns,
+		rowGap: layoutOverride?.rowGap ?? metrics.itemGapY,
+		columnGap: layoutOverride?.columnGap ?? metrics.itemGapX,
 	});
 	const useTimeline = shouldUseSectionTimeline({
 		sectionTimeline,
@@ -314,7 +325,7 @@ const SectionItems = ({ children, columns = 1 }: SectionItemsProps) => {
 	);
 };
 
-const SectionItem = ({ children, style }: SectionItemProps) => {
+const SectionItem = ({ children, style, keepTogether = false }: SectionItemProps) => {
 	const { itemStyle: sectionItemStyle, useTimeline } = useSectionItemsContext();
 	const itemStyle = useTemplateStyle("item");
 	const itemRuleStyle = useSectionStyleRule("item");
@@ -322,13 +333,18 @@ const SectionItem = ({ children, style }: SectionItemProps) => {
 	const timelineMarkerStyle = useTemplateFeatureStyle("sectionTimeline", "marker");
 	const timelineDotStyle = useTemplateFeatureStyle("sectionTimeline", "dot");
 	const timelineContentStyle = useTemplateFeatureStyle("sectionTimeline", "content");
+	const wrapProps: { wrap?: false } = keepTogether ? { wrap: false } : {};
 
 	if (!useTimeline) {
-		return <Div style={composeStyles(itemStyle, itemRuleStyle, sectionItemStyle, style)}>{children}</Div>;
+		return (
+			<Div style={composeStyles(itemStyle, itemRuleStyle, sectionItemStyle, style)} {...wrapProps}>
+				{children}
+			</Div>
+		);
 	}
 
 	return (
-		<View style={composeStyles(timelineItemStyle)}>
+		<View style={composeStyles(timelineItemStyle)} {...wrapProps}>
 			<View style={composeStyles(timelineMarkerStyle)}>
 				<View style={composeStyles(timelineDotStyle)} />
 			</View>
@@ -660,7 +676,7 @@ const SkillsSection = ({ sectionId = "skills", sectionData }: ItemSectionProps<S
 		<SectionShell sectionId={sectionId} title={skills.title}>
 			<SectionItems columns={skills.columns}>
 				{items.map((item) => (
-					<SectionItem key={item.id} style={{ rowGap: metrics.gapY(0.25) }}>
+					<SectionItem key={item.id} keepTogether style={{ rowGap: metrics.gapY(0.25) }}>
 						<SectionItemHeader>
 							<View style={composeStyles(inlineStyle)}>
 								<Icon name={item.icon as IconName} />
@@ -692,7 +708,7 @@ const LanguagesSection = ({ sectionId = "languages", sectionData }: ItemSectionP
 		<SectionShell sectionId={sectionId} title={languages.title}>
 			<SectionItems columns={languages.columns}>
 				{items.map((item) => (
-					<SectionItem key={item.id}>
+					<SectionItem key={item.id} keepTogether>
 						<SectionItemHeader>
 							<Bold>{item.language}</Bold>
 							<Text>{item.fluency}</Text>
@@ -975,7 +991,13 @@ const CustomSection = ({ sectionId, showHeading = true }: CustomSectionProps) =>
 	return customSectionMap[customSection.type]();
 };
 
-export const Section = ({ section, placement, showHeading = true }: SectionProps) => {
+export const Section = ({
+	section,
+	placement,
+	showHeading = true,
+	titleOverride,
+	itemLayoutOverride,
+}: SectionProps) => {
 	const data = useRender();
 
 	if (!isSectionVisible(section, data)) return null;
@@ -1002,7 +1024,11 @@ export const Section = ({ section, placement, showHeading = true }: SectionProps
 	return (
 		<TemplatePlacementProvider placement={placement}>
 			<SectionStyleProvider context={getSectionStyleRuleContext(data, section)}>
-				{render ? render() : <CustomSection sectionId={section} showHeading={showHeading} />}
+				<SectionTitleOverrideContext.Provider value={titleOverride}>
+					<SectionItemLayoutOverrideContext.Provider value={itemLayoutOverride}>
+						{render ? render() : <CustomSection sectionId={section} showHeading={showHeading} />}
+					</SectionItemLayoutOverrideContext.Provider>
+				</SectionTitleOverrideContext.Provider>
 			</SectionStyleProvider>
 		</TemplatePlacementProvider>
 	);

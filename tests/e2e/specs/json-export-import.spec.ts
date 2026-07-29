@@ -21,7 +21,7 @@ test("exports and imports a resume JSON backup", async ({ authPage: page }, test
 	await page.goto("/dashboard/resumes");
 	await page.getByRole("button", { name: "Import", exact: true }).click();
 	const dialog = page.getByRole("dialog", { name: "Import an existing resume" });
-	// Import is now file-first: selecting the file auto-detects the Reactive Resume JSON format.
+	// Import is now file-first: selecting the file auto-detects the TNM HR Platform JSON format.
 	await dialog.locator('input[type="file"]').setInputFiles(downloadPath);
 	await dialog.getByRole("button", { name: "Import", exact: true }).click();
 

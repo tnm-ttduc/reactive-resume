@@ -203,6 +203,8 @@ export const sampleResumeData: ResumeData = {
 					name: "Unity Engine",
 					proficiency: "Expert",
 					level: 5,
+					experience: "5+ Years",
+					lastUsed: "Present",
 					keywords: ["C#", "Editor Tools", "Performance Profiling"],
 				},
 				{
@@ -213,6 +215,8 @@ export const sampleResumeData: ResumeData = {
 					name: "Unreal Engine",
 					proficiency: "Advanced",
 					level: 4,
+					experience: "4 Years",
+					lastUsed: "Present",
 					keywords: ["C++", "Blueprints", "UE5 Features"],
 				},
 				{
@@ -223,6 +227,8 @@ export const sampleResumeData: ResumeData = {
 					name: "Programming Languages",
 					proficiency: "Expert",
 					level: 5,
+					experience: "8+ Years",
+					lastUsed: "Present",
 					keywords: ["C#", "C++", "Python", "HLSL/GLSL"],
 				},
 				{
@@ -233,6 +239,8 @@ export const sampleResumeData: ResumeData = {
 					name: "Game AI",
 					proficiency: "Advanced",
 					level: 4,
+					experience: "5 Years",
+					lastUsed: "Present",
 					keywords: ["Behavior Trees", "FSM", "Pathfinding", "Navigation"],
 				},
 				{
@@ -243,6 +251,8 @@ export const sampleResumeData: ResumeData = {
 					name: "Physics & Mathematics",
 					proficiency: "Advanced",
 					level: 4,
+					experience: "6 Years",
+					lastUsed: "Present",
 					keywords: ["3D Math", "Collision Detection", "Rigid Body Dynamics"],
 				},
 				{
@@ -253,6 +263,8 @@ export const sampleResumeData: ResumeData = {
 					name: "Performance Optimization",
 					proficiency: "Advanced",
 					level: 4,
+					experience: "5 Years",
+					lastUsed: "Present",
 					keywords: ["Profiling", "Memory Management", "Frame Rate"],
 				},
 			],

@@ -9,6 +9,7 @@ import { Document } from "#react-pdf-renderer";
 import { RenderProvider } from "./context";
 import { registerFonts, resumeContentContainsCJK, resumeContentScripts } from "./hooks/use-register-fonts";
 import { getTemplatePage } from "./templates";
+import { AstTemplatePage } from "./templates/ast/AstTemplatePage";
 
 export type TemplatePageProps = {
 	page: LayoutPage;
@@ -32,8 +33,17 @@ export const ResumeDocument = ({ data, template, renderOptions, resolveSectionTi
 	const creationDate = useMemo(() => new Date(), []);
 	const hasCjkContent = useMemo(() => resumeContentContainsCJK(data), [data]);
 	const scripts = useMemo(() => resumeContentScripts(data), [data]);
+	const typographyConfig = useMemo(() => {
+		const ast = data.metadata.customTemplate?.ast;
+		if (!ast) return data.metadata.typography;
+		return {
+			...data.metadata.typography,
+			body: { ...data.metadata.typography.body, fontFamily: ast.tokens.bodyFont, fontSize: ast.tokens.bodySize },
+			heading: { ...data.metadata.typography.heading, fontFamily: ast.tokens.headingFont },
+		};
+	}, [data.metadata.customTemplate, data.metadata.typography]);
 	const typography = registerFonts(
-		data.metadata.typography,
+		typographyConfig,
 		data.metadata.page.locale as Locale,
 		hasCjkContent,
 		scripts,
@@ -49,16 +59,23 @@ export const ResumeDocument = ({ data, template, renderOptions, resolveSectionTi
 			<Document
 				pageMode="useNone"
 				creationDate={creationDate}
-				producer="Reactive Resume"
+				producer="TNM HR Platform"
 				title={resumeData.basics.name}
 				author={resumeData.basics.name}
 				creator={resumeData.basics.name}
 				subject={resumeData.basics.headline}
 				language={resumeData.metadata.page.locale}
 			>
-				{resumeData.metadata.layout.pages.map((page, index) => (
-					<TemplatePageComponent key={getLayoutPageKey(page, index)} page={page} pageIndex={index} />
-				))}
+				{resumeData.metadata.customTemplate ? (
+					<AstTemplatePage
+						page={resumeData.metadata.layout.pages[0] ?? { fullWidth: true, main: [], sidebar: [] }}
+						pageIndex={0}
+					/>
+				) : (
+					resumeData.metadata.layout.pages.map((page, index) => (
+						<TemplatePageComponent key={getLayoutPageKey(page, index)} page={page} pageIndex={index} />
+					))
+				)}
 			</Document>
 		</RenderProvider>
 	);

@@ -2,10 +2,7 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { m } from "motion/react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@reactive-resume/ui/components/accordion";
-import { buttonVariants } from "@reactive-resume/ui/components/button";
 import { cn } from "@reactive-resume/utils/style";
-
-const crowdinUrl = "https://crowdin.com/project/reactive-resume";
 
 type FAQItemData = {
 	question: string;
@@ -14,45 +11,32 @@ type FAQItemData = {
 
 const getFaqItems = (): FAQItemData[] => [
 	{
-		question: t`Is Reactive Resume really free?`,
-		answer: t`Yes! Reactive Resume is completely free to use, with no hidden costs, premium tiers, or subscription fees. It's open-source and will always remain free.`,
+		question: t`What is TNM HR Platform?`,
+		answer: t`TNM HR Platform helps you create, manage, and share professional resumes from one place.`,
 	},
 	{
 		question: t`How is my data protected?`,
-		answer: t`Your data is stored securely and is never shared with third parties. You can also self-host Reactive Resume on your own servers for complete control over your data.`,
+		answer: t`Your data is stored securely and is never shared with third parties. Your administrator controls how this platform is hosted and operated.`,
 	},
 	{
 		question: t`Can I export my resume to PDF?`,
 		answer: t`Absolutely! You can export your resume to PDF with a single click. The exported PDF maintains all your formatting and styling perfectly.`,
 	},
 	{
-		question: t`Is Reactive Resume available in multiple languages?`,
-		answer: (
-			<Trans>
-				Yes, Reactive Resume is available in multiple languages. You can choose your preferred language in the settings
-				page, or using the language switcher in the top right corner. If you don't see your language, or you would like
-				to improve the existing translations, you can{" "}
-				<a
-					href={crowdinUrl}
-					target="_blank"
-					rel="noopener noreferrer"
-					className={buttonVariants({ variant: "link", className: "h-auto px-0!" })}
-				>
-					contribute to the translations on Crowdin
-					<span className="sr-only">
-						<Trans comment="Screen reader hint indicating the FAQ translation contribution link opens in a new browser tab">
-							{" "}
-							(opens in new tab)
-						</Trans>
-					</span>
-				</a>
-				.
-			</Trans>
-		),
+		question: t`Is TNM HR Platform available in multiple languages?`,
+		answer: t`Yes. You can choose your preferred language in the settings page or from the language switcher.`,
 	},
 	{
-		question: t`What makes Reactive Resume different from other resume builders?`,
-		answer: t`Reactive Resume is open-source, privacy-focused, and completely free. Unlike other resume builders, it doesn't show ads, track your data, or limit your features behind a paywall.`,
+		question: t`What makes TNM HR Platform useful?`,
+		answer: t`It brings resume creation, job application tracking, and AI-assisted workflows into one focused workspace.`,
+	},
+	{
+		question: t`Can I create different resumes for different roles?`,
+		answer: t`Yes. Keep a complete career profile, then create focused resume versions that highlight the most relevant experience for each opportunity.`,
+	},
+	{
+		question: t`How does AI help with my application?`,
+		answer: t`AI can compare your profile with a role, suggest clearer wording, and identify useful skills or experience to highlight. You always review and control the final content.`,
 	},
 	{
 		question: t`How do I share my resume?`,

@@ -1,4 +1,5 @@
 import z from "zod";
+import { customTemplateSnapshotSchema } from "../template-ast";
 import { templateSchema } from "../templates";
 
 const iconSchema = z
@@ -257,6 +258,12 @@ export const skillItemSchema = baseItemSchema.extend({
 		.describe(
 			"The proficiency level of the skill, defined as a number between 0 and 5. If set to 0, the icons displaying the level will be hidden.",
 		),
+	experience: z
+		.string()
+		.optional()
+		.catch("")
+		.describe("The amount of experience associated with this skill, such as '1 Year'."),
+	lastUsed: z.string().optional().catch("").describe("The year or date when this skill was last used."),
 	keywords: z
 		.array(z.string())
 		.catch([])
@@ -618,6 +625,11 @@ export const metadataSchema = z.object({
 	template: templateSchema
 		.catch("onyx")
 		.describe("The template to use for the resume. Determines the overall design and appearance of the resume."),
+	customTemplate: customTemplateSnapshotSchema
+		.optional()
+		.describe(
+			"An immutable published custom-template snapshot. When present, it renders instead of the legacy template.",
+		),
 	layout: layoutSchema.describe(
 		"The layout of the resume. Determines the structure and arrangement of the sections on the resume.",
 	),

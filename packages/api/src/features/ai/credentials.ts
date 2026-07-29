@@ -84,7 +84,7 @@ export function redactEncryptedCredential(fields: StoredCredentialFields): Redac
 	};
 }
 
-function isCredentialEncryptionConfigured() {
+export function isCredentialEncryptionConfigured() {
 	return !!getEncryptionSecret();
 }
 

@@ -33,7 +33,7 @@ COPY packages/ui/package.json ./packages/ui/package.json
 COPY packages/utils/package.json ./packages/utils/package.json
 COPY tooling/package.json ./tooling/package.json
 
-RUN --mount=type=cache,id=reactive-resume-dev-pnpm-store,target=/pnpm/store,sharing=locked \
+RUN --mount=type=cache,id=tnm-hr-platform-dev-pnpm-store,target=/pnpm/store,sharing=locked \
 	pnpm install --frozen-lockfile
 
 COPY . .

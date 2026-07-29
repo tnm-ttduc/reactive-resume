@@ -1,11 +1,11 @@
 ---
 title: "Single Sign-On (SSO)"
-description: "Configure Single Sign-On for self-hosted Reactive Resume using custom OAuth providers like Authentik, Authelia, Keycloak, or any OIDC-compliant IdP."
+description: "Configure Single Sign-On for self-hosted TNM HR Platform using custom OAuth providers like Authentik, Authelia, Keycloak, or any OIDC-compliant IdP."
 ---
 
 ## Overview
 
-Reactive Resume supports custom OAuth providers, allowing you to integrate with enterprise identity providers and self-hosted authentication solutions. This is particularly useful for organizations that want to:
+TNM HR Platform supports custom OAuth providers, allowing you to integrate with enterprise identity providers and self-hosted authentication solutions. This is particularly useful for organizations that want to:
 
 - Use a centralized identity provider (Authentik, Authelia, Keycloak, etc.)
 - Enforce Single Sign-On (SSO) across all internal applications
@@ -13,7 +13,7 @@ Reactive Resume supports custom OAuth providers, allowing you to integrate with 
 
 <Info>
   Custom OAuth is designed for **self-hosted instances**. If you're using the hosted version at
-  [rxresu.me](https://rxresu.me), you can use the built-in Google and GitHub sign-in options.
+  [localhost:3000](http://localhost:3000), you can use the built-in Google and GitHub sign-in options.
 </Info>
 
 ## Environment Variables
@@ -42,7 +42,7 @@ You must configure endpoints using **one** of these two methods:
     The discovery URL automatically provides the authorization, token, and userinfo endpoints.
 
     **Examples:**
-    - Authentik: `https://auth.example.com/application/o/reactive-resume/.well-known/openid-configuration`
+    - Authentik: `https://auth.example.com/application/o/tnm-hr-platform/.well-known/openid-configuration`
     - Keycloak: `https://keycloak.example.com/realms/myrealm/.well-known/openid-configuration`
     - Authelia: `https://auth.example.com/.well-known/openid-configuration`
 
@@ -100,9 +100,9 @@ https://resume.example.com/api/auth/oauth2/callback/custom
 
 ## Profile Mapping
 
-Reactive Resume automatically maps user profile data from the OAuth provider. The following fields are used:
+TNM HR Platform automatically maps user profile data from the OAuth provider. The following fields are used:
 
-| Reactive Resume Field | OAuth Profile Fields (in order of preference) |
+| TNM HR Platform Field | OAuth Profile Fields (in order of preference) |
 | --------------------- | --------------------------------------------- |
 | **Email** (required)  | `email`                                       |
 | **Name**              | `name` → `preferred_username` → email prefix  |
@@ -121,7 +121,7 @@ Reactive Resume automatically maps user profile data from the OAuth provider. Th
   <Step title="Create an OAuth2/OpenID Provider">
     In the Authentik admin interface, navigate to **Applications → Providers** and create a new **OAuth2/OpenID Provider**.
 
-    - **Name**: Reactive Resume
+    - **Name**: TNM HR Platform
     - **Authorization flow**: Use your preferred authorization flow
     - **Client type**: Confidential
     - **Redirect URIs**: `https://resume.example.com/api/auth/oauth2/callback/custom`
@@ -131,8 +131,8 @@ Reactive Resume automatically maps user profile data from the OAuth provider. Th
   <Step title="Create an Application">
     Navigate to **Applications → Applications** and create a new application:
 
-    - **Name**: Reactive Resume
-    - **Slug**: `reactive-resume`
+    - **Name**: TNM HR Platform
+    - **Slug**: `tnm-hr-platform`
     - **Provider**: Select the provider you just created
 
   </Step>
@@ -144,7 +144,7 @@ Reactive Resume automatically maps user profile data from the OAuth provider. Th
 OAUTH_PROVIDER_NAME="Authentik"
 OAUTH_CLIENT_ID="your-client-id"
 OAUTH_CLIENT_SECRET="your-client-secret"
-OAUTH_DISCOVERY_URL="https://auth.example.com/application/o/reactive-resume/.well-known/openid-configuration"
+OAUTH_DISCOVERY_URL="https://auth.example.com/application/o/tnm-hr-platform/.well-known/openid-configuration"
 ```
   </Step>
 </Steps>
@@ -159,8 +159,8 @@ OAUTH_DISCOVERY_URL="https://auth.example.com/application/o/reactive-resume/.wel
 identity_providers:
   oidc:
     clients:
-      - client_id: reactive-resume
-        client_name: Reactive Resume
+      - client_id: tnm-hr-platform
+        client_name: TNM HR Platform
         client_secret: "your-hashed-secret" # Use authelia hash-password to generate
         public: false
         authorization_policy: two_factor # or one_factor
@@ -182,13 +182,13 @@ identity_providers:
   <Step title="Configure environment variables">
 ```bash .env
 OAUTH_PROVIDER_NAME="Authelia"
-OAUTH_CLIENT_ID="reactive-resume"
+OAUTH_CLIENT_ID="tnm-hr-platform"
 OAUTH_CLIENT_SECRET="your-plain-secret"
 OAUTH_DISCOVERY_URL="https://auth.example.com/.well-known/openid-configuration"
 ```
 
     <Warning>
-      Use the **plain text** secret in Reactive Resume's environment, not the hashed version used in Authelia's configuration.
+      Use the **plain text** secret in TNM HR Platform's environment, not the hashed version used in Authelia's configuration.
     </Warning>
 
   </Step>
@@ -202,7 +202,7 @@ OAUTH_DISCOVERY_URL="https://auth.example.com/.well-known/openid-configuration"
 
     1. Select your realm
     2. Navigate to **Clients → Create client**
-    3. Set **Client ID** (e.g., `reactive-resume`)
+    3. Set **Client ID** (e.g., `tnm-hr-platform`)
     4. Set **Client authentication** to **On**
     5. Enable **Standard flow**
 
@@ -220,7 +220,7 @@ OAUTH_DISCOVERY_URL="https://auth.example.com/.well-known/openid-configuration"
   <Step title="Configure environment variables">
 ```bash .env
 OAUTH_PROVIDER_NAME="Keycloak"
-OAUTH_CLIENT_ID="reactive-resume"
+OAUTH_CLIENT_ID="tnm-hr-platform"
 OAUTH_CLIENT_SECRET="your-client-secret"
 OAUTH_DISCOVERY_URL="https://keycloak.example.com/realms/myrealm/.well-known/openid-configuration"
 ```
@@ -270,9 +270,9 @@ AUTH_SECRET="your-32-byte-hex-secret"
 
 # Custom OAuth Provider (e.g., Authentik)
 OAUTH_PROVIDER_NAME="Company SSO"
-OAUTH_CLIENT_ID="reactive-resume-client-id"
-OAUTH_CLIENT_SECRET="reactive-resume-client-secret"
-OAUTH_DISCOVERY_URL="https://auth.company.com/application/o/reactive-resume/.well-known/openid-configuration"
+OAUTH_CLIENT_ID="tnm-hr-platform-client-id"
+OAUTH_CLIENT_SECRET="tnm-hr-platform-client-secret"
+OAUTH_DISCOVERY_URL="https://auth.company.com/application/o/tnm-hr-platform/.well-known/openid-configuration"
 # OAUTH_SCOPES="openid profile email"  # Defaults to these scopes if not set
 ```
 
@@ -334,7 +334,7 @@ OAUTH_DISCOVERY_URL="https://auth.company.com/application/o/reactive-resume/.wel
 
 <CardGroup cols={2}>
   <Card title="Use HTTPS" icon="lock">
-    Always use HTTPS for both your Reactive Resume instance and OAuth provider in production. OAuth tokens should never
+    Always use HTTPS for both your TNM HR Platform instance and OAuth provider in production. OAuth tokens should never
     be transmitted over unencrypted connections.
   </Card>
   <Card title="Protect secrets" icon="key">
@@ -347,6 +347,6 @@ OAUTH_DISCOVERY_URL="https://auth.company.com/application/o/reactive-resume/.wel
     Keep `AUTH_SECRET` and `BETTER_AUTH_API_KEY` private. Rotating `AUTH_SECRET` may invalidate active sessions.
   </Card>
   <Card title="Review scopes" icon="list-check">
-    Only request the scopes you need. The default (`openid profile email`) is sufficient for Reactive Resume.
+    Only request the scopes you need. The default (`openid profile email`) is sufficient for TNM HR Platform.
   </Card>
 </CardGroup>

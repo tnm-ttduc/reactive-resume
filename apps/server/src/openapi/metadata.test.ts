@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
 	auth: {},
 	env: {
-		APP_URL: "https://rxresu.me",
+		APP_URL: "https://hr.example.com",
 	},
 }));
 
@@ -35,8 +35,8 @@ describe("handleOAuthProtectedResource", () => {
 		const response = await handleOAuthProtectedResource();
 
 		await expect(response.json()).resolves.toMatchObject({
-			resource: "https://rxresu.me",
-			authorization_servers: ["https://rxresu.me/api/auth"],
+			resource: "https://hr.example.com",
+			authorization_servers: ["https://hr.example.com/api/auth"],
 		});
 	});
 });

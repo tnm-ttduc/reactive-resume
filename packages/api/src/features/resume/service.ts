@@ -134,6 +134,7 @@ async function applyResumePatchTx(
 			name: schema.resume.name,
 			slug: schema.resume.slug,
 			tags: schema.resume.tags,
+			candidateId: schema.resume.candidateId,
 			data: schema.resume.data,
 			isPublic: schema.resume.isPublic,
 			isLocked: schema.resume.isLocked,
@@ -429,6 +430,7 @@ export const resumeService = {
 				name: schema.resume.name,
 				slug: schema.resume.slug,
 				tags: schema.resume.tags,
+				candidateId: schema.resume.candidateId,
 				isPublic: schema.resume.isPublic,
 				isLocked: schema.resume.isLocked,
 				createdAt: schema.resume.createdAt,
@@ -459,6 +461,7 @@ export const resumeService = {
 				name: schema.resume.name,
 				slug: schema.resume.slug,
 				tags: schema.resume.tags,
+				candidateId: schema.resume.candidateId,
 				data: schema.resume.data,
 				isPublic: schema.resume.isPublic,
 				isLocked: schema.resume.isLocked,
@@ -481,6 +484,7 @@ export const resumeService = {
 				name: schema.resume.name,
 				slug: schema.resume.slug,
 				tags: schema.resume.tags,
+				candidateId: schema.resume.candidateId,
 				data: schema.resume.data,
 				isPublic: schema.resume.isPublic,
 				isLocked: schema.resume.isLocked,
@@ -519,6 +523,7 @@ export const resumeService = {
 		slug: string;
 		tags: string[];
 		locale: Locale;
+		candidateId?: string;
 		data?: ResumeData;
 	}) => {
 		const id = generateId();
@@ -532,6 +537,7 @@ export const resumeService = {
 				slug: input.slug,
 				tags: input.tags,
 				userId: input.userId,
+				candidateId: input.candidateId,
 				data,
 			});
 
@@ -597,6 +603,7 @@ export const resumeService = {
 					name: schema.resume.name,
 					slug: schema.resume.slug,
 					tags: schema.resume.tags,
+					candidateId: schema.resume.candidateId,
 					data: schema.resume.data,
 					isPublic: schema.resume.isPublic,
 					isLocked: schema.resume.isLocked,

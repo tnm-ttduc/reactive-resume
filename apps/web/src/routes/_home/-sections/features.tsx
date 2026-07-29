@@ -2,198 +2,134 @@ import type { Icon } from "@phosphor-icons/react";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
-	CloudArrowUpIcon,
-	CodeSimpleIcon,
-	CurrencyDollarIcon,
-	DatabaseIcon,
-	DotsThreeIcon,
+	BriefcaseIcon,
 	FilePdfIcon,
 	FilesIcon,
-	GithubLogoIcon,
 	GlobeIcon,
-	KeyIcon,
-	LayoutIcon,
-	LockSimpleIcon,
+	MagicWandIcon,
 	PaletteIcon,
-	ProhibitIcon,
 	ShieldCheckIcon,
-	TranslateIcon,
+	TargetIcon,
 } from "@phosphor-icons/react";
 import { m } from "motion/react";
-import { cn } from "@reactive-resume/utils/style";
 
 type Feature = {
 	id: string;
 	icon: Icon;
 	title: string;
 	description: string;
+	accent: string;
 };
-
-type FeatureCardProps = Feature;
 
 const getFeatures = (): Feature[] => [
 	{
-		id: "free",
-		icon: CurrencyDollarIcon,
-		title: t`Free`,
-		description: t`Completely free, forever, no hidden costs.`,
+		id: "career-profile",
+		icon: TargetIcon,
+		title: t`One career profile`,
+		description: t`Keep your experience, skills, education, and achievements organized as a reliable source of truth.`,
+		accent: "from-emerald-500/15",
 	},
 	{
-		id: "open-source",
-		icon: GithubLogoIcon,
-		title: t`Open Source`,
-		description: t`By the community, for the community.`,
-	},
-	{
-		id: "no-ads",
-		icon: ProhibitIcon,
-		title: t`No Advertising, No Tracking`,
-		description: t`For a secure and distraction-free experience.`,
-	},
-	{
-		id: "instant-generation",
-		icon: FilePdfIcon,
-		title: t`Instant Generation`,
-		description: t`Export your resume to PDF instantly, without any waiting or delays.`,
-	},
-	{
-		id: "data-security",
-		icon: DatabaseIcon,
-		title: t`Data Security`,
-		description: t`Your data is secure, and never shared or sold to anyone.`,
-	},
-	{
-		id: "self-host",
-		icon: CloudArrowUpIcon,
-		title: t`Self-Host with Docker`,
-		description: t`You also have the option to deploy on your own servers using the Docker image.`,
-	},
-	{
-		id: "languages",
-		icon: TranslateIcon,
-		title: t`Multilingual`,
-		description: t`Available in multiple languages. If you would like to contribute, check out Crowdin.`,
-	},
-	{
-		id: "auth",
-		icon: KeyIcon,
-		title: t`One-Click Sign-In`,
-		description: t`Sign in with GitHub, Google or a custom OAuth provider.`,
-	},
-	{
-		id: "2fa",
-		icon: ShieldCheckIcon,
-		title: t`Passkeys & 2FA`,
-		description: t`Enhance the security of your account with additional layers of protection.`,
-	},
-	{
-		id: "unlimited-resumes",
+		id: "tailored-resumes",
 		icon: FilesIcon,
-		title: t`Unlimited Resumes`,
-		description: t`Create as many resumes as you want, without limits.`,
+		title: t`Role-ready resumes`,
+		description: t`Create focused resume versions for different opportunities without rebuilding your story from scratch.`,
+		accent: "from-sky-500/15",
+	},
+	{
+		id: "ai-guidance",
+		icon: MagicWandIcon,
+		title: t`Practical AI guidance`,
+		description: t`Review job fit, strengthen your writing, and surface the experience that matters most for each role.`,
+		accent: "from-violet-500/15",
+	},
+	{
+		id: "applications",
+		icon: BriefcaseIcon,
+		title: t`Application tracking`,
+		description: t`See every opportunity, stage, note, and next step in one calm, focused workflow.`,
+		accent: "from-amber-500/15",
 	},
 	{
 		id: "design",
 		icon: PaletteIcon,
-		title: t`Flexibility`,
-		description: t`Personalize your resume with any colors, fonts or designs, and make it your own.`,
+		title: t`Flexible design`,
+		description: t`Choose a professional template and make it yours with typography, color, spacing, and layout controls.`,
+		accent: "from-rose-500/15",
 	},
 	{
-		id: "templates",
-		icon: LayoutIcon,
-		title: t`12+ Templates`,
-		description: t`Beautiful templates to choose from, with more on the way.`,
+		id: "pdf",
+		icon: FilePdfIcon,
+		title: t`Polished PDF export`,
+		description: t`Download a sharp, consistent PDF that is ready for recruiters, hiring managers, and applications.`,
+		accent: "from-orange-500/15",
 	},
 	{
-		id: "public",
+		id: "sharing",
 		icon: GlobeIcon,
-		title: t`Shareable Links`,
-		description: t`Share your resume with a public URL, and let others view it.`,
+		title: t`Simple, controlled sharing`,
+		description: t`Share with a direct link, add password protection, or keep a resume private until it is ready.`,
+		accent: "from-cyan-500/15",
 	},
 	{
-		id: "password-protection",
-		icon: LockSimpleIcon,
-		title: t`Password Protection`,
-		description: t`Protect your resume with a password, and let only people with the password view it.`,
-	},
-	{
-		id: "api-access",
-		icon: CodeSimpleIcon,
-		title: t`API Access`,
-		description: t`Access your resumes and data programmatically using the API.`,
-	},
-	{
-		id: "more",
-		icon: DotsThreeIcon,
-		title: t`And many more...`,
-		description: t`New features are constantly being added and improved, so be sure to check back often.`,
+		id: "privacy",
+		icon: ShieldCheckIcon,
+		title: t`Private by design`,
+		description: t`Your career data stays in your workspace, with clear controls over what you publish and share.`,
+		accent: "from-primary/15",
 	},
 ];
 
-function FeatureCard({ icon: Icon, title, description }: FeatureCardProps) {
-	return (
-		<m.div
-			className={cn(
-				"group relative flex min-h-48 flex-col gap-4 overflow-hidden border-b bg-background p-6 transition-[background-color] duration-300 will-change-[transform,opacity]",
-				"not-nth-[2n]:border-r xl:not-nth-[4n]:border-r",
-				"hover:bg-secondary/30",
-			)}
-			initial={{ opacity: 0, y: 16 }}
-			whileInView={{ opacity: 1, y: 0 }}
-			viewport={{ once: true, amount: 0.1 }}
-			transition={{ duration: 0.35, ease: "easeOut" }}
-		>
-			{/* Hover gradient overlay */}
-			<div
-				aria-hidden="true"
-				className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-			/>
-
-			{/* Icon */}
-			<div aria-hidden="true" className="relative">
-				<div className="inline-flex rounded-md bg-primary/5 p-2.5 text-foreground transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-					<Icon size={24} weight="thin" />
-				</div>
-			</div>
-
-			{/* Content */}
-			<div className="relative flex flex-col gap-y-1.5">
-				<h3 className="font-semibold text-base tracking-tight transition-colors group-hover:text-primary">{title}</h3>
-				<p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
-			</div>
-		</m.div>
-	);
-}
-
 export function Features() {
-	const features = getFeatures();
-
 	return (
-		<section id="features">
-			{/* Header */}
+		<section id="features" className="p-4 md:p-8 xl:p-16">
 			<m.div
-				className="space-y-4 p-4 will-change-[transform,opacity] md:p-8 xl:py-16"
+				className="grid gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-end"
 				initial={{ opacity: 0, y: 20 }}
 				whileInView={{ opacity: 1, y: 0 }}
-				viewport={{ once: true }}
+				viewport={{ once: true, amount: 0.4 }}
 				transition={{ duration: 0.45 }}
 			>
-				<h2 className="font-semibold text-2xl tracking-tight md:text-4xl xl:text-5xl">
-					<Trans>Features</Trans>
-				</h2>
-
-				<p className="max-w-2xl text-muted-foreground leading-relaxed">
+				<div>
+					<p className="mb-3 font-semibold text-primary text-xs uppercase tracking-[0.2em]">
+						<Trans>Built for momentum</Trans>
+					</p>
+					<h2 className="text-balance font-semibold text-3xl tracking-tight md:text-5xl">
+						<Trans>Everything between your experience and your next role.</Trans>
+					</h2>
+				</div>
+				<p className="max-w-xl text-muted-foreground leading-relaxed lg:justify-self-end">
 					<Trans>
-						Everything you need to create, customize, and share professional resumes. Built with privacy in mind,
-						powered by open source, and completely free forever.
+						TNM HR Platform brings the scattered pieces of a job search together, so you can spend less time managing
+						documents and more time making a strong impression.
 					</Trans>
 				</p>
 			</m.div>
 
-			{/* Features Grid */}
-			<div className="grid grid-cols-1 xs:grid-cols-2 border-t xl:grid-cols-4">
-				{features.map((feature) => (
-					<FeatureCard key={feature.id} {...feature} />
+			<div className="mt-10 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+				{getFeatures().map(({ id, icon: Icon, title, description, accent }, index) => (
+					<m.article
+						key={id}
+						className="group relative min-h-56 overflow-hidden rounded-xl border bg-card p-5"
+						initial={{ opacity: 0, y: 18 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, amount: 0.2 }}
+						transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.2) }}
+					>
+						<div
+							aria-hidden="true"
+							className={`absolute inset-0 bg-linear-to-br ${accent} via-transparent to-transparent opacity-60 transition-opacity group-hover:opacity-100`}
+						/>
+						<div className="relative flex h-full flex-col">
+							<div className="grid size-10 place-items-center rounded-lg border bg-background/80 text-primary shadow-sm">
+								<Icon size={20} />
+							</div>
+							<div className="mt-auto pt-10">
+								<h3 className="font-semibold tracking-tight">{title}</h3>
+								<p className="mt-2 text-muted-foreground text-sm leading-relaxed">{description}</p>
+							</div>
+						</div>
+					</m.article>
 				))}
 			</div>
 		</section>

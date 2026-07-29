@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { dbMock, queryMock, queryState } = vi.hoisted(() => {
+const { dbMock, envMock, queryMock, queryState } = vi.hoisted(() => {
 	const state = {
 		rows: [] as unknown[],
 		whereArg: undefined as unknown,
@@ -21,12 +21,18 @@ const { dbMock, queryMock, queryState } = vi.hoisted(() => {
 
 	return {
 		dbMock: { select: vi.fn(() => query) },
+		envMock: {
+			AI_PROVIDER_BASE_URL: undefined as string | undefined,
+			AI_PROVIDER_API_KEY: undefined as string | undefined,
+			AI_PROVIDER_MODEL: undefined as string | undefined,
+		},
 		queryMock: query,
 		queryState: state,
 	};
 });
 
 vi.mock("@reactive-resume/db/client", () => ({ db: dbMock }));
+vi.mock("@reactive-resume/env/server", () => ({ env: envMock }));
 vi.mock("@reactive-resume/db/schema", () => ({
 	aiProvider: {
 		id: "ai_provider.id",
@@ -59,13 +65,16 @@ vi.mock("../ai/credentials", () => ({
 	assertCredentialEncryptionConfigured: vi.fn(),
 	decryptCredential: vi.fn(() => "decrypted-key"),
 	encryptCredential: vi.fn(),
+	isCredentialEncryptionConfigured: vi.fn(() => false),
 	redactEncryptedCredential: vi.fn(() => ({
 		apiKeyFingerprint: "fingerprint",
 		apiKeyPreview: "sk-...test",
 	})),
 }));
 vi.mock("../ai/service", () => ({ testConnection: vi.fn() }));
-vi.mock("../ai/url-policy", () => ({ resolveAiBaseUrl: vi.fn() }));
+vi.mock("../ai/url-policy", () => ({
+	resolveAiBaseUrl: vi.fn(({ baseURL }: { baseURL: string }) => baseURL),
+}));
 
 const { aiProvidersService } = await import("./service");
 
@@ -95,9 +104,64 @@ function providerRow(overrides: Record<string, unknown> = {}) {
 describe("aiProvidersService", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		envMock.AI_PROVIDER_BASE_URL = undefined;
+		envMock.AI_PROVIDER_API_KEY = undefined;
+		envMock.AI_PROVIDER_MODEL = undefined;
 		queryState.rows = [];
 		queryState.whereArg = undefined;
 		queryState.orderByArgs = [];
+	});
+
+	it("uses the server environment provider before user providers", async () => {
+		envMock.AI_PROVIDER_BASE_URL = "https://ai.example.com/v1";
+		envMock.AI_PROVIDER_API_KEY = "secret-key";
+		envMock.AI_PROVIDER_MODEL = "example-model";
+
+		await expect(aiProvidersService.getDefaultRunnable({ userId: "user-1" })).resolves.toMatchObject({
+			id: "environment:openai-compatible",
+			provider: "openai-compatible",
+			model: "example-model",
+			baseURL: "https://ai.example.com/v1",
+			apiKey: "secret-key",
+			source: "environment",
+		});
+
+		expect(dbMock.select).not.toHaveBeenCalled();
+	});
+
+	it("lists the environment provider without exposing its API key", async () => {
+		envMock.AI_PROVIDER_BASE_URL = "https://ai.example.com/v1";
+		envMock.AI_PROVIDER_API_KEY = "secret-key";
+		envMock.AI_PROVIDER_MODEL = "example-model";
+
+		const [provider] = await aiProvidersService.list({ userId: "user-1" });
+
+		expect(provider).toMatchObject({
+			id: "environment:openai-compatible",
+			apiKeyPreview: "Configured on server",
+			source: "environment",
+		});
+		expect(provider).not.toHaveProperty("apiKey");
+		expect(dbMock.select).not.toHaveBeenCalled();
+	});
+
+	it("rejects a partially configured environment provider", async () => {
+		envMock.AI_PROVIDER_BASE_URL = "https://ai.example.com/v1";
+		envMock.AI_PROVIDER_MODEL = "example-model";
+
+		await expect(aiProvidersService.getDefaultRunnable({ userId: "user-1" })).rejects.toThrow(
+			"AI_ENV_PROVIDER_INCOMPLETE",
+		);
+	});
+
+	it("resolves the environment provider by its stable ID", async () => {
+		envMock.AI_PROVIDER_BASE_URL = "https://ai.example.com/v1";
+		envMock.AI_PROVIDER_API_KEY = "secret-key";
+		envMock.AI_PROVIDER_MODEL = "example-model";
+
+		await expect(
+			aiProvidersService.getRunnableById({ id: "environment:openai-compatible", userId: "user-1" }),
+		).resolves.toMatchObject({ apiKey: "secret-key", source: "environment" });
 	});
 
 	it("gets the first enabled and tested provider by creation order", async () => {

@@ -3,13 +3,13 @@ title: "Using Artificial Intelligence"
 description: "Configure an OpenAI, Anthropic, Gemini, OpenRouter, or Ollama provider to power resume analysis, AI edits, agent drafts, and PDF imports."
 ---
 
-Reactive Resume uses AI providers for features such as resume analysis, AI-assisted resume changes, AI agent drafts, and PDF or Word imports.
+TNM HR Platform uses AI providers for features such as resume analysis, AI-assisted resume changes, AI agent drafts, and PDF or Word imports.
 
 ## Open AI provider settings
 
 <Steps>
   <Step title="Sign in to the dashboard">
-    Head over to [https://rxresu.me](https://rxresu.me) and sign in with your account credentials.
+    Head over to [http://localhost:3000](http://localhost:3000) and sign in with your account credentials.
   </Step>
 
   <Step title="Navigate to Integrations settings">
@@ -32,11 +32,11 @@ In the **AI Providers** section, fill out the **Add Provider** form. The form is
 | --- | --- |
 | **Label** | A name that helps you recognize the provider, such as `Work OpenAI` or `Personal OpenRouter`. |
 | **Provider** | The provider type, such as OpenAI, Anthropic Claude, Google Gemini, Vercel AI Gateway, OpenRouter, Ollama, or OpenAI-compatible. |
-| **API Key** | The key Reactive Resume should use when sending AI requests to that provider. |
+| **API Key** | The key TNM HR Platform should use when sending AI requests to that provider. |
 | **Model** *(advanced)* | The exact model name expected by that provider. |
 | **Base URL** *(advanced)* | The provider endpoint. Leave the default unless you use a gateway, proxy, local provider, or OpenAI-compatible endpoint. |
 
-Click **Save Provider** when the form is complete. Reactive Resume tests the connection automatically as part of the save, so you'll see a success or failure status immediately without a separate click.
+Click **Save Provider** when the form is complete. TNM HR Platform tests the connection automatically as part of the save, so you'll see a success or failure status immediately without a separate click.
 
 <Frame caption="Saved AI provider in Integrations">
   <img
@@ -55,7 +55,7 @@ After saving a provider, test it before using it.
 
 <Steps>
   <Step title="Click Test">
-    Reactive Resume sends a small request to verify the provider, model, base URL, and key.
+    TNM HR Platform sends a small request to verify the provider, model, base URL, and key.
   </Step>
 
   <Step title="Review the status">
@@ -63,7 +63,7 @@ After saving a provider, test it before using it.
   </Step>
 
   <Step title="Enable the provider">
-    Turn on **Use** for the tested provider you want Reactive Resume to use.
+    Turn on **Use** for the tested provider you want TNM HR Platform to use.
   </Step>
 </Steps>
 

@@ -1,0 +1,8 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="720" fill="#09090B"/>
+  <circle cx="640" cy="280" r="112" fill="#FAFAFA"/>
+  <path d="M564 238H716V268H655V354H625V268H564V238Z" fill="#09090B"/>
+  <path d="M578 290H608V354H578V290ZM672 290H702V354H672V290Z" fill="#09090B"/>
+  <text x="640" y="465" text-anchor="middle" fill="#FAFAFA" font-family="Arial, sans-serif" font-size="58" font-weight="700">TNM HR Platform</text>
+  <text x="640" y="520" text-anchor="middle" fill="#A1A1AA" font-family="Arial, sans-serif" font-size="26">Create, manage, and share professional resumes.</text>
+</svg>

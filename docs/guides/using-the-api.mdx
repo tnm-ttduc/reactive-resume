@@ -1,11 +1,11 @@
 ---
 title: "Using the API"
-description: "Create Reactive Resume API keys, authenticate REST requests with bearer tokens, and integrate resume data into your own scripts, apps, or automations."
+description: "Create TNM HR Platform API keys, authenticate REST requests with bearer tokens, and integrate resume data into your own scripts, apps, or automations."
 ---
 
 <Steps>
   <Step title="Sign in to the dashboard">
-    Head over to [https://rxresu.me](https://rxresu.me) and sign in with your account credentials.
+    Head over to [http://localhost:3000](http://localhost:3000) and sign in with your account credentials.
   </Step>
 
 <Step title="Navigate to API Keys settings">
@@ -17,7 +17,7 @@ description: "Create Reactive Resume API keys, authenticate REST requests with b
     On the API Keys page, click <Badge>API Documentation</Badge> to view the API reference.
 
     <Tip>
-      You can also open it directly here: [API Reference](https://docs.rxresu.me/api-reference).
+      You can also open it directly here: [API Reference](/api-reference).
     </Tip>
 
   </Step>
@@ -43,11 +43,11 @@ description: "Create Reactive Resume API keys, authenticate REST requests with b
     To authenticate API requests, include your key in the <Badge>x-api-key</Badge> header.
 
     <Info>
-      If you're self-hosting, replace <code>https://rxresu.me</code> with your instance URL. The API is served under <code>/api/openapi</code>.
+      If you're self-hosting, replace <code>http://localhost:3000</code> with your instance URL. The API is served under <code>/api/openapi</code>.
     </Info>
 
     ```bash
-    curl "https://rxresu.me/api/openapi/resumes" \
+    curl "http://localhost:3000/api/openapi/resumes" \
       -H "x-api-key: YOUR_API_KEY"
     ```
 

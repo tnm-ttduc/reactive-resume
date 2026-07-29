@@ -1,4 +1,4 @@
-name: reactive_resume
+name: tnm_hr_platform
 
 services:
   postgres:
@@ -68,7 +68,7 @@ services:
       /bin/sh -c "
         sleep 5;
         mc alias set seaweedfs http://seaweedfs:8333 seaweedfs seaweedfs;
-        mc mb seaweedfs/reactive-resume;
+        mc mb seaweedfs/tnm-hr-platform;
         exit 0;
       "
     networks:
@@ -77,8 +77,7 @@ services:
       seaweedfs:
         condition: service_healthy
 
-  reactive_resume:
-    # image: ghcr.io/amruthpillai/reactive-resume:latest
+  tnm_hr_platform:
     build:
       context: .
       dockerfile: Dockerfile

@@ -2,11 +2,11 @@ import { describe, expect, it } from "vitest";
 import { detectJsonImportType } from "./import.utils";
 
 describe("detectJsonImportType", () => {
-	it("detects JSON Resume by a top-level basics without Reactive Resume sections/metadata", () => {
+	it("detects JSON Resume by a top-level basics without TNM HR Platform sections/metadata", () => {
 		expect(detectJsonImportType({ basics: { name: "A" }, work: [] })).toBe("json-resume-json");
 	});
 
-	it("detects the current Reactive Resume schema by metadata.page", () => {
+	it("detects the current TNM HR Platform schema by metadata.page", () => {
 		expect(detectJsonImportType({ basics: {}, sections: {}, metadata: { page: { locale: "en-US" } } })).toBe(
 			"reactive-resume-json",
 		);

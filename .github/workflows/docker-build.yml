@@ -29,14 +29,17 @@ jobs:
       - name: Determine publishing mode
         id: mode
         run: |
-          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" ]]; then
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            echo "nightly=false" >> "$GITHUB_OUTPUT"
+            echo "release=true" >> "$GITHUB_OUTPUT"
+            echo 'matrix={"include":[{"platform":"linux/amd64","runner":"ubuntu-latest","arch":"amd64"},{"platform":"linux/arm64","runner":"ubuntu-24.04-arm","arch":"arm64"}]}' >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "nightly=true" >> "$GITHUB_OUTPUT"
             echo "release=false" >> "$GITHUB_OUTPUT"
             echo 'matrix={"include":[{"platform":"linux/amd64","runner":"ubuntu-latest","arch":"amd64"}]}' >> "$GITHUB_OUTPUT"
           else
-            echo "nightly=false" >> "$GITHUB_OUTPUT"
-            echo "release=true" >> "$GITHUB_OUTPUT"
-            echo 'matrix={"include":[{"platform":"linux/amd64","runner":"ubuntu-latest","arch":"amd64"},{"platform":"linux/arm64","runner":"ubuntu-24.04-arm","arch":"arm64"}]}' >> "$GITHUB_OUTPUT"
+            echo "Unsupported ref for image publishing: ${{ github.ref }}" >&2
+            exit 1
           fi
 
   build:
@@ -66,12 +69,6 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v4
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v4
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v4
         with:
@@ -83,9 +80,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: |
-            ghcr.io/${{ env.IMAGE }}
-            docker.io/${{ env.IMAGE }}
+          images: ghcr.io/${{ env.IMAGE }}
           tags: |
             type=sha,prefix=sha-,suffix=-${{ matrix.arch }}
 
@@ -125,6 +120,10 @@ jobs:
     timeout-minutes: 30
     runs-on: ubuntu-latest
 
+    outputs:
+      final_tag: ${{ steps.manifest.outputs.final_tag }}
+      ghcr_digest: ${{ steps.manifest.outputs.ghcr_digest }}
+
     permissions:
       contents: read
       packages: write
@@ -152,12 +151,6 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v4
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v4
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v4
         with:
@@ -179,9 +172,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: |
-            ghcr.io/${{ env.IMAGE }}
-            docker.io/${{ env.IMAGE }}
+          images: ghcr.io/${{ env.IMAGE }}
           tags: |
             type=sha,prefix=sha-
             type=raw,value=nightly,enable=${{ needs.mode.outputs.nightly == 'true' }}
@@ -206,52 +197,94 @@ jobs:
           docker buildx imagetools create \
             $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             --annotation "index:org.opencontainers.image.licenses=MIT" \
-            --annotation "index:org.opencontainers.image.title=Reactive Resume" \
+            --annotation "index:org.opencontainers.image.title=TNM HR Platform" \
             --annotation "index:org.opencontainers.image.description=A free and open-source resume builder." \
             --annotation "index:org.opencontainers.image.vendor=Amruth Pillai" \
-            --annotation "index:org.opencontainers.image.url=https://rxresu.me" \
-            --annotation "index:org.opencontainers.image.documentation=https://docs.rxresu.me" \
-            --annotation "index:org.opencontainers.image.source=https://github.com/amruthpillai/reactive-resume" \
             --annotation "index:org.opencontainers.image.version=${{ steps.version.outputs.version }}" \
-            $(printf 'ghcr.io/${{ env.IMAGE }}@sha256:%s ' *) \
-            $(printf 'docker.io/${{ env.IMAGE }}@sha256:%s ' *)
+            $(printf 'ghcr.io/${{ env.IMAGE }}@sha256:%s ' *)
 
           # Get the digest of the multi-arch manifest
           GHCR_DIGEST=$(docker buildx imagetools inspect ghcr.io/${{ env.IMAGE }}:${FINAL_TAG} --format '{{json .Manifest.Digest}}' | tr -d '"')
-          DOCKER_DIGEST=$(docker buildx imagetools inspect docker.io/${{ env.IMAGE }}:${FINAL_TAG} --format '{{json .Manifest.Digest}}' | tr -d '"')
           echo "final_tag=$FINAL_TAG" >> "$GITHUB_OUTPUT"
           echo "ghcr_digest=$GHCR_DIGEST" >> "$GITHUB_OUTPUT"
-          echo "docker_digest=$DOCKER_DIGEST" >> "$GITHUB_OUTPUT"
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3
 
       - name: Sign images with Cosign
-        run: |
-          # Sign GHCR image
-          cosign sign --yes ghcr.io/${{ env.IMAGE }}@${{ steps.manifest.outputs.ghcr_digest }}
-
-          # Sign Docker Hub image
-          cosign sign --yes docker.io/${{ env.IMAGE }}@${{ steps.manifest.outputs.docker_digest }}
+        run: cosign sign --yes ghcr.io/${{ env.IMAGE }}@${{ steps.manifest.outputs.ghcr_digest }}
 
       - name: Inspect image
-        run: |
-          docker buildx imagetools inspect ghcr.io/${{ env.IMAGE }}:${{ steps.manifest.outputs.final_tag }}
-          docker buildx imagetools inspect docker.io/${{ env.IMAGE }}:${{ steps.manifest.outputs.final_tag }}
+        run: docker buildx imagetools inspect ghcr.io/${{ env.IMAGE }}:${{ steps.manifest.outputs.final_tag }}
 
-      - name: Redeploy Stack
-        if: ${{ needs.mode.outputs.release == 'true' }}
-        uses: appleboy/ssh-action@v1
+  deploy-staging:
+    needs:
+      - mode
+      - merge
+    if: ${{ needs.mode.outputs.nightly == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: staging
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
         with:
-          key: ${{ secrets.SSH_KEY }}
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          script: |
-            cd docker
-            ./manage_stack.sh up reactive_resume
+          persist-credentials: false
+
+      - name: Deploy immutable image to Dokploy staging
+        if: ${{ vars.DOKPLOY_ENABLED == 'true' }}
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+          DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
+          DOKPLOY_APPLICATION_ID: ${{ secrets.DOKPLOY_APPLICATION_ID }}
+          DOKPLOY_IMAGE: ghcr.io/${{ env.IMAGE }}@${{ needs.merge.outputs.ghcr_digest }}
+          DOKPLOY_REGISTRY_PASSWORD: ${{ secrets.DOKPLOY_REGISTRY_PASSWORD }}
+          DOKPLOY_REGISTRY_URL: ghcr.io
+          DOKPLOY_REGISTRY_USERNAME: ${{ secrets.DOKPLOY_REGISTRY_USERNAME }}
+          DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
+        run: node scripts/deployment/deploy-dokploy.mjs deploy
+
+      - name: Dokploy staging deployment is not configured
+        if: ${{ vars.DOKPLOY_ENABLED != 'true' }}
+        run: echo "Image published successfully; set DOKPLOY_ENABLED=true after configuring staging secrets."
+
+  deploy-production:
+    needs:
+      - mode
+      - merge
+    if: ${{ needs.mode.outputs.release == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Deploy immutable image to Dokploy production
+        if: ${{ vars.DOKPLOY_ENABLED == 'true' }}
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+          DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
+          DOKPLOY_APPLICATION_ID: ${{ secrets.DOKPLOY_APPLICATION_ID }}
+          DOKPLOY_IMAGE: ghcr.io/${{ env.IMAGE }}@${{ needs.merge.outputs.ghcr_digest }}
+          DOKPLOY_REGISTRY_PASSWORD: ${{ secrets.DOKPLOY_REGISTRY_PASSWORD }}
+          DOKPLOY_REGISTRY_URL: ghcr.io
+          DOKPLOY_REGISTRY_USERNAME: ${{ secrets.DOKPLOY_REGISTRY_USERNAME }}
+          DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
+        run: node scripts/deployment/deploy-dokploy.mjs deploy
 
       - name: Purge Cloudflare cache
-        if: ${{ needs.mode.outputs.release == 'true' }}
+        if: ${{ vars.DOKPLOY_ENABLED == 'true' && vars.CLOUDFLARE_ENABLED == 'true' }}
         env:
           CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
