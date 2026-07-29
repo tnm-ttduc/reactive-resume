@@ -5,9 +5,13 @@
 	"private": true,
 	"exports": {
 		"./applications/*": "./src/applications/*.ts",
+		"./candidate/*": "./src/candidate/*.ts",
 		"./icons": "./src/icons.ts",
 		"./resume/*": "./src/resume/*.ts",
 		"./schema.json": "./schema.json",
+		"./template-ast": "./src/template-ast.ts",
+		"./template-import-job": "./src/template-import-job.ts",
+		"./template-vision": "./src/template-vision.ts",
 		"./templates": "./src/templates.ts"
 	},
 	"scripts": {

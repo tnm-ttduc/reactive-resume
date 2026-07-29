@@ -1,19 +1,19 @@
 ---
 title: "Importing resumes"
-description: "Import a resume from JSON, JSON Resume, PDF, or Microsoft Word files with automatic format detection from the Reactive Resume dashboard."
+description: "Import a resume from JSON, JSON Resume, PDF, or Microsoft Word files with automatic format detection from the TNM HR Platform dashboard."
 ---
 
-Reactive Resume can create a new resume from several existing file formats. Use import when you are moving from another tool, restoring a backup, or converting an older Reactive Resume file.
+TNM HR Platform can create a new resume from several existing file formats. Use import when you are moving from another tool, restoring a backup, or converting an older TNM HR Platform file.
 
 ## Supported import formats
 
 | Format | Requires AI integration? | Notes |
 | --- | --- | --- |
-| **Reactive Resume (JSON)** | No | Best option for backups exported from the current version of Reactive Resume. |
-| **Reactive Resume v4 (JSON)** | No | Use this for files exported from Reactive Resume v4. |
+| **TNM HR Platform (JSON)** | No | Best option for backups exported from the current version of TNM HR Platform. |
+| **TNM HR Platform v4 (JSON)** | No | Use this for files exported from TNM HR Platform v4. |
 | **JSON Resume** | No | Use this for files that follow the JSON Resume schema. |
-| **PDF** | Yes | Reactive Resume asks your configured AI provider to parse the file into structured resume data. |
-| **Microsoft Word** | Yes | Supports Word documents. Reactive Resume asks your configured AI provider to parse the document. |
+| **PDF** | Yes | TNM HR Platform asks your configured AI provider to parse the file into structured resume data. |
+| **Microsoft Word** | Yes | Supports Word documents. TNM HR Platform asks your configured AI provider to parse the document. |
 
 <Info>
   PDF and Word imports depend on your AI settings because those formats are not structured resume data. Configure AI in
@@ -39,14 +39,14 @@ Reactive Resume can create a new resume from several existing file formats. Use 
   </Step>
 
   <Step title="Choose your file">
-    Select the resume file from your computer. Reactive Resume detects the format automatically from the file's contents
+    Select the resume file from your computer. TNM HR Platform detects the format automatically from the file's contents
     and shows the matching import type.
 
     If auto-detection is uncertain, or you want to force a specific format, adjust the import type manually before continuing.
   </Step>
 
   <Step title="Import">
-    Click **Import**. Reactive Resume creates a new resume and opens it in the builder when the import succeeds.
+    Click **Import**. TNM HR Platform creates a new resume and opens it in the builder when the import succeeds.
 
     For PDF and Microsoft Word files, the dialog checks that you have a working AI provider configured before it starts.
     If none is available, you'll get a link to **Integrations** to set one up.
@@ -55,9 +55,9 @@ Reactive Resume can create a new resume from several existing file formats. Use 
 
 ## Choose the right import type
 
-If you have a file exported from Reactive Resume, choose **Reactive Resume (JSON)**. This preserves the most information because the file already matches Reactive Resume's data model.
+If you have a file exported from TNM HR Platform, choose **TNM HR Platform (JSON)**. This preserves the most information because the file already matches TNM HR Platform's data model.
 
-If you are coming from Reactive Resume v4, choose **Reactive Resume v4 (JSON)**.
+If you are coming from TNM HR Platform v4, choose **TNM HR Platform v4 (JSON)**.
 
 If your file is a standard JSON Resume document, choose **JSON Resume**.
 
@@ -79,4 +79,4 @@ Try importing a cleaner source file. Simple resumes with selectable text import 
 
 ### The JSON file is rejected
 
-Make sure you selected the correct JSON import type. A Reactive Resume JSON export, a Reactive Resume v4 JSON export, and a JSON Resume file are different formats.
+Make sure you selected the correct JSON import type. A TNM HR Platform JSON export, a TNM HR Platform v4 JSON export, and a JSON Resume file are different formats.

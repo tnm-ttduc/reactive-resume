@@ -2,6 +2,7 @@ import { isAbsolute, join } from "node:path";
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
 import { findWorkspaceRoot } from "@reactive-resume/utils/monorepo.node";
+import { isReleaseSafeAppUrl } from "./app-url";
 
 const workspaceRoot = findWorkspaceRoot();
 
@@ -18,7 +19,9 @@ if (workspaceRoot) {
 export const env = createEnv({
 	server: {
 		// Application
-		APP_URL: z.url({ protocol: /https?/ }),
+		APP_URL: z
+			.url({ protocol: /https?/ })
+			.refine(isReleaseSafeAppUrl, "APP_URL must use the deployed application hostname in production, not localhost"),
 		SERVER_PORT: z.coerce.number().int().min(1).max(65535).default(3001),
 
 		// Database
@@ -75,12 +78,16 @@ export const env = createEnv({
 		REDIS_URL: z.url({ protocol: /redis(s)?/ }).optional(),
 		ENCRYPTION_SECRET: z.string().min(32, "ENCRYPTION_SECRET must be at least 32 characters").optional(),
 
+		// Default OpenAI-compatible provider (optional, server-only)
+		AI_PROVIDER_BASE_URL: z.url({ protocol: /https?/ }).optional(),
+		AI_PROVIDER_API_KEY: z.string().min(1).optional(),
+		AI_PROVIDER_MODEL: z.string().min(1).optional(),
+
 		// Feature Flags
 		FLAG_DISABLE_SIGNUPS: z.stringbool().default(false),
 		FLAG_DISABLE_EMAIL_AUTH: z.stringbool().default(false),
 		FLAG_DISABLE_IMAGE_PROCESSING: z.stringbool().default(false),
 		FLAG_DISABLE_API_RATE_LIMIT: z.stringbool().default(false),
-		FLAG_SHOW_SPONSORS: z.stringbool().default(false),
 		FLAG_ALLOW_UNSAFE_AI_BASE_URL: z.stringbool().default(false),
 		FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI: z.stringbool().default(false),
 	},

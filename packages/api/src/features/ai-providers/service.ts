@@ -4,16 +4,20 @@ import { and, asc, desc, eq, sql } from "drizzle-orm";
 import { aiProviderSchema } from "@reactive-resume/ai/types";
 import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
+import { env } from "@reactive-resume/env/server";
 import {
 	assertCredentialEncryptionConfigured,
 	decryptCredential,
 	encryptCredential,
+	isCredentialEncryptionConfigured,
 	redactEncryptedCredential,
 } from "../ai/credentials";
 import { testConnection } from "../ai/service";
 import { resolveAiBaseUrl } from "../ai/url-policy";
 
 type AiProviderRecord = typeof schema.aiProvider.$inferSelect;
+
+const ENVIRONMENT_PROVIDER_ID = "environment:openai-compatible";
 
 export type AiProviderResponse = {
 	id: string;
@@ -30,7 +34,10 @@ export type AiProviderResponse = {
 	lastUsedAt: Date | null;
 	createdAt: Date;
 	updatedAt: Date;
+	source: "database" | "environment";
 };
+
+type RunnableAiProvider = AiProviderResponse & { apiKey: string; baseURL: string };
 
 type CreateAiProviderInput = {
 	userId: string;
@@ -76,14 +83,58 @@ function toResponse(row: AiProviderRecord): AiProviderResponse {
 		lastUsedAt: row.lastUsedAt,
 		createdAt: row.createdAt,
 		updatedAt: row.updatedAt,
+		source: "database",
 	};
+}
+
+function getEnvironmentProvider(): RunnableAiProvider | null {
+	const baseURL = env.AI_PROVIDER_BASE_URL?.trim() ?? "";
+	const apiKey = env.AI_PROVIDER_API_KEY?.trim() ?? "";
+	const model = env.AI_PROVIDER_MODEL?.trim() ?? "";
+	const configuredValues = [baseURL, apiKey, model].filter(Boolean).length;
+
+	if (configuredValues === 0) return null;
+	if (configuredValues !== 3) throw new Error("AI_ENV_PROVIDER_INCOMPLETE");
+
+	const normalizedBaseURL = resolveAiBaseUrl(
+		{ provider: "openai-compatible", baseURL },
+		{ allowUnsafe: env.FLAG_ALLOW_UNSAFE_AI_BASE_URL },
+	);
+	const timestamp = new Date(0);
+
+	return {
+		id: ENVIRONMENT_PROVIDER_ID,
+		label: "Environment Default",
+		provider: "openai-compatible",
+		model,
+		baseURL: normalizedBaseURL,
+		enabled: true,
+		testStatus: "success",
+		testError: null,
+		apiKeyPreview: "Configured on server",
+		apiKeyFingerprint: "environment",
+		lastTestedAt: null,
+		lastUsedAt: null,
+		createdAt: timestamp,
+		updatedAt: timestamp,
+		source: "environment",
+		apiKey,
+	};
+}
+
+function toEnvironmentResponse(provider: RunnableAiProvider): AiProviderResponse {
+	const { apiKey: _apiKey, ...response } = provider;
+	return response;
 }
 
 function normalizeBaseUrl(input: { provider: AIProvider; baseURL?: string | null }) {
 	const trimmed = input.baseURL?.trim() ?? "";
 	if (!trimmed) return null;
 
-	return resolveAiBaseUrl({ provider: input.provider, baseURL: trimmed });
+	return resolveAiBaseUrl(
+		{ provider: input.provider, baseURL: trimmed },
+		{ allowUnsafe: env.FLAG_ALLOW_UNSAFE_AI_BASE_URL },
+	);
 }
 
 function orderByLastUsedAtDescNullsLast() {
@@ -104,7 +155,11 @@ async function getOwnedProvider(input: { id: string; userId: string }) {
 
 export const aiProvidersService = {
 	list: async (input: { userId: string }) => {
-		assertCredentialEncryptionConfigured();
+		const environmentProvider = getEnvironmentProvider();
+		if (!isCredentialEncryptionConfigured()) {
+			if (environmentProvider) return [toEnvironmentResponse(environmentProvider)];
+			assertCredentialEncryptionConfigured();
+		}
 
 		const providers = await db
 			.select()
@@ -112,10 +167,16 @@ export const aiProvidersService = {
 			.where(eq(schema.aiProvider.userId, input.userId))
 			.orderBy(orderByLastUsedAtDescNullsLast(), asc(schema.aiProvider.createdAt));
 
-		return providers.map(toResponse);
+		return [...(environmentProvider ? [toEnvironmentResponse(environmentProvider)] : []), ...providers.map(toResponse)];
 	},
 
 	getRunnableById: async (input: { id: string; userId: string }) => {
+		const environmentProvider = getEnvironmentProvider();
+		if (input.id === ENVIRONMENT_PROVIDER_ID) {
+			if (!environmentProvider) throw new ORPCError("NOT_FOUND");
+			return environmentProvider;
+		}
+
 		assertCredentialEncryptionConfigured();
 
 		const provider = await getOwnedProvider(input);
@@ -131,6 +192,9 @@ export const aiProvidersService = {
 	},
 
 	getDefaultRunnable: async (input: { userId: string }) => {
+		const environmentProvider = getEnvironmentProvider();
+		if (environmentProvider) return environmentProvider;
+
 		assertCredentialEncryptionConfigured();
 
 		const [provider] = await db
@@ -267,6 +331,8 @@ export const aiProvidersService = {
 	},
 
 	markUsed: async (input: { id: string; userId: string }) => {
+		if (input.id === ENVIRONMENT_PROVIDER_ID) return;
+
 		await db
 			.update(schema.aiProvider)
 			.set({ lastUsedAt: new Date() })

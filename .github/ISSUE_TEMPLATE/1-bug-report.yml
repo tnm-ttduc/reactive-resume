@@ -1,10 +1,10 @@
 name: 🐞 Bug Report
 
-description: Create a bug report to help improve Reactive Resume
+description: Create a bug report to help improve TNM HR Platform
 
 title: "[Bug] <title>"
 labels: [bug, v5, needs triage]
-assignees: "AmruthPillai"
+assignees: ""
 
 body:
   - type: checkboxes
@@ -19,9 +19,9 @@ body:
     id: variant
     attributes:
       label: Product Variant
-      description: What variant of Reactive Resume are you using?
+      description: What deployment of TNM HR Platform are you using?
       options:
-        - Cloud (https://rxresu.me)
+        - Organization-hosted
         - Self-Hosted
     validations:
       required: true

@@ -44,6 +44,55 @@ function stubOpenAICompatibleResponse(response?: { content?: string; finishReaso
 	return { fetchMock, getRequestBody: () => requestBody };
 }
 
+function stubEventStreamHeaderWithJsonBody() {
+	const responseBody = `${JSON.stringify({
+		id: "chatcmpl-test",
+		object: "chat.completion",
+		created: 1,
+		model: "test-model",
+		choices: [{ index: 0, message: { role: "assistant", content: "1" }, finish_reason: "stop" }],
+		usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
+	})}data: [DONE]\n`;
+
+	vi.stubGlobal(
+		"fetch",
+		vi.fn(async () => new Response(responseBody, { headers: { "Content-Type": "text/event-stream" } })),
+	);
+}
+
+function stubUnexpectedEventStreamChunks() {
+	const chunks = [
+		{
+			id: "chatcmpl-test",
+			object: "chat.completion.chunk",
+			created: 1,
+			model: "test-model",
+			choices: [{ index: 0, delta: { role: "assistant" }, finish_reason: null }],
+		},
+		{
+			id: "chatcmpl-test",
+			object: "chat.completion.chunk",
+			created: 1,
+			model: "test-model",
+			choices: [{ index: 0, delta: { content: "1" }, finish_reason: null }],
+		},
+		{
+			id: "chatcmpl-test",
+			object: "chat.completion.chunk",
+			created: 1,
+			model: "test-model",
+			choices: [{ index: 0, delta: {}, finish_reason: "stop" }],
+			usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
+		},
+	];
+	const responseBody = `${chunks.map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`).join("")}data: [DONE]\n\n`;
+
+	vi.stubGlobal(
+		"fetch",
+		vi.fn(async () => new Response(responseBody, { headers: { "Content-Type": "text/event-stream" } })),
+	);
+}
+
 const { testConnection } = await import("./service");
 
 describe("AI chat service", () => {
@@ -75,6 +124,32 @@ describe("AI chat service", () => {
 				baseURL: "https://example.test/v1",
 			}),
 		).rejects.toThrow("The model returned too much text during the provider test.");
+	});
+
+	it("normalizes non-stream responses mislabeled as event streams", async () => {
+		stubEventStreamHeaderWithJsonBody();
+
+		await expect(
+			testConnection({
+				provider: "openai-compatible",
+				model: "test-model",
+				apiKey: "test-key",
+				baseURL: "https://example.test/v1",
+			}),
+		).resolves.toBe(true);
+	});
+
+	it("combines unexpected SSE chunks returned for a non-streaming request", async () => {
+		stubUnexpectedEventStreamChunks();
+
+		await expect(
+			testConnection({
+				provider: "openai-compatible",
+				model: "test-model",
+				apiKey: "test-key",
+				baseURL: "https://example.test/v1",
+			}),
+		).resolves.toBe(true);
 	});
 
 	it("keeps proposal tool history valid for follow-up chat messages", async () => {

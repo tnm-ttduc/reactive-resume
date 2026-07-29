@@ -34,6 +34,7 @@
 				"@better-auth/drizzle-adapter",
 				"@better-auth/infra",
 				"@better-auth/passkey",
+				"@napi-rs/canvas",
 				"@orpc/experimental-ratelimit",
 				"@sindresorhus/slugify",
 				"@t3-oss/env-core",

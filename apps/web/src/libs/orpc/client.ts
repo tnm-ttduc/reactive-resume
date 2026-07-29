@@ -4,11 +4,9 @@ import { createORPCClient, onError } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import { BatchLinkPlugin } from "@orpc/client/plugins";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
+import { getAppEndpoint } from "@/libs/app-url";
 
-const getRpcUrl = () => {
-	if (typeof window === "undefined") return "http://localhost:3000/api/rpc";
-	return `${window.location.origin}/api/rpc`;
-};
+const getRpcUrl = () => getAppEndpoint("/api/rpc");
 
 const createRpcClient = (): RouterClient<typeof router> => {
 	const link = new RPCLink({

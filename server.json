@@ -1,18 +1,13 @@
 {
 	"$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-	"name": "io.github.amruthpillai/reactive-resume",
-	"title": "Reactive Resume",
-	"description": "Free open-source resume builder with remote MCP tools for resumes and job applications.",
-	"websiteUrl": "https://rxresu.me",
-	"repository": {
-		"url": "https://github.com/amruthpillai/reactive-resume",
-		"source": "github"
-	},
+	"name": "vn.tnm.hr-platform",
+	"title": "TNM HR Platform",
+	"description": "Resume and job application management with remote MCP tools.",
 	"version": "5.2.2",
 	"remotes": [
 		{
 			"type": "streamable-http",
-			"url": "https://rxresu.me/mcp"
+			"url": "http://localhost:3000/mcp"
 		}
 	]
 }

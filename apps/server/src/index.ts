@@ -1,5 +1,6 @@
 import { pathToFileURL } from "node:url";
 import { serve } from "@hono/node-server";
+import { startCustomTemplateImportWorker } from "@reactive-resume/api/features/custom-templates/worker";
 import { env } from "@reactive-resume/env/server";
 import { createApp } from "./http/app";
 import { runStartupChecks } from "./startup/checks";
@@ -13,6 +14,7 @@ async function main() {
 		process.env.NODE_ENV === "production" ? Number.parseInt(process.env.PORT ?? "3000", 10) : env.SERVER_PORT;
 
 	const app = createApp();
+	startCustomTemplateImportWorker();
 
 	serve(
 		{

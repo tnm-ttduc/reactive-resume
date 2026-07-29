@@ -14,10 +14,15 @@ type SectionBaseProps = {
 vi.mock("../shared/section-base", () => ({
 	SectionBase: ({ children }: SectionBaseProps) => <div>{children}</div>,
 }));
+vi.mock("@tanstack/react-query", () => ({
+	useQuery: () => ({ data: [] }),
+	useQueryClient: () => ({ fetchQuery: vi.fn() }),
+}));
 vi.mock("@/features/resume/builder/draft", () => ({
 	useCurrentResume: () => ({
 		data: { metadata: { template: "ditto" } },
 	}),
+	useUpdateResumeData: () => vi.fn(),
 }));
 
 const { TemplateSectionBuilder } = await import("./template");

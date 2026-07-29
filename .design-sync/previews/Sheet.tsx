@@ -1,5 +1,5 @@
-import { Button } from "@reactive-resume/ui/components/button";
-import { Label } from "@reactive-resume/ui/components/label";
+import { Button } from "@tnm-hr-platform/ui/components/button";
+import { Label } from "@tnm-hr-platform/ui/components/label";
 import {
 	Sheet,
 	SheetClose,
@@ -8,7 +8,7 @@ import {
 	SheetFooter,
 	SheetHeader,
 	SheetTitle,
-} from "@reactive-resume/ui/components/sheet";
+} from "@tnm-hr-platform/ui/components/sheet";
 
 // Side drawer — rendered open (defaultOpen), anchored to the right edge.
 // cfg.overrides.Sheet pins cardMode: single + viewport.
@@ -22,7 +22,7 @@ export const Open = () => (
 			<div style={{ display: "flex", flexDirection: "column", gap: 14, padding: "0 16px" }}>
 				<div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
 					<Label>Public slug</Label>
-					<span style={{ fontSize: 13, color: "var(--muted-foreground)" }}>rxresume.me/jane-doe</span>
+					<span style={{ fontSize: 13, color: "var(--muted-foreground)" }}>localhost:3000/jane-doe</span>
 				</div>
 				<div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
 					<Label>Visibility</Label>

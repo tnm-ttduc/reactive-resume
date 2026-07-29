@@ -9,9 +9,11 @@ import {
 	GearSixIcon,
 	KeyIcon,
 	MagnifyingGlassIcon,
+	PaintBrushBroadIcon,
 	ReadCvLogoIcon,
 	ShieldCheckIcon,
 	UserCircleIcon,
+	UsersThreeIcon,
 	WarningIcon,
 } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
@@ -47,9 +49,19 @@ type SidebarItem = {
 
 const appSidebarItems = [
 	{
+		icon: <UsersThreeIcon />,
+		label: msg`Candidates`,
+		href: "/dashboard/candidates",
+	},
+	{
 		icon: <ReadCvLogoIcon />,
 		label: msg`Resumes`,
 		href: "/dashboard/resumes",
+	},
+	{
+		icon: <PaintBrushBroadIcon />,
+		label: msg`CV Templates`,
+		href: "/dashboard/templates",
 	},
 	{
 		icon: <BriefcaseIcon />,
@@ -157,7 +169,7 @@ export function DashboardSidebar() {
 							render={
 								<Link to="/">
 									<BrandIcon variant="icon" className="size-6" />
-									<h1 className="sr-only">Reactive Resume</h1>
+									<h1 className="sr-only">TNM HR Platform</h1>
 								</Link>
 							}
 						/>

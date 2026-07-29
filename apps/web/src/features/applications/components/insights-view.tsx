@@ -173,7 +173,7 @@ async function ibmPlexFontFace(): Promise<string | null> {
 
 // A funnel-flow snapshot (the shareable picture). Hand-drawn SVG with inline fills so it exports to
 // PNG without any library. Rendered dark + vibrant so the on-screen preview matches the export;
-// the "Tracked using Reactive Resume" mark is injected only when exporting.
+// the "Tracked using TNM HR Platform" mark is injected only when exporting.
 function PipelineFlow({ insights }: { insights: ReturnType<typeof computeInsights> }) {
 	const svgRef = useRef<SVGSVGElement>(null);
 	const W = 800;
@@ -314,7 +314,7 @@ function PipelineFlow({ insights }: { insights: ReturnType<typeof computeInsight
 					</g>
 				))}
 
-				{/* export-only watermark: the Reactive Resume mark, bottom-right, 8px from each edge.
+				{/* export-only watermark: the TNM HR Platform mark, bottom-right, 8px from each edge.
 				    Paths are apps/web/public/icon/dark.svg verbatim (fill #FAFAFA). */}
 				<g
 					data-export-only

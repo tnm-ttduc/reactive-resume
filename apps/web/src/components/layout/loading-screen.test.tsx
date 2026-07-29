@@ -6,10 +6,10 @@ import { describe, expect, it } from "vitest";
 import { LoadingScreen } from "./loading-screen";
 
 describe("LoadingScreen", () => {
-	it("renders the Reactive Resume icon and spinner", () => {
+	it("renders the TNM HR Platform icon and spinner", () => {
 		render(<LoadingScreen />);
 
-		const icons = screen.getAllByAltText("Reactive Resume");
+		const icons = screen.getAllByAltText("TNM HR Platform");
 		expect(icons).toHaveLength(2);
 		expect(icons.map((icon) => icon.getAttribute("src"))).toEqual(["/icon/dark.svg", "/icon/light.svg"]);
 		expect(screen.getByLabelText("Loading")).toBeInTheDocument();

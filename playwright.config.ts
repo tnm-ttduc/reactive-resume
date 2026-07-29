@@ -37,8 +37,9 @@ export default defineConfig({
 		env: {
 			...process.env,
 			APP_URL: baseURL,
-			NODE_ENV: "production",
+			NODE_ENV: "test",
 			PORT: String(port),
+			SERVER_PORT: String(port),
 		},
 	},
 });

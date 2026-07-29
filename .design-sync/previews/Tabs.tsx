@@ -1,6 +1,6 @@
 import type * as React from "react";
 import { BriefcaseIcon, GraduationCapIcon, SparkleIcon } from "@phosphor-icons/react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@reactive-resume/ui/components/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@tnm-hr-platform/ui/components/tabs";
 
 const wrap: React.CSSProperties = { width: 460, padding: 16 };
 const panel: React.CSSProperties = { padding: "12px 4px", lineHeight: 1.6 };
@@ -47,7 +47,7 @@ export const LineVariant = () => (
 				Your resume renders live as you edit each section.
 			</TabsContent>
 			<TabsContent value="share" style={panel}>
-				Publish a public link at reactive-resume.app/u/your-name.
+				Publish a public link at tnm-hr-platform.app/u/your-name.
 			</TabsContent>
 			<TabsContent value="export" style={panel}>
 				Download a print-ready PDF or DOCX in one click.

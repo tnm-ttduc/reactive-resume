@@ -207,6 +207,7 @@ function ProviderRow({ provider }: ProviderRowProps) {
 	const { mutate: updateProvider, isPending: isUpdating } = useMutation(orpc.aiProviders.update.mutationOptions());
 	const { mutate: deleteProvider, isPending: isDeleting } = useMutation(orpc.aiProviders.delete.mutationOptions());
 	const isMutating = isTesting || isUpdating || isDeleting;
+	const isEnvironmentProvider = provider.source === "environment";
 
 	return (
 		<div className="grid gap-4 rounded-md border bg-card p-4 md:grid-cols-[1fr_auto]">
@@ -217,6 +218,11 @@ function ProviderRow({ provider }: ProviderRowProps) {
 					{provider.enabled ? (
 						<Badge variant="outline">
 							<Trans>Enabled</Trans>
+						</Badge>
+					) : null}
+					{isEnvironmentProvider ? (
+						<Badge variant="secondary">
+							<Trans>Server environment</Trans>
 						</Badge>
 					) : null}
 				</div>
@@ -233,75 +239,81 @@ function ProviderRow({ provider }: ProviderRowProps) {
 				</div>
 			</div>
 
-			<div className="flex items-center gap-2 md:justify-end">
-				<div className="flex items-center gap-2 pe-2">
-					<Switch
-						checked={provider.enabled}
-						disabled={provider.testStatus !== "success" || isMutating}
-						onCheckedChange={(enabled) =>
-							updateProvider(
-								{ id: provider.id, enabled },
+			{isEnvironmentProvider ? (
+				<p className="self-center text-muted-foreground text-sm">
+					<Trans>Managed through environment variables</Trans>
+				</p>
+			) : (
+				<div className="flex items-center gap-2 md:justify-end">
+					<div className="flex items-center gap-2 pe-2">
+						<Switch
+							checked={provider.enabled}
+							disabled={provider.testStatus !== "success" || isMutating}
+							onCheckedChange={(enabled) =>
+								updateProvider(
+									{ id: provider.id, enabled },
+									{
+										onSuccess: () => void invalidate(),
+										onError: (error) =>
+											toast.error(getOrpcErrorMessage(error, { fallback: t`Failed to update provider.` })),
+									},
+								)
+							}
+						/>
+						<span className="text-muted-foreground text-sm">
+							<Trans>Use</Trans>
+						</span>
+					</div>
+
+					<Button
+						variant="outline"
+						disabled={isMutating}
+						onClick={() =>
+							testProvider(
+								{ id: provider.id },
 								{
-									onSuccess: () => void invalidate(),
-									onError: (error) =>
-										toast.error(getOrpcErrorMessage(error, { fallback: t`Failed to update provider.` })),
+									onSuccess: (response) => {
+										if (response.testStatus === "success") {
+											toast.success(t`Provider connection verified.`);
+										} else {
+											toast.error(response.testError ?? t`Could not verify provider connection.`);
+										}
+										void invalidate();
+									},
+									onError: (error) => {
+										toast.error(getOrpcErrorMessage(error, { fallback: t`Could not verify provider connection.` }));
+										void invalidate();
+									},
 								},
 							)
 						}
-					/>
-					<span className="text-muted-foreground text-sm">
-						<Trans>Use</Trans>
-					</span>
+					>
+						{isTesting ? <Spinner /> : provider.testStatus === "success" ? <CheckCircleIcon /> : <WarningCircleIcon />}
+						<Trans>Test</Trans>
+					</Button>
+
+					<Button
+						size="icon"
+						variant="ghost"
+						disabled={isMutating}
+						onClick={() =>
+							deleteProvider(
+								{ id: provider.id },
+								{
+									onSuccess: () => void invalidate(),
+									onError: (error) =>
+										toast.error(getOrpcErrorMessage(error, { fallback: t`Failed to delete provider.` })),
+								},
+							)
+						}
+					>
+						<TrashIcon />
+						<span className="sr-only">
+							<Trans>Delete provider</Trans>
+						</span>
+					</Button>
 				</div>
-
-				<Button
-					variant="outline"
-					disabled={isMutating}
-					onClick={() =>
-						testProvider(
-							{ id: provider.id },
-							{
-								onSuccess: (response) => {
-									if (response.testStatus === "success") {
-										toast.success(t`Provider connection verified.`);
-									} else {
-										toast.error(response.testError ?? t`Could not verify provider connection.`);
-									}
-									void invalidate();
-								},
-								onError: (error) => {
-									toast.error(getOrpcErrorMessage(error, { fallback: t`Could not verify provider connection.` }));
-									void invalidate();
-								},
-							},
-						)
-					}
-				>
-					{isTesting ? <Spinner /> : provider.testStatus === "success" ? <CheckCircleIcon /> : <WarningCircleIcon />}
-					<Trans>Test</Trans>
-				</Button>
-
-				<Button
-					size="icon"
-					variant="ghost"
-					disabled={isMutating}
-					onClick={() =>
-						deleteProvider(
-							{ id: provider.id },
-							{
-								onSuccess: () => void invalidate(),
-								onError: (error) =>
-									toast.error(getOrpcErrorMessage(error, { fallback: t`Failed to delete provider.` })),
-							},
-						)
-					}
-				>
-					<TrashIcon />
-					<span className="sr-only">
-						<Trans>Delete provider</Trans>
-					</span>
-				</Button>
-			</div>
+			)}
 		</div>
 	);
 }

@@ -1,4 +1,4 @@
-You are a strict resume extraction engine for {{FORMAT_HEADER}}. Convert the attached {{FORMAT_NOUN}} into a Reactive Resume JSON object.
+You are a strict resume extraction engine for {{FORMAT_HEADER}}. Convert the attached {{FORMAT_NOUN}} into a TNM HR Platform JSON object.
 
 ## Objective
 

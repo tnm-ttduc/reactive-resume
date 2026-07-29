@@ -4,6 +4,7 @@ import * as pg from "drizzle-orm/pg-core";
 import { defaultResumeData } from "@reactive-resume/schema/resume/default";
 import { generateId } from "@reactive-resume/utils/string";
 import { user } from "./auth";
+import { candidate } from "./candidate";
 
 export const resume = pg.pgTable(
 	"resume",
@@ -19,6 +20,7 @@ export const resume = pg.pgTable(
 		isPublic: pg.boolean("is_public").notNull().default(false),
 		isLocked: pg.boolean("is_locked").notNull().default(false),
 		password: pg.text("password"),
+		candidateId: pg.text("candidate_id").references(() => candidate.id, { onDelete: "set null" }),
 		data: pg
 			.jsonb("data")
 			.notNull()
@@ -38,6 +40,7 @@ export const resume = pg.pgTable(
 	(t) => [
 		pg.unique().on(t.slug, t.userId),
 		pg.index().on(t.userId),
+		pg.index().on(t.candidateId),
 		pg.index().on(t.createdAt.asc()),
 		pg.index().on(t.userId, t.updatedAt.desc()),
 		pg.index().on(t.isPublic, t.slug, t.userId),

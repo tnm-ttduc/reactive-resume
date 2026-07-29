@@ -1,11 +1,14 @@
 import type { AIProvider } from "@reactive-resume/ai/types";
 import { AI_PROVIDER_DEFAULT_BASE_URLS } from "@reactive-resume/ai/types";
-import { env } from "@reactive-resume/env/server";
 import { isPrivateOrLoopbackHost, parseUrl } from "@reactive-resume/utils/url-security.node";
 
 type ResolveAiBaseUrlInput = {
 	provider: AIProvider;
 	baseURL?: string | null;
+};
+
+type ResolveAiBaseUrlOptions = {
+	allowUnsafe?: boolean;
 };
 
 function assertSafeUrl(input: string, errorCode: string, options?: { allowUnsafe?: boolean }) {
@@ -23,9 +26,12 @@ function assertSafeUrl(input: string, errorCode: string, options?: { allowUnsafe
 	return parsed.toString();
 }
 
-export function resolveAiBaseUrl(input: ResolveAiBaseUrlInput) {
+export function resolveAiBaseUrl(
+	input: ResolveAiBaseUrlInput,
+	options: ResolveAiBaseUrlOptions = { allowUnsafe: false },
+) {
 	const baseURL = input.baseURL?.trim() || AI_PROVIDER_DEFAULT_BASE_URLS[input.provider];
 	if (!baseURL) throw new Error("INVALID_AI_BASE_URL");
 
-	return assertSafeUrl(baseURL, "INVALID_AI_BASE_URL", { allowUnsafe: env.FLAG_ALLOW_UNSAFE_AI_BASE_URL });
+	return assertSafeUrl(baseURL, "INVALID_AI_BASE_URL", options);
 }

@@ -1,9 +1,9 @@
 ---
 title: "Self-Hosted Resume Builder"
-description: "Run Reactive Resume as a self-hosted resume builder with Docker Compose, PostgreSQL, optional object storage, Single Sign-On, and v4 to v5 migration."
+description: "Run TNM HR Platform as a self-hosted resume builder with Docker Compose, PostgreSQL, optional object storage, Single Sign-On, and v4 to v5 migration."
 ---
 
-Reactive Resume can be run as a self-hosted resume builder when you want to operate the app on your own infrastructure instead of using the hosted instance.
+TNM HR Platform can be run as a self-hosted resume builder when you want to operate the app on your own infrastructure instead of using the hosted instance.
 
 ## When self-hosting is a good fit
 
@@ -20,7 +20,7 @@ Start here:
 
 A typical self-hosted deployment uses:
 
-- Reactive Resume application container.
+- TNM HR Platform application container.
 - PostgreSQL database.
 - SMTP configuration for account emails, or console-logged emails in simple development setups.
 - Optional S3-compatible storage for uploads.
@@ -35,6 +35,6 @@ Some features require extra configuration. For example, saved AI providers need 
 For automation setup on self-hosted instances, see [Using the API](/guides/using-the-api) and [Using the MCP Server](/guides/using-the-mcp-server).
 
 <Tip>
-  Replace hosted URLs such as <code>https://rxresu.me</code> with your own instance URL when following API, MCP, or
+  Replace hosted URLs such as <code>http://localhost:3000</code> with your own instance URL when following API, MCP, or
   sharing examples.
 </Tip>

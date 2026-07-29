@@ -16,7 +16,7 @@ env:
   FLAG_DISABLE_SIGNUPS: "false"
   FLAG_DISABLE_EMAIL_AUTH: "false"
   FLAG_DISABLE_API_RATE_LIMIT: "true"
-  LOCAL_STORAGE_PATH: /tmp/reactive-resume-e2e-storage
+  LOCAL_STORAGE_PATH: /tmp/tnm-hr-platform-e2e-storage
 
 jobs:
   e2e:

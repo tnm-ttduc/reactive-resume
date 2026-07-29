@@ -1,4 +1,4 @@
-# Reactive Resume UI — how to build with it
+# TNM HR Platform UI — how to build with it
 
 This is `@reactive-resume/ui`: a shadcn-style React component library built on **Base UI**
 primitives and **Tailwind CSS v4**. Every component is real upstream code, bundled to the

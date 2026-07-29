@@ -10,15 +10,14 @@ describe("buildMcpServerCard", () => {
 		expect(card.serverInfo.version).toBe("1.2.3");
 	});
 
-	it("identifies the server as reactive-resume", () => {
-		expect(card.serverInfo.name).toBe("reactive-resume");
-		expect(card.serverInfo.title).toBe("Reactive Resume");
-		expect(card.serverInfo.websiteUrl).toBe("https://rxresu.me");
+	it("identifies the TNM HR Platform server", () => {
+		expect(card.serverInfo.name).toBe("tnm-hr-platform");
+		expect(card.serverInfo.title).toBe("TNM HR Platform");
 	});
 
-	it("exposes light + dark theme icons", () => {
-		const themes = card.serverInfo.icons.map((icon) => icon.theme).sort();
-		expect(themes).toEqual(["dark", "light"]);
+	it("does not advertise upstream-hosted assets", () => {
+		expect(card.serverInfo).not.toHaveProperty("icons");
+		expect(card.serverInfo).not.toHaveProperty("websiteUrl");
 	});
 
 	it("requires authentication with oauth2 + bearer schemes", () => {

@@ -22,7 +22,7 @@ export const Navigation = () => (
 		>
 			<Sidebar collapsible="none">
 				<SidebarHeader>
-					<div style={{ padding: 8, fontWeight: 600, fontSize: 14 }}>Reactive Resume</div>
+					<div style={{ padding: 8, fontWeight: 600, fontSize: 14 }}>TNM HR Platform</div>
 				</SidebarHeader>
 				<SidebarContent>
 					<SidebarGroup>

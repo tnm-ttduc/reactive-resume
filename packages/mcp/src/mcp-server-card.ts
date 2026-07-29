@@ -92,16 +92,11 @@ export function buildMcpServerCard(appVersion: string) {
 			},
 		},
 		serverInfo: {
-			name: "reactive-resume",
+			name: "tnm-hr-platform",
 			version: appVersion,
-			title: "Reactive Resume",
-			websiteUrl: "https://rxresu.me",
+			title: "TNM HR Platform",
 			description:
-				"Reactive Resume is a free and open-source resume builder. Use this MCP server to interact with your resume using an LLM of your choice.",
-			icons: [
-				{ src: "https://rxresu.me/icon/light.svg", mimeType: "image/svg+xml", theme: "light" as const },
-				{ src: "https://rxresu.me/icon/dark.svg", mimeType: "image/svg+xml", theme: "dark" as const },
-			],
+				"TNM HR Platform helps users create and manage resumes. Use this MCP server to interact with resume data using an LLM of your choice.",
 		},
 		tools,
 		prompts,

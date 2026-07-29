@@ -6,11 +6,18 @@
 	"scripts": {
 		"db:reset": "tsx database/reset.ts",
 		"fonts:generate": "tsx fonts/generate.ts",
+		"sprint0:render-golden": "tsx sprint-0/render-golden-pdfs.ts",
 		"typecheck": "tsgo --noEmit"
+	},
+	"dependencies": {
+		"@reactive-resume/pdf": "workspace:*",
+		"@reactive-resume/schema": "workspace:*",
+		"react": "^19.2.7"
 	},
 	"devDependencies": {
 		"@reactive-resume/config": "workspace:*",
 		"@reactive-resume/env": "workspace:*",
+		"@types/react": "^19.2.17",
 		"@types/pg": "^8.20.0",
 		"@typescript/native-preview": "7.0.0-dev.20260707.2",
 		"drizzle-orm": "1.0.0-rc.4",

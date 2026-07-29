@@ -23,7 +23,7 @@ export const Addons = () => (
 		<InputGroup>
 			<InputGroupAddon>
 				<GlobeIcon />
-				<InputGroupText>rxresu.me/u/</InputGroupText>
+				<InputGroupText>localhost:3000/u/</InputGroupText>
 			</InputGroupAddon>
 			<InputGroupInput defaultValue="jordan-rivera" />
 		</InputGroup>

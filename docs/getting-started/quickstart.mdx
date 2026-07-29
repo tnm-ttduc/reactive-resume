@@ -1,11 +1,11 @@
 ---
 title: "Quickstart"
-description: "Get started with Reactive Resume in minutes by signing in to the hosted version or deploying your own self-hosted instance with Docker Compose."
+description: "Get started with TNM HR Platform in minutes by signing in to the hosted version or deploying your own self-hosted instance with Docker Compose."
 ---
 
 ## Options
 
-Reactive Resume offers flexibility in how you want to use it. Choose the option that best fits your needs:
+TNM HR Platform offers flexibility in how you want to use it. Choose the option that best fits your needs:
 
 <CardGroup cols={2}>
   <Card title="Use the Cloud Version" icon="cloud" href="#use-the-cloud-version">
@@ -20,11 +20,11 @@ Reactive Resume offers flexibility in how you want to use it. Choose the option 
 
 ## Using the Cloud Version
 
-The easiest way to use Reactive Resume is through our cloud version at [rxresu.me](https://rxresu.me). **This service is completely free and will always remain free.**
+The easiest way to use TNM HR Platform is through our cloud version at [localhost:3000](http://localhost:3000). **This service is completely free and will always remain free.**
 
 <Steps>
 	<Step title="Create an Account">
-		Visit [rxresu.me](https://rxresu.me) and sign up for free using your email, or sign in with your GitHub or Google
+		Visit [localhost:3000](http://localhost:3000) and sign up for free using your email, or sign in with your GitHub or Google
 		account.
 	</Step>
 
@@ -49,7 +49,7 @@ The easiest way to use Reactive Resume is through our cloud version at [rxresu.m
 
 ## Self-Host with Docker
 
-For users who prefer complete control over their data, you can deploy Reactive Resume on your own infrastructure using Docker.
+For users who prefer complete control over their data, you can deploy TNM HR Platform on your own infrastructure using Docker.
 
 <Info>
   **From v5.1.0 onwards** — PDF generation now runs entirely client-side via `@react-pdf/renderer`. Self-hosted deployments no longer require Browserless, Chromium, or any external print service as a dependency. The `PRINTER_*` and `BROWSERLESS_*` environment variables are no longer read and can be removed from your `.env`.
@@ -72,8 +72,8 @@ Before you begin, ensure you have the following installed:
 <Steps>
 	<Step title="Clone the Repository">
 		```bash
-		git clone https://github.com/amruthpillai/reactive-resume.git
-		cd reactive-resume
+		git clone https://github.com/your-organization/tnm-hr-platform
+		cd tnm-hr-platform
 		```
 	</Step>
 
@@ -94,7 +94,7 @@ AUTH_SECRET=your-secure-secret-key-here
 S3_ACCESS_KEY_ID=seaweedfs
 S3_SECRET_ACCESS_KEY=seaweedfs
 S3_ENDPOINT=http://seaweedfs:8333
-S3_BUCKET=reactive-resume
+S3_BUCKET=tnm-hr-platform
 S3_FORCE_PATH_STYLE=true
 
 # AI features (optional; ENCRYPTION_SECRET for saved providers, plus REDIS_URL for the agent)
@@ -117,11 +117,11 @@ ENCRYPTION_SECRET=your-secure-encryption-secret-here
     	- **PostgreSQL** — Database for storing user data and resumes
 	- **Redis** — Required for the AI Agent workspace
     	- **SeaweedFS** — S3-compatible storage for file uploads
-    	- **Reactive Resume** — The main application
+      - **TNM HR Platform** — The main application
     </Step>
 
     <Step title="Access Your Instance">
-    	Once all services are running, access your Reactive Resume instance at:
+      Once all services are running, access your TNM HR Platform instance at:
 
     	```text
     	http://localhost:3000
@@ -139,11 +139,11 @@ Here's what each service in the stack does:
 | `postgres`        | 5432 | PostgreSQL database for storing all application data |
 | `redis`           | 6379 | Redis instance required by the AI Agent workspace    |
 | `seaweedfs`       | 8333 | S3-compatible object storage for file uploads        |
-| `reactive_resume` | 3000 | The main Reactive Resume application                 |
+| `tnm_hr_platform` | 3000 | The main TNM HR Platform application                 |
 
 <Note>
   Saved AI provider management requires `ENCRYPTION_SECRET`, and the AI Agent workspace requires both `REDIS_URL` and
-  `ENCRYPTION_SECRET`. Other Reactive Resume features can run without them. Agent attachments and other private objects
+  `ENCRYPTION_SECRET`. Other TNM HR Platform features can run without them. Agent attachments and other private objects
   require S3-compatible storage; local storage rejects private objects.
 </Note>
 
@@ -169,7 +169,7 @@ Here's a complete list of environment variables you can configure:
 | -------------- | ------------------------------ | ------------------------------------- |
 | `DATABASE_URL` | PostgreSQL connection string   | `postgresql://user:pass@host:5432/db` |
 | `AUTH_SECRET`  | Secret key for authentication  | Generate with `openssl rand -hex 32`  |
-| `APP_URL`      | Public URL of your Application | `https://rxresu.me`                   |
+| `APP_URL`      | Public URL of your Application | `http://localhost:3000`                   |
 
 ### Optional Variables
 
@@ -207,7 +207,6 @@ Here's a complete list of environment variables you can configure:
 | `FLAG_DISABLE_SIGNUPS`                | Disables new user signups                                   | `false`                |
 | `FLAG_DISABLE_EMAIL_AUTH`             | Disables email/password login (SSO only)                    | `false`                |
 | `FLAG_DISABLE_IMAGE_PROCESSING`       | Disables image processing                                   | `false`                |
-| `FLAG_SHOW_SPONSORS`                  | Shows sponsor placements on the public landing page         | `false`                |
 | `FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI` | Allows arbitrary dynamic OAuth redirect URIs                | `false`                |
 | `FLAG_ALLOW_UNSAFE_AI_BASE_URL`       | Allows unsafe/private/non-public AI provider base URLs      | `false`                |
 
@@ -225,7 +224,7 @@ Here's a complete list of environment variables you can configure:
 
 <CardGroup cols={2}>
   <Card title="Development Setup" icon="code" href="/contributing/development">
-    Set up a development environment to contribute or customize Reactive Resume.
+    Set up a development environment to contribute or customize TNM HR Platform.
   </Card>
   <Card title="Project Architecture" icon="folder-open" href="/contributing/architecture">
     Learn about the project structure and architecture.
@@ -233,6 +232,6 @@ Here's a complete list of environment variables you can configure:
 </CardGroup>
 
 <Note>
-  **Having trouble?** Check our [GitHub Issues](https://github.com/amruthpillai/reactive-resume/issues) or reach out via
-  [email](mailto:hello@amruthpillai.com).
+  **Having trouble?** Check our [GitHub Issues](https://github.com/your-organization/tnm-hr-platform/issues) or reach out via
+  [email](mailto:support@example.com).
 </Note>

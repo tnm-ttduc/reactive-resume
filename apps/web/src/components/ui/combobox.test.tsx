@@ -59,7 +59,7 @@ describe("Combobox", () => {
 
 		await user.click(screen.getByRole("combobox"));
 
-		expect(screen.getByText("Primary")).toBeInTheDocument();
+		expect(await screen.findByText("Primary")).toBeInTheDocument();
 		expect(screen.getByText("Secondary")).toBeInTheDocument();
 		expect(screen.getByText("Alpha")).toBeInTheDocument();
 		expect(screen.getByText("Beta")).toBeInTheDocument();

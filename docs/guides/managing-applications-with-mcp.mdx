@@ -3,7 +3,7 @@ title: "Managing applications with MCP"
 description: "Use a connected MCP client to track job applications, attach sent PDFs, run Application Copilot, and manage your pipeline with natural-language prompts."
 ---
 
-Use this guide when you want an AI client to manage the **Application Tracker** for you. After the Reactive Resume MCP server is connected, the agent can use tools for the same application workflows available in the app: listing applications, creating records, importing rows, updating stages, adding notes, managing follow-ups, attaching documents, and running Application Copilot.
+Use this guide when you want an AI client to manage the **Application Tracker** for you. After the TNM HR Platform MCP server is connected, the agent can use tools for the same application workflows available in the app: listing applications, creating records, importing rows, updating stages, adding notes, managing follow-ups, attaching documents, and running Application Copilot.
 
 ## Prerequisites
 
@@ -13,7 +13,7 @@ Use this guide when you want an AI client to manage the **Application Tracker** 
   </Step>
 
   <Step title="Confirm the application tools are visible">
-    Ask your client to list the Reactive Resume tools. You should see tools such as `list_applications`, `create_application`, `update_application`, `attach_application_document`, and `draft_application_message`.
+    Ask your client to list the TNM HR Platform tools. You should see tools such as `list_applications`, `create_application`, `update_application`, `attach_application_document`, and `draft_application_message`.
   </Step>
 
   <Step title="Decide how destructive actions should be handled">
@@ -22,7 +22,7 @@ Use this guide when you want an AI client to manage the **Application Tracker** 
 </Steps>
 
 <Info>
-  Application Copilot tools require the same AI provider setup used by the app. Match scoring and resume tailoring work best when the application has a linked Reactive Resume and a job description.
+  Application Copilot tools require the same AI provider setup used by the app. Match scoring and resume tailoring work best when the application has a linked TNM HR Platform and a job description.
 </Info>
 
 ## Start with a pipeline review
@@ -62,7 +62,7 @@ Create an application for Senior Product Engineer at Acme. Stage: saved. Locatio
 If you have a job posting, ask the agent to extract details first.
 
 ```text
-Use the Reactive Resume application auto-fill tool on this job posting URL, then create a saved application from the extracted company, role, location, salary, and job description. Tag it with remote and backend.
+Use the TNM HR Platform application auto-fill tool on this job posting URL, then create a saved application from the extracted company, role, location, salary, and job description. Tag it with remote and backend.
 ```
 
 If the posting is private, paste the description into your prompt:
@@ -78,7 +78,7 @@ Create an application from this pasted job description. Use auto-fill if availab
 Use `import_applications` when you already have spreadsheet rows. The Application Tracker accepts up to 500 imported rows at a time.
 
 ```text
-Import these application rows into Reactive Resume. Normalize the stages to saved, applied, screening, interview, offer, or rejected. Skip rows that do not have both a company and role, and tell me what was skipped.
+Import these application rows into TNM HR Platform. Normalize the stages to saved, applied, screening, interview, offer, or rejected. Skip rows that do not have both a company and role, and tell me what was skipped.
 
 Company,Role,Stage,Location,Source,Tags
 Acme,Frontend Engineer,applied,Remote,LinkedIn,remote;react
@@ -272,15 +272,15 @@ Show applications by stage and tell me where the pipeline is blocked.
 Add this to your MCP client's project or session instructions when you want the agent to manage applications safely:
 
 ```text
-Use Reactive Resume MCP for application tracking. Start by calling list_applications before creating a new record so you do not duplicate existing applications. Confirm before delete_application, bulk_delete_applications, bulk_update_applications, replacing attached documents, or archiving more than five applications. Prefer add_application_note for timeline updates. Use Application Copilot tools only when the application has enough context, and never present AI-generated cover letters or follow-ups as sent messages.
+Use TNM HR Platform MCP for application tracking. Start by calling list_applications before creating a new record so you do not duplicate existing applications. Confirm before delete_application, bulk_delete_applications, bulk_update_applications, replacing attached documents, or archiving more than five applications. Prefer add_application_note for timeline updates. Use Application Copilot tools only when the application has enough context, and never present AI-generated cover letters or follow-ups as sent messages.
 ```
 
 ## Troubleshooting
 
 | Issue | What to do |
 | --- | --- |
-| The agent cannot see application tools | Reconnect the MCP server and ask the client to refresh tool discovery. Confirm you are connected to Reactive Resume v5.2.2 or later. |
+| The agent cannot see application tools | Reconnect the MCP server and ask the client to refresh tool discovery. Confirm you are connected to TNM HR Platform v5.2.2 or later. |
 | The agent creates duplicates | Ask it to run `list_applications` first and match by company, role, and source URL before creating records. |
 | Document attachment fails | Attach only PDFs. If your MCP client cannot read local files, upload the document from the web app. |
-| Match scoring or tailoring fails | Link a Reactive Resume to the application and add a job description. Confirm your AI provider is configured. |
+| Match scoring or tailoring fails | Link a TNM HR Platform to the application and add a job description. Confirm your AI provider is configured. |
 | A bulk action changed too much | Use the application list and timeline to inspect what changed. For future sessions, require confirmation before bulk actions. |

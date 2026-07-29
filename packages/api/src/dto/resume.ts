@@ -42,7 +42,7 @@ export const resumeDto = {
 		// features/resume/access-policy.ts). Relax the `min(1)` constraint here so
 		// the redacted public response passes output validation.
 		output: resumeSchema
-			.omit({ name: true, password: true, userId: true, createdAt: true, updatedAt: true })
+			.omit({ name: true, password: true, userId: true, candidateId: true, createdAt: true, updatedAt: true })
 			.extend({ name: z.string() }),
 	},
 

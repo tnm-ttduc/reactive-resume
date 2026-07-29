@@ -27,30 +27,14 @@ const renderInfo = () =>
 	);
 
 describe("InformationSectionBuilder", () => {
-	it("renders the donation prompt and CTA", () => {
+	it("renders neutral platform information", () => {
 		renderInfo();
-		expect(screen.getByText("Support the app by doing what you can!")).toBeInTheDocument();
-		expect(screen.getByText("Donate to Reactive Resume")).toBeInTheDocument();
+		expect(screen.getByText("TNM HR Platform")).toBeInTheDocument();
+		expect(screen.getByText(/Create, manage, and share professional resumes/)).toBeInTheDocument();
 	});
 
-	it("links to the OpenCollective donation page", () => {
+	it("does not include promotional or community links", () => {
 		renderInfo();
-		const donateLink = screen.getByText("Donate to Reactive Resume").closest("a");
-		expect(donateLink?.getAttribute("href")).toBe("http://opencollective.com/reactive-resume");
-	});
-
-	it("includes external resource links (docs, source, bugs, translations, sponsors)", () => {
-		renderInfo();
-		const labels = ["Documentation", "Source Code", "Report a Bug", "Translations", "Sponsors"];
-		for (const label of labels) {
-			expect(screen.getByText(label).closest("a"), label).not.toBeNull();
-		}
-	});
-
-	it("opens external links in a new tab", () => {
-		renderInfo();
-		const docs = screen.getByText("Documentation").closest("a") as HTMLAnchorElement;
-		expect(docs.getAttribute("target")).toBe("_blank");
-		expect(docs.getAttribute("rel")).toBe("noopener noreferrer");
+		expect(screen.queryAllByRole("link")).toHaveLength(0);
 	});
 });

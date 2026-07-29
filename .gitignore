@@ -52,10 +52,15 @@ temp
 .codegraph
 .superpowers
 .migration
+.nodeterm/
 
 # Local Storage Data
 /data
 /apps/web/data
+
+# Sprint 0 research inputs may contain candidate PII.
+/research/input-cvs/*
+!/research/input-cvs/README.md
 
 # Git Hooks
 .vite-hooks/

@@ -1,6 +1,6 @@
 ---
 title: "Self-Hosting with Docker"
-description: "A comprehensive guide to self-host Reactive Resume with Docker (Postgres only), including a detailed environment variable reference and troubleshooting tips."
+description: "A comprehensive guide to self-host TNM HR Platform with Docker (Postgres only), including a detailed environment variable reference and troubleshooting tips."
 ---
 
 <Info>
@@ -9,7 +9,7 @@ description: "A comprehensive guide to self-host Reactive Resume with Docker (Po
 
 ## Overview
 
-Reactive Resume can be self-hosted using Docker in a matter of minutes, and this guide will walk you through the process. Here are some of the services you'll need to get started:
+TNM HR Platform can be self-hosted using Docker in a matter of minutes, and this guide will walk you through the process. Here are some of the services you'll need to get started:
 
 <CardGroup cols={2}>
   <Card title="PostgreSQL">Stores accounts, resumes, and application data.</Card>
@@ -23,8 +23,8 @@ Reactive Resume can be self-hosted using Docker in a matter of minutes, and this
 
 You can pull the latest app image from:
 
-- Docker Hub: `amruthpillai/reactive-resume:latest`
-- GitHub Container Registry: `ghcr.io/amruthpillai/reactive-resume:latest`
+- Docker Hub: `tnm-hr-platform:latest`
+- GitHub Container Registry: `tnm-hr-platform:latest`
 
 ## Minimum requirements
 
@@ -36,7 +36,7 @@ You can pull the latest app image from:
 
 ## Quickstart using Docker Compose
 
-Create a new folder (for example `reactive-resume/`) with:
+Create a new folder (for example `tnm-hr-platform/`) with:
 
 - `compose.yml`
 - `.env`
@@ -91,7 +91,7 @@ SMTP_HOST=""
 SMTP_PORT="587"
 SMTP_USER=""
 SMTP_PASS=""
-SMTP_FROM="Reactive Resume <noreply@rxresu.me>"
+SMTP_FROM="TNM HR Platform <noreply@localhost:3000>"
 SMTP_SECURE="false"
 
 # --- Storage (optional) ---
@@ -108,7 +108,7 @@ S3_FORCE_PATH_STYLE="false"
 
 # --- AI features (optional) ---
 # ENCRYPTION_SECRET is required for saved AI providers. REDIS_URL is also required for the AI Agent workspace.
-# The rest of Reactive Resume can run without these.
+# The rest of TNM HR Platform can run without these.
 REDIS_URL=""
 # Generated using `openssl rand -hex 32`
 ENCRYPTION_SECRET=""
@@ -118,7 +118,6 @@ FLAG_DISABLE_SIGNUPS="false"
 FLAG_DISABLE_EMAIL_AUTH="false"
 FLAG_DISABLE_IMAGE_PROCESSING="false"
 FLAG_DISABLE_API_RATE_LIMIT="false"
-FLAG_SHOW_SPONSORS="false"
 # Allows any parseable dynamic OAuth redirect URI. Keep false unless this is a trusted self-hosted deployment.
 FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI="false"
 # Allows unsafe/private/non-public AI provider base URLs. Keep false unless this is a trusted self-hosted deployment.
@@ -147,7 +146,7 @@ FLAG_ALLOW_UNSAFE_AI_BASE_URL="false"
   </Step>
 
   <Step title="Create compose.yml">
-    This setup runs Postgres and Reactive Resume on a private Docker network.
+    This setup runs Postgres and TNM HR Platform on a private Docker network.
 
     <CodeGroup>
 
@@ -168,9 +167,9 @@ services:
       timeout: 5s
       retries: 10
 
-  reactive-resume:
-    image: amruthpillai/reactive-resume:latest
-    # image: ghcr.io/amruthpillai/reactive-resume:latest
+  tnm-hr-platform:
+    image: tnm-hr-platform:latest
+    # image: tnm-hr-platform:latest
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -195,11 +194,11 @@ volumes:
     </CodeGroup>
 
     <Tip>
-      Prefer pulling from Docker Hub? Keep <code>amruthpillai/reactive-resume:latest</code>. Prefer GHCR? Swap it to <code>ghcr.io/amruthpillai/reactive-resume:latest</code>.
+      Prefer pulling from Docker Hub? Keep <code>tnm-hr-platform:latest</code>. Prefer GHCR? Swap it to <code>tnm-hr-platform:latest</code>.
     </Tip>
 
     <Note>
-      In Docker, the Reactive Resume server listens on <code>PORT</code> and serves both the API and the built web app.
+      In Docker, the TNM HR Platform server listens on <code>PORT</code> and serves both the API and the built web app.
       The default image uses <code>PORT=3000</code>, so the example maps <code>3000:3000</code>. If you change
       <code>PORT</code>, update the container-side port mapping and health check to match.
     </Note>
@@ -218,12 +217,12 @@ docker compose ps
 ```
 
 ```bash
-docker compose logs -f reactive-resume
+docker compose logs -f tnm-hr-platform
 ```
 
     </CodeGroup>
 
-    Reactive Resume should now be available at your `APP_URL` (for the example above: `http://localhost:3000`).
+    TNM HR Platform should now be available at your `APP_URL` (for the example above: `http://localhost:3000`).
 
   </Step>
 </Steps>
@@ -327,7 +326,7 @@ openssl rand -hex 32
     - **`SMTP_HOST`**: SMTP host (if empty, email sending is disabled).
     - **`SMTP_PORT`**: Defaults to `587` in the app.
     - **`SMTP_USER`** / **`SMTP_PASS`**: SMTP credentials.
-    - **`SMTP_FROM`**: Default from address (for example, `Reactive Resume <noreply@rxresu.me>`).
+    - **`SMTP_FROM`**: Default from address (for example, `TNM HR Platform <noreply@localhost:3000>`).
     - **`SMTP_SECURE`**: `"true"` or `"false"` (string). Match your provider settings.
 
   </Accordion>
@@ -345,7 +344,7 @@ openssl rand -hex 32
 </Accordion>
 
 <Accordion title="AI features (optional)">
-  Saved AI provider management is usable only when **`ENCRYPTION_SECRET`** is configured. The AI Agent workspace also requires **`REDIS_URL`**. The rest of Reactive Resume can run without them.
+  Saved AI provider management is usable only when **`ENCRYPTION_SECRET`** is configured. The AI Agent workspace also requires **`REDIS_URL`**. The rest of TNM HR Platform can run without them.
 
   - **`REDIS_URL`**: Redis connection string used by the AI Agent workspace.
   - **`ENCRYPTION_SECRET`**: Secret used to encrypt saved AI provider credentials. Generate with `openssl rand -hex 32`.
@@ -359,7 +358,6 @@ openssl rand -hex 32
   - **`FLAG_DISABLE_EMAIL_AUTH`**: Disables email/password login entirely. Also disables email verification, forgot password, and reset password flows. Users can still sign up via social auth (Google/GitHub/LinkedIn/Custom OAuth), unless FLAG_DISABLE_SIGNUPS is also set to true. Useful when only SSO is required.
   - **`FLAG_DISABLE_IMAGE_PROCESSING`**: Disables image processing. This is useful if you are using a machine with limited resources, like a Raspberry Pi.
   - **`FLAG_DISABLE_API_RATE_LIMIT`**: Disables API rate limiting for authentication endpoints. Rate limiting is enabled by default in production to prevent abuse.
-  - **`FLAG_SHOW_SPONSORS`**: Shows sponsor placements on the public landing page. Disabled by default for self-hosted instances.
   - **`FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI`**: Allows dynamic OAuth client registration to use any parseable redirect URI, including custom schemes, private hosts, and non-loopback `http://` URLs. **Warning: enabling this on a public or multi-tenant deployment can enable phishing or token exfiltration.** Only enable on trusted, self-hosted deployments.
   - **`FLAG_ALLOW_UNSAFE_AI_BASE_URL`**: Allows AI providers to be configured with unsafe, private, or non-public base URLs, including `http://` and private/loopback addresses (for example, a local Ollama instance at `http://192.168.1.10:11434`). Public HTTPS provider URLs remain the safe default. **Warning: enabling this on a multi-tenant deployment is an SSRF risk.** Only enable on trusted, self-hosted deployments.
 </Accordion>
@@ -367,7 +365,7 @@ openssl rand -hex 32
 
 ## Updating your installation
 
-To update your Reactive Resume installation to the latest available version, follow these steps:
+To update your TNM HR Platform installation to the latest available version, follow these steps:
 
 1. **Back up your database and uploads first** (highly recommended before every update).
 
@@ -386,7 +384,7 @@ To update your Reactive Resume installation to the latest available version, fol
 4. **Check migration/startup logs** after deploy.
 
    ```bash
-   docker compose logs -f reactive-resume
+   docker compose logs -f tnm-hr-platform
    ```
 
 5. **(Optional) Remove old, unused Docker images** to free up disk space.
@@ -398,7 +396,7 @@ This process updates app services and automatically runs DB migrations on startu
 
 ## Backups (recommended)
 
-Regular backups are essential to protect your data. Reactive Resume stores data in two places: the PostgreSQL database and file uploads (either local storage or S3).
+Regular backups are essential to protect your data. TNM HR Platform stores data in two places: the PostgreSQL database and file uploads (either local storage or S3).
 
 ### Database backups
 
@@ -412,7 +410,7 @@ If you're using S3-compatible storage, consider enabling versioning on your buck
 
 ## Health Checks
 
-Reactive Resume exposes a health check endpoint at `/api/health` that verifies the application and its dependencies. It checks **database** and **storage**; if either is unhealthy, the endpoint returns HTTP `503`.
+TNM HR Platform exposes a health check endpoint at `/api/health` that verifies the application and its dependencies. It checks **database** and **storage**; if either is unhealthy, the endpoint returns HTTP `503`.
 
 ### How it works
 
@@ -435,7 +433,7 @@ Most reverse proxies (such as **Traefik**, **Caddy**, or **nginx** with upstream
 - **Healthy containers** receive traffic as normal
 - **Unhealthy containers** are automatically removed from the load balancer pool
 
-This is particularly useful in high-availability setups where you have multiple instances of Reactive Resume. If one instance becomes unhealthy (for example, it loses database or storage connectivity), the reverse proxy will stop routing traffic to it until it recovers.
+This is particularly useful in high-availability setups where you have multiple instances of TNM HR Platform. If one instance becomes unhealthy (for example, it loses database or storage connectivity), the reverse proxy will stop routing traffic to it until it recovers.
 
 <Tip>
   If you're using **Traefik**, it automatically respects Docker health checks when using the Docker provider. Unhealthy
@@ -444,7 +442,7 @@ This is particularly useful in high-availability setups where you have multiple 
 
 ### Manually checking health
 
-You can manually verify the health of your Reactive Resume instance:
+You can manually verify the health of your TNM HR Platform instance:
 
 ```bash
 # From outside the container
@@ -464,7 +462,7 @@ A healthy response returns HTTP 200. Any other response (or a connection failure
     - **What to do**:
       Check logs for migration errors and database connectivity details:
       ```bash
-      docker compose logs -f reactive-resume
+      docker compose logs -f tnm-hr-platform
       ```
   </Accordion>
 
