@@ -8,6 +8,10 @@ type ResolveAiBaseUrlInput = {
 	baseURL?: string | null;
 };
 
+type ResolveAiBaseUrlOptions = {
+	allowUnsafe?: boolean;
+};
+
 function assertSafeUrl(input: string, errorCode: string, options?: { allowUnsafe?: boolean }) {
 	const parsed = parseUrl(input);
 	if (!parsed) throw new Error(errorCode);
@@ -23,9 +27,12 @@ function assertSafeUrl(input: string, errorCode: string, options?: { allowUnsafe
 	return parsed.toString();
 }
 
-export function resolveAiBaseUrl(input: ResolveAiBaseUrlInput) {
+export function resolveAiBaseUrl(
+	input: ResolveAiBaseUrlInput,
+	options: ResolveAiBaseUrlOptions = { allowUnsafe: env.FLAG_ALLOW_UNSAFE_AI_BASE_URL },
+) {
 	const baseURL = input.baseURL?.trim() || AI_PROVIDER_DEFAULT_BASE_URLS[input.provider];
 	if (!baseURL) throw new Error("INVALID_AI_BASE_URL");
 
-	return assertSafeUrl(baseURL, "INVALID_AI_BASE_URL", { allowUnsafe: env.FLAG_ALLOW_UNSAFE_AI_BASE_URL });
+	return assertSafeUrl(baseURL, "INVALID_AI_BASE_URL", options);
 }

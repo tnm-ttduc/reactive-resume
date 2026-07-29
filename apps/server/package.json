@@ -38,6 +38,7 @@
 		"@better-auth/passkey": "^1.6.23",
 		"@hono/node-server": "^2.0.8",
 		"@modelcontextprotocol/sdk": "^1.29.0",
+		"@napi-rs/canvas": "1.0.2",
 		"@orpc/client": "^1.14.7",
 		"@orpc/experimental-ratelimit": "^1.14.7",
 		"@orpc/json-schema": "^1.14.7",

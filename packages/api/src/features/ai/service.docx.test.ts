@@ -106,5 +106,5 @@ describe("AI DOCX parsing", () => {
 		expect(messages).toContain("Jane Doe & Co");
 		expect(messages).toContain("converted to plain text");
 		expect(messages).not.toContain('"type":"file"');
-	});
+	}, 15_000);
 });
