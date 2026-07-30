@@ -16,7 +16,10 @@ RUN corepack enable
 FROM base AS pruner
 COPY . .
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store,sharing=locked \
-    pnpm dlx turbo@2.9.12 prune web server --docker
+    node -e 'const fs = require("node:fs"); const path = "package.json"; const manifest = JSON.parse(fs.readFileSync(path, "utf8")); delete manifest.devEngines?.runtime; fs.writeFileSync(path, `${JSON.stringify(manifest, null, 2)}\n`);' \
+    && pnpm install --lockfile-only --no-frozen-lockfile
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store,sharing=locked \
+    pnpm dlx turbo@2.10.4 prune web server --docker
 
 FROM base AS builder
 COPY --from=pruner /app/out/json/ ./
@@ -30,7 +33,10 @@ RUN rm -rf apps/web/dist apps/server/dist && pnpm turbo run build --filter=web -
 FROM base AS runtime-pruner
 COPY . .
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store,sharing=locked \
-    pnpm dlx turbo@2.9.12 prune server --docker
+    node -e 'const fs = require("node:fs"); const path = "package.json"; const manifest = JSON.parse(fs.readFileSync(path, "utf8")); delete manifest.devEngines?.runtime; fs.writeFileSync(path, `${JSON.stringify(manifest, null, 2)}\n`);' \
+    && pnpm install --lockfile-only --no-frozen-lockfile
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store,sharing=locked \
+    pnpm dlx turbo@2.10.4 prune server --docker
 
 FROM base AS runtime-deps
 COPY --from=runtime-pruner /app/out/json/ ./
