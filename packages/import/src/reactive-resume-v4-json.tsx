@@ -366,6 +366,10 @@ export function parseReactiveResumeV4JSON(json: string): ResumeData {
 								inlineLink: false,
 							},
 							description: item.summary ?? item.description ?? "",
+							role: "",
+							teamSize: "",
+							technologies: item.keywords ?? [],
+							responsibilities: "",
 						})),
 				},
 				skills: {

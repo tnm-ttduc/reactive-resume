@@ -651,9 +651,14 @@ const ProjectsSection = ({ sectionId = "projects", sectionData }: ItemSectionPro
 								<ItemTitle website={item.website}>{item.name}</ItemTitle>
 								<Text style={composeStyles(alignEndStyle)}>{item.period}</Text>
 							</View>
+							{item.role && <Text>{item.role}</Text>}
+							{(item.teamSize || item.technologies.length > 0) && (
+								<Small>{[item.teamSize, item.technologies.join(", ")].filter(Boolean).join(" · ")}</Small>
+							)}
 						</SectionItemHeader>
 
 						<RichText>{item.description}</RichText>
+						<RichText>{item.responsibilities}</RichText>
 
 						<ItemWebsiteLink website={item.website} />
 					</SectionItem>

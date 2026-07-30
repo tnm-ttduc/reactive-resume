@@ -219,6 +219,16 @@ export const projectItemSchema = baseItemSchema.extend({
 	period: z.string().describe("The period of time the project was worked on."),
 	website: itemWebsiteSchema.describe("The link to the project, if any."),
 	description: z.string().describe("The description of the project. This should be a HTML-formatted string."),
+	role: z.string().catch("").describe("The position or role held by the author while working on the project."),
+	teamSize: z.string().catch("").describe("The size or composition of the team that worked on the project."),
+	technologies: z
+		.array(z.string())
+		.catch([])
+		.describe("The technologies, tools, frameworks, and platforms used by the project."),
+	responsibilities: z
+		.string()
+		.catch("")
+		.describe("The responsibilities and contributions of the author. This should be a HTML-formatted string."),
 });
 
 export const publicationItemSchema = baseItemSchema.extend({

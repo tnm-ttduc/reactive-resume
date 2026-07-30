@@ -268,6 +268,10 @@ function convertJSONResume(jsonResume: JSONResume): ResumeData {
 					period: formatPeriod(project.startDate, project.endDate),
 					website: createItemWebsite(project.url),
 					description: toHtmlDescription(project.description, project.highlights),
+					role: "",
+					teamSize: "",
+					technologies: project.keywords ?? [],
+					responsibilities: "",
 				})),
 		};
 	}

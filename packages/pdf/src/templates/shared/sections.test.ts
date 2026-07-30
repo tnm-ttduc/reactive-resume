@@ -14,6 +14,15 @@ describe("ExperienceSection", () => {
 	});
 });
 
+describe("ProjectsSection", () => {
+	it("renders all structured project fields, including rich-text responsibilities", () => {
+		expect(source).toContain("{item.role && <Text>{item.role}</Text>}");
+		expect(source).toContain("item.technologies.join");
+		expect(source).toContain("<RichText>{item.description}</RichText>");
+		expect(source).toContain("<RichText>{item.responsibilities}</RichText>");
+	});
+});
+
 describe("SectionShell", () => {
 	it("keeps section and heading style rules when section heading icons are hidden", () => {
 		expect(source).toContain("<View style={composeStyles(sectionStyle, sectionRuleStyle)} {...breakProps}>");

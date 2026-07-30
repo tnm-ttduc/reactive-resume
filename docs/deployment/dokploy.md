@@ -146,6 +146,19 @@ pnpm deploy:dokploy deploy
 
 For a public image, omit `DOKPLOY_REGISTRY_USERNAME` and `DOKPLOY_REGISTRY_PASSWORD`.
 
+## One-command production release
+
+The production release helper formats and validates the workspace, commits all current changes, increments the patch
+version, creates an annotated release tag, atomically pushes both `main` and the tag, waits for GitHub Actions, and checks
+the public health endpoint.
+
+```bash
+pnpm release:production -- --message "feat: describe the release"
+```
+
+Use `--version 5.3.0` to choose an explicit version. Run `--dry-run` to inspect the commands without changing files,
+commits, tags, or remote refs. `--skip-checks` is available for emergency releases only.
+
 GitHub uses two Environments named `staging` and `production`. Each environment must define:
 
 - Variable `DOKPLOY_ENABLED`, initially `false`; change it to `true` only after all secrets are configured.

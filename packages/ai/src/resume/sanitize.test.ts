@@ -123,6 +123,36 @@ describe("sanitizeAndParseResumeJson", () => {
 		expect(result.data.sections.experience.items[0]?.company).toBe("Acme");
 	});
 
+	it("preserves all project fields required by custom templates", () => {
+		const json = JSON.stringify({
+			basics: { name: "Test" },
+			sections: {
+				projects: {
+					items: [
+						{
+							name: "Booking App",
+							period: "2025 - Present",
+							description: "<p>Ticket booking platform.</p>",
+							role: "Software Engineer",
+							teamSize: "9",
+							technologies: ["Java", "React"],
+							responsibilities: "<ul><li>Built REST APIs.</li></ul>",
+						},
+					],
+				},
+			},
+		});
+
+		const result = sanitizeAndParseResumeJson(json);
+		expect(result.data.sections.projects.items[0]).toMatchObject({
+			name: "Booking App",
+			role: "Software Engineer",
+			teamSize: "9",
+			technologies: ["Java", "React"],
+			responsibilities: "<ul><li>Built REST APIs.</li></ul>",
+		});
+	});
+
 	it("clears customSections to empty array regardless of input", () => {
 		const json = JSON.stringify({
 			basics: { name: "Test" },

@@ -41,6 +41,19 @@ describe("buildAiExtractionTemplate", () => {
 		expect(item.period).toBe("");
 	});
 
+	it("creates project items with all template-bound fields", () => {
+		const template = buildAiExtractionTemplate();
+		const item = template.sections.projects.items[0] as Record<string, unknown>;
+		expect(item).toMatchObject({
+			name: "",
+			description: "",
+			role: "",
+			teamSize: "",
+			technologies: [],
+			responsibilities: "",
+		});
+	});
+
 	it("preserves unmodified sections from default (e.g., title)", () => {
 		const template = buildAiExtractionTemplate();
 		expect(template.sections.skills.title).toBe(defaultResumeData.sections.skills.title);

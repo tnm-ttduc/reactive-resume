@@ -7,6 +7,7 @@ import {
 	layoutSchema,
 	pageSchema,
 	pictureSchema,
+	projectItemSchema,
 	resumeDataSchema,
 	skillItemSchema,
 	styleRuleSchema,
@@ -163,6 +164,52 @@ describe("experienceItemSchema", () => {
 		});
 		expect(result.success).toBe(true);
 		if (result.success) expect(result.data.roles).toEqual([]);
+	});
+});
+
+describe("projectItemSchema", () => {
+	it("preserves the fields used by imported project templates", () => {
+		const result = projectItemSchema.safeParse({
+			id: "project-1",
+			hidden: false,
+			name: "Booking App",
+			period: "2025 - Present",
+			website: { url: "", label: "", inlineLink: false },
+			description: "<p>Ticket booking platform.</p>",
+			role: "Software Engineer",
+			teamSize: "9",
+			technologies: ["Java", "React"],
+			responsibilities: "<ul><li>Built REST APIs.</li></ul>",
+		});
+
+		expect(result.success).toBe(true);
+		if (result.success) {
+			expect(result.data.role).toBe("Software Engineer");
+			expect(result.data.teamSize).toBe("9");
+			expect(result.data.technologies).toEqual(["Java", "React"]);
+			expect(result.data.responsibilities).toContain("Built REST APIs");
+		}
+	});
+
+	it("backfills empty project fields for legacy resume data", () => {
+		const result = projectItemSchema.safeParse({
+			id: "project-1",
+			hidden: false,
+			name: "Legacy Project",
+			period: "",
+			website: { url: "", label: "", inlineLink: false },
+			description: "",
+		});
+
+		expect(result.success).toBe(true);
+		if (result.success) {
+			expect(result.data).toMatchObject({
+				role: "",
+				teamSize: "",
+				technologies: [],
+				responsibilities: "",
+			});
+		}
 	});
 });
 

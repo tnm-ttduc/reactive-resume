@@ -16,6 +16,12 @@ describe("buildResumeDataFromCandidate", () => {
 		expect(resume.basics.name).toBe("Candidate One");
 		expect(resume.metadata.customTemplate).toEqual(template);
 		expect(resume.metadata.template).toBe("onyx");
+		expect(resume.sections.projects.items[0]).toMatchObject({
+			role: "Solo Developer",
+			teamSize: "1",
+			technologies: ["Unity", "C#"],
+			responsibilities: "",
+		});
 
 		resume.basics.name = "Resume Variant";
 		const snapshot = resume.metadata.customTemplate;

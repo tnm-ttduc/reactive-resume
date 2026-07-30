@@ -251,9 +251,10 @@ msgstr "Thêm hồ sơ ứng tuyển"
 msgid "Add contact"
 msgstr "Thêm liên hệ"
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
 #: src/routes/dashboard/templates/$templateId.tsx
 msgid "Add item"
-msgstr ""
+msgstr "Thêm mục"
 
 #: src/components/input/chip-input.tsx
 msgid "Add keyword"
@@ -280,9 +281,10 @@ msgstr "Thêm nhà cung cấp"
 msgid "Add Role"
 msgstr "Thêm vai trò"
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
 #: src/routes/dashboard/templates/$templateId.tsx
 msgid "Add section"
-msgstr ""
+msgstr "Thêm section"
 
 #: src/features/applications/components/table-view.tsx
 msgid "Add tag"
@@ -303,6 +305,10 @@ msgstr "Hãy điều chỉnh sơ yếu lý lịch cho phù hợp với vị trí
 #: src/features/settings/integrations/components/ai-section.tsx
 msgid "Advanced"
 msgstr "Trình độ cao"
+
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Advanced JSON"
+msgstr "JSON nâng cao"
 
 #: src/libs/locale.ts
 msgid "Afrikaans"
@@ -507,6 +513,10 @@ msgstr "Đã ứng tuyển vào"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/custom-styles.tsx
 msgid "Applied Rules"
 msgstr "Quy tắc áp dụng"
+
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Apply JSON"
+msgstr "Áp dụng JSON"
 
 #: src/routes/_home/-sections/workflow.tsx
 msgid "Apply with clarity"
@@ -784,14 +794,27 @@ msgid "Candidate imported successfully."
 msgstr ""
 
 #: src/routes/dashboard/candidates/$candidateId.tsx
-msgid "Candidate profile saved."
-msgstr ""
+msgid "Candidate name"
+msgstr "Tên ứng viên"
+
+#. placeholder {0}: updated.currentVersion
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "Candidate profile saved as version {0}."
+msgstr "Hồ sơ ứng viên đã được lưu thành phiên bản {0}."
+
+#: src/features/candidates/components/candidate-version-history.tsx
+msgid "Candidate version restored."
+msgstr "Đã khôi phục phiên bản ứng viên."
+
+#: src/features/candidates/components/candidate-version-history.tsx
+msgid "Candidate versions"
+msgstr "Các phiên bản ứng viên"
 
 #: src/routes/dashboard/-components/sidebar.tsx
 #: src/routes/dashboard/candidates/$candidateId.tsx
 #: src/routes/dashboard/candidates/index.tsx
 msgid "Candidates"
-msgstr ""
+msgstr "Ứng viên"
 
 #: src/routes/agent/-components/agent-chat.tsx
 msgid "Cannot restore; the resume has changed since this edit was applied."
@@ -917,6 +940,10 @@ msgstr "Trợ lý AI gần gũi"
 msgid "Cohere"
 msgstr "Liên kết"
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Collapse"
+msgstr "Thu gọn"
+
 #: src/routes/builder/$resumeId/-sidebar/left/sections/custom.tsx
 #: src/routes/builder/$resumeId/-sidebar/left/shared/section-menu.tsx
 msgid "Columns"
@@ -949,6 +976,10 @@ msgstr "Công ty A–Z"
 #: src/routes/agent/-components/agent-chat.tsx
 msgid "Compare this resume against this role URL and update keywords while keeping the voice concise and credible."
 msgstr "Hãy so sánh CV này với đường dẫn đăng tuyển dụng và cập nhật các từ khóa, đồng thời giữ giọng văn ngắn gọn và đáng tin cậy."
+
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "Complete candidate profile"
+msgstr "Hồ sơ ứng viên đầy đủ"
 
 #. Account deletion confirmation dialog confirm action in danger zone
 #. Create API key dialog acknowledgment action after copying
@@ -1057,13 +1088,17 @@ msgstr ""
 msgid "Could not reach the AI provider. Please try again."
 msgstr "Không thể kết nối với nhà cung cấp AI. Vui lòng thử lại."
 
+#: src/features/candidates/components/candidate-version-history.tsx
+msgid "Could not restore candidate version."
+msgstr "Không thể khôi phục phiên bản ứng viên."
+
 #: src/routes/agent/-components/agent-chat.tsx
 msgid "Could not restore this patch."
 msgstr "Không thể khôi phục bản vá này."
 
 #: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Could not save candidate profile."
-msgstr ""
+msgstr "Không thể lưu hồ sơ ứng viên."
 
 #: src/features/settings/integrations/components/ai-section.tsx
 msgid "Could not verify provider connection."
@@ -1242,7 +1277,7 @@ msgstr "Tạo sơ yếu lý lịch mẫu"
 #: src/dialogs/candidate/create-resume.tsx
 #: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Create CV"
-msgstr ""
+msgstr "Tạo CV"
 
 #: src/dialogs/candidate/create-resume.tsx
 msgid "Create CV from candidate"
@@ -1314,6 +1349,10 @@ msgstr "Mật khẩu hiện tại"
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Current stage"
 msgstr "Giai đoạn hiện tại"
+
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "Current version"
+msgstr "Phiên bản hiện tại"
 
 #: src/components/input/color-picker.tsx
 msgid "Custom"
@@ -1654,6 +1693,10 @@ msgstr "Chỉnh sửa từ khóa"
 msgid "Edit note"
 msgstr "Sửa ghi chú"
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Edit the complete normalized candidate profile. Apply it here, then save the candidate."
+msgstr "Chỉnh sửa toàn bộ hồ sơ ứng viên đã chuẩn hóa. Áp dụng tại đây rồi lưu ứng viên."
+
 #: src/features/resume/export/download-dialog.tsx
 msgid "Editable in Word, Google Docs, and Pages."
 msgstr "Có thể chỉnh sửa trong Word, Google Docs và Pages."
@@ -1673,7 +1716,6 @@ msgid "Education"
 msgstr "Giáo dục"
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
-#: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Email"
 msgstr "Email"
 
@@ -1714,6 +1756,10 @@ msgstr "Đang bật bảo vệ bằng mật khẩu..."
 #: src/dialogs/auth/enable-two-factor.tsx
 msgid "Enabling two-factor authentication…"
 msgstr "Kích hoạt xác thực hai yếu tố…"
+
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "engineering, senior, referral"
+msgstr "kỹ thuật, cấp cao, giới thiệu"
 
 #: src/libs/locale.ts
 msgid "English"
@@ -1759,6 +1805,10 @@ msgstr ""
 msgid "Exit Fullscreen"
 msgstr "Thoát toàn màn hình"
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Expand"
+msgstr "Mở rộng"
+
 #: src/dialogs/resume/sections/custom.tsx
 #: src/libs/resume/section-title.ts
 #: src/libs/resume/section.tsx
@@ -1800,10 +1850,6 @@ msgstr "Đã xuất pipeline-flow.png"
 
 #: src/dialogs/candidate/import.tsx
 msgid "Extract candidate content from PDF, Word or JSON. Layout and styling are not imported as a template."
-msgstr ""
-
-#: src/routes/dashboard/candidates/$candidateId.tsx
-msgid "Extracted content"
 msgstr ""
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
@@ -2212,7 +2258,6 @@ msgid "Heading 6"
 msgstr "Tiêu đề 6"
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
-#: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Headline"
 msgstr "Tiêu đề"
 
@@ -2231,6 +2276,7 @@ msgstr "Đây là mã API mới của bạn"
 #: src/components/level/combobox.tsx
 #: src/dialogs/resume/sections/language.tsx
 #: src/dialogs/resume/sections/skill.tsx
+#: src/features/candidates/components/candidate-profile-editor.tsx
 msgid "Hidden"
 msgstr "Ẩn"
 
@@ -2451,6 +2497,10 @@ msgstr "Sở thích"
 msgid "Invalid AI provider configuration."
 msgstr "Cấu hình nhà cung cấp AI không hợp lệ."
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Invalid candidate JSON."
+msgstr "JSON ứng viên không hợp lệ."
+
 #: src/routes/_home/-sections/faq.tsx
 msgid "Is TNM HR Platform available in multiple languages?"
 msgstr ""
@@ -2594,6 +2644,10 @@ msgstr "Lần phân tích cuối cùng vào {updatedAtLabel}"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/statistics.tsx
 msgid "Last downloaded on {0}"
 msgstr "Tải xuống lần cuối vào {0}"
+
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "Last saved"
+msgstr "Lưu lần cuối"
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Last updated"
@@ -2741,6 +2795,7 @@ msgstr ""
 msgid "Loading threads…"
 msgstr "Đang tải luồng…"
 
+#: src/features/candidates/components/candidate-version-history.tsx
 #: src/routes/builder/$resumeId/-components/version-history.tsx
 msgid "Loading…"
 msgstr "Đang tải…"
@@ -2751,7 +2806,6 @@ msgstr "Đang tải…"
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/applications/components/table-view.tsx
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
-#: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Location"
 msgstr "Vị trí"
 
@@ -2889,7 +2943,6 @@ msgstr "Phải bắt đầu bằng https://"
 #: src/features/auth/pages/register.tsx
 #: src/features/settings/pages/profile.tsx
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
-#: src/routes/dashboard/candidates/$candidateId.tsx
 #: src/routes/dashboard/resumes/index.tsx
 msgid "Name"
 msgstr "Tên"
@@ -2965,9 +3018,13 @@ msgstr ""
 msgid "No data was returned from the AI provider."
 msgstr "Không có dữ liệu nào được trả về từ nhà cung cấp AI."
 
-#: src/routes/dashboard/candidates/$candidateId.tsx
-msgid "No list sections were extracted."
-msgstr ""
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "No data. Use Advanced JSON to add a new structured item."
+msgstr "Chưa có dữ liệu. Hãy dùng JSON nâng cao để thêm mục dữ liệu có cấu trúc."
+
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "No data. Use the action above to add a structured item."
+msgstr "Chưa có dữ liệu. Hãy dùng thao tác phía trên để thêm mục dữ liệu có cấu trúc."
 
 #: src/features/settings/authentication/components/passkeys.tsx
 msgid "No passkeys registered yet."
@@ -2994,6 +3051,7 @@ msgstr "Không có hồ sơ nào phù hợp với yêu cầu tìm kiếm của b
 msgid "No resumes yet."
 msgstr "Chưa có sơ yếu lý lịch nào."
 
+#: src/features/candidates/components/candidate-version-history.tsx
 #: src/routes/builder/$resumeId/-components/version-history.tsx
 msgid "No saved versions yet."
 msgstr "Chưa có phiên bản nào được lưu."
@@ -3001,6 +3059,10 @@ msgstr "Chưa có phiên bản nào được lưu."
 #: src/features/applications/components/insights-view.tsx
 msgid "No source data yet."
 msgstr "Chưa có dữ liệu nguồn."
+
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "No source documents."
+msgstr "Không có tài liệu nguồn."
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/custom-styles.tsx
 msgid "No style rules yet."
@@ -3265,7 +3327,6 @@ msgstr "Ba Tư"
 
 #: src/dialogs/resume/sections/reference.tsx
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
-#: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Phone"
 msgstr "Điện thoại"
 
@@ -3335,6 +3396,7 @@ msgid "Portuguese (Portugal)"
 msgstr "Bồ Đào Nha (Bồ Đào Nha)"
 
 #: src/dialogs/resume/sections/experience.tsx
+#: src/dialogs/resume/sections/project.tsx
 #: src/dialogs/resume/sections/reference.tsx
 msgid "Position"
 msgstr "Vị trí"
@@ -3506,6 +3568,11 @@ msgstr "Từ xa, Kết hợp, một thành phố…"
 msgid "Remove"
 msgstr "Xóa"
 
+#. placeholder {0}: humanize(label)
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Remove {0}"
+msgstr "Xóa {0}"
+
 #. Screen reader label for button that removes a keyword chip. Variable is the current keyword text.
 #: src/components/input/chip-input.tsx
 msgid "Remove {chip}"
@@ -3589,9 +3656,17 @@ msgstr "Đặt lại mật khẩu"
 msgid "Resetting your password..."
 msgstr "Đang đặt lại mật khẩu..."
 
+#: src/dialogs/resume/sections/project.tsx
+msgid "Responsibilities"
+msgstr "Trách nhiệm"
+
 #: src/routes/agent/-components/agent-chat.tsx
 msgid "Restore"
 msgstr "Khôi phục"
+
+#: src/features/candidates/components/candidate-version-history.tsx
+msgid "Restore candidate version {version}?"
+msgstr "Khôi phục phiên bản ứng viên {version}?"
 
 #: src/routes/agent/-components/agent-chat.tsx
 msgid "Restore the resume to before this patch? This will roll back this patch and any patches applied after it."
@@ -3600,6 +3675,10 @@ msgstr "Khôi phục trạng thái trước khi cập nhật bản vá này? Tha
 #: src/routes/builder/$resumeId/-components/version-history.tsx
 msgid "Restore this version?"
 msgstr "Khôi phục phiên bản này?"
+
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "Restoring an older snapshot creates another version and preserves the full history."
+msgstr "Khôi phục một bản chụp cũ sẽ tạo thêm một phiên bản và giữ nguyên toàn bộ lịch sử."
 
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/resume/export/download-dialog.tsx
@@ -3653,8 +3732,8 @@ msgid "Retry"
 msgstr "Thử lại"
 
 #: src/routes/dashboard/candidates/$candidateId.tsx
-msgid "Review candidate profile"
-msgstr ""
+msgid "Review and edit every normalized field extracted from the source CV. Each save creates a new version."
+msgstr "Xem lại và chỉnh sửa mọi trường đã chuẩn hóa được trích xuất từ CV nguồn. Mỗi lần lưu sẽ tạo một phiên bản mới."
 
 #: src/routes/_home/-sections/features.tsx
 msgid "Review job fit, strengthen your writing, and surface the experience that matters most for each role."
@@ -3747,10 +3826,6 @@ msgstr "Lưu & Kiểm tra Nhà cung cấp"
 msgid "Save & Upload"
 msgstr "Lưu & Tải lên"
 
-#: src/routes/dashboard/candidates/$candidateId.tsx
-msgid "Save candidate"
-msgstr ""
-
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Save changes"
 msgstr "Lưu thay đổi"
@@ -3779,15 +3854,20 @@ msgstr "Lưu thay đổi"
 msgid "Save draft"
 msgstr ""
 
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "Save new version"
+msgstr "Lưu phiên bản mới"
+
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "Saved"
 msgstr "Đã lưu"
 
 #: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Saving candidate profile..."
-msgstr ""
+msgstr "Đang lưu hồ sơ ứng viên..."
 
 #: src/routes/builder/$resumeId/-components/header.tsx
+#: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Saving…"
 msgstr "Đang lưu…"
 
@@ -3925,6 +4005,10 @@ msgstr "Đang gửi email đặt lại mật khẩu..."
 #: src/routes/_home/-sections/ai-spotlight.tsx
 msgid "Senior Product Designer"
 msgstr ""
+
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Separate values with commas"
+msgstr "Phân tách các giá trị bằng dấu phẩy"
 
 #: src/components/input/rich-input.tsx
 msgid "Separator"
@@ -4182,7 +4266,7 @@ msgstr "Nguồn"
 
 #: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Source documents"
-msgstr ""
+msgstr "Tài liệu nguồn"
 
 #: src/routes/dashboard/templates/index.tsx
 msgid "Source file"
@@ -4289,6 +4373,10 @@ msgstr ""
 msgid "Strong match"
 msgstr ""
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Structured editor"
+msgstr "Trình chỉnh sửa có cấu trúc"
+
 #: src/routes/dashboard/templates/$templateId.tsx
 msgid "Submit review"
 msgstr ""
@@ -4338,6 +4426,7 @@ msgstr "Bảng"
 #: src/dialogs/resume/index.tsx
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/applications/components/table-view.tsx
+#: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Tags"
 msgstr "Thẻ"
 
@@ -4360,6 +4449,14 @@ msgstr "Tinh chỉnh thất bại."
 #: src/libs/locale.ts
 msgid "Tamil"
 msgstr "Tamil"
+
+#: src/dialogs/resume/sections/project.tsx
+msgid "Team size"
+msgstr "Quy mô nhóm"
+
+#: src/dialogs/resume/sections/project.tsx
+msgid "Technologies"
+msgstr "Công nghệ"
 
 #: src/libs/locale.ts
 msgid "Telugu"
@@ -4428,6 +4525,10 @@ msgstr "Khóa API sẽ không còn có thể truy cập dữ liệu của bạn 
 msgid "The command you're looking for doesn't exist."
 msgstr "Lệnh bạn đang tìm kiếm không tồn tại."
 
+#: src/features/candidates/components/candidate-version-history.tsx
+msgid "The current data and all earlier versions will be kept. Restoring creates a new version."
+msgstr "Dữ liệu hiện tại và mọi phiên bản trước đó vẫn được giữ lại. Việc khôi phục sẽ tạo một phiên bản mới."
+
 #. Error shown when AI parsing returns invalid resume structure during import
 #: src/dialogs/resume/import.tsx
 msgid "The imported file could not be parsed into a valid resume."
@@ -4480,10 +4581,6 @@ msgstr "Đã xảy ra lỗi trong quá trình tạo PDF, vui lòng thử lại."
 #: src/features/resume/export/use-resume-export.ts
 msgid "There was a problem while preparing your resume for printing, please try again."
 msgstr "Đã xảy ra lỗi trong quá trình chuẩn bị sơ yếu lý lịch của bạn để in, vui lòng thử lại."
-
-#: src/routes/dashboard/candidates/$candidateId.tsx
-msgid "These fields were extracted from the candidate CV and can be corrected before creating CVs."
-msgstr ""
 
 #: src/routes/agent/-components/agent-chat.tsx
 msgid "Thinking"
@@ -4774,6 +4871,7 @@ msgid "Two-Factor Authentication QR Code"
 msgstr "Mã QR xác thực hai yếu tố"
 
 #: src/dialogs/resume/import.tsx
+#: src/features/candidates/components/candidate-profile-editor.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/design.tsx
 msgid "Type"
 msgstr "Loại"
@@ -5045,6 +5143,7 @@ msgstr "Đang xác minh mật khẩu..."
 msgid "Verifying your email is required when resetting your password."
 msgstr "Cần xác minh email của bạn khi đặt lại mật khẩu."
 
+#: src/features/candidates/components/candidate-version-history.tsx
 #: src/routes/builder/$resumeId/-components/version-history.tsx
 msgid "Version history"
 msgstr "Lịch sử phiên bản"

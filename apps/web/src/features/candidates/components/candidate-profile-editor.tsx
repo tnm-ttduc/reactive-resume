@@ -1,15 +1,22 @@
 import type { CandidateProfile } from "@reactive-resume/schema/candidate/data";
+import type { CustomSectionType } from "@reactive-resume/schema/resume/data";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { TrashIcon } from "@phosphor-icons/react";
+import { PlusIcon, TrashIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
+import { buildAiExtractionTemplate } from "@reactive-resume/ai/resume/extraction-template";
 import { candidateProfileSchema } from "@reactive-resume/schema/candidate/data";
+import { sectionTypeSchema } from "@reactive-resume/schema/resume/data";
+import { defaultSectionIconNames } from "@reactive-resume/schema/resume/section-icons";
 import { Button } from "@reactive-resume/ui/components/button";
 import { Checkbox } from "@reactive-resume/ui/components/checkbox";
 import { Input } from "@reactive-resume/ui/components/input";
 import { Label } from "@reactive-resume/ui/components/label";
+import { Switch } from "@reactive-resume/ui/components/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@reactive-resume/ui/components/tabs";
 import { Textarea } from "@reactive-resume/ui/components/textarea";
+import { generateId } from "@reactive-resume/utils/string";
+import { RichInput } from "@/components/input/rich-input";
 
 type PathSegment = string | number;
 
@@ -25,6 +32,26 @@ type ProfileFieldProps = {
 	onChange: (path: PathSegment[], value: unknown) => void;
 	onRemove?: () => void;
 	depth?: number;
+	sectionType?: CustomSectionType;
+};
+
+const candidateItemTemplate = buildAiExtractionTemplate();
+
+const richTextFieldNames = new Set(["content", "description", "recipient", "responsibilities"]);
+
+const sectionItemIdentityFields: Partial<Record<CustomSectionType, string>> = {
+	profiles: "network",
+	experience: "company",
+	education: "school",
+	projects: "name",
+	skills: "name",
+	languages: "language",
+	interests: "name",
+	awards: "title",
+	certifications: "title",
+	publications: "title",
+	volunteer: "organization",
+	references: "name",
 };
 
 function humanize(value: string) {
@@ -32,6 +59,10 @@ function humanize(value: string) {
 		.replace(/([a-z\d])([A-Z])/g, "$1 $2")
 		.replace(/[_-]+/g, " ")
 		.replace(/^./, (character) => character.toUpperCase());
+}
+
+export function isCandidateRichTextField(label: string) {
+	return richTextFieldNames.has(label);
 }
 
 function replaceAtPath(root: unknown, path: PathSegment[], value: unknown): unknown {
@@ -52,8 +83,43 @@ function replaceAtPath(root: unknown, path: PathSegment[], value: unknown): unkn
 	};
 }
 
-function ProfileField({ label, value, path, onChange, onRemove, depth = 0 }: ProfileFieldProps) {
+function isCustomSectionType(value: unknown): value is CustomSectionType {
+	return typeof value === "string" && sectionTypeSchema.options.includes(value as CustomSectionType);
+}
+
+export function createCandidateSectionItem(sectionType: CustomSectionType): Record<string, unknown> {
+	if (sectionType === "summary") return { id: generateId(), hidden: false, content: "" };
+	if (sectionType === "cover-letter") return { id: generateId(), hidden: false, recipient: "", content: "" };
+
+	const section = (candidateItemTemplate.sections as unknown as Record<string, { items: Record<string, unknown>[] }>)[
+		sectionType
+	];
+	const item = structuredClone(section.items[0] ?? {});
+	item.id = generateId();
+
+	const identityField = sectionItemIdentityFields[sectionType];
+	if (identityField) item[identityField] = `New ${humanize(sectionType)}`;
+
+	return item;
+}
+
+export function createCandidateCustomSection(sectionType: CustomSectionType) {
+	return {
+		id: generateId(),
+		title: humanize(sectionType),
+		type: sectionType,
+		icon: defaultSectionIconNames[sectionType],
+		columns: 1,
+		hidden: false,
+		keepTogether: false,
+		startOnNewPage: false,
+		items: [],
+	};
+}
+
+function ProfileField({ label, value, path, onChange, onRemove, depth = 0, sectionType }: ProfileFieldProps) {
 	const [isOpen, setIsOpen] = useState(depth === 0 && ["basics", "summary"].includes(label));
+	const [newSectionType, setNewSectionType] = useState<CustomSectionType>("projects");
 
 	if (typeof value === "boolean") {
 		return (
@@ -83,12 +149,13 @@ function ProfileField({ label, value, path, onChange, onRemove, depth = 0 }: Pro
 	}
 
 	if (typeof value === "string") {
-		const multiline =
-			value.includes("\n") || ["content", "description", "summary", "keywords", "notes"].includes(label);
+		const multiline = value.includes("\n") || ["summary", "keywords", "notes"].includes(label);
 		return (
 			<div className="space-y-2">
 				<Label htmlFor={`candidate-${path.join("-")}`}>{humanize(label)}</Label>
-				{multiline ? (
+				{isCandidateRichTextField(label) ? (
+					<RichInput value={value} editorClassName="min-h-32" onChange={(nextValue) => onChange(path, nextValue)} />
+				) : multiline ? (
 					<Textarea
 						id={`candidate-${path.join("-")}`}
 						value={value}
@@ -108,22 +175,11 @@ function ProfileField({ label, value, path, onChange, onRemove, depth = 0 }: Pro
 	}
 
 	if (Array.isArray(value)) {
-		if (value.length === 0) {
-			return (
-				<div className="space-y-1 rounded-md border border-dashed p-3">
-					<p className="font-medium text-sm">{humanize(label)}</p>
-					<p className="text-muted-foreground text-xs">
-						<Trans>No data. Use Advanced JSON to add a new structured item.</Trans>
-					</p>
-				</div>
-			);
-		}
-
 		const primitiveArray = value.every(
 			(item) => typeof item === "string" || typeof item === "number" || typeof item === "boolean",
 		);
 
-		if (primitiveArray) {
+		if (primitiveArray && value.length > 0) {
 			return (
 				<div className="space-y-2">
 					<Label htmlFor={`candidate-${path.join("-")}`}>{humanize(label)}</Label>
@@ -145,43 +201,112 @@ function ProfileField({ label, value, path, onChange, onRemove, depth = 0 }: Pro
 			);
 		}
 
+		const isCustomSections = label === "customSections" && path.length === 1;
+		const canAddItem = label === "items" && sectionType !== undefined;
+		const canAddStructuredValue = isCustomSections || canAddItem;
+
+		if (value.length === 0 && !canAddStructuredValue) {
+			return (
+				<div className="space-y-1 rounded-md border border-dashed p-3">
+					<p className="font-medium text-sm">{humanize(label)}</p>
+					<p className="text-muted-foreground text-xs">
+						<Trans>No data. Use Advanced JSON to add a new structured item.</Trans>
+					</p>
+				</div>
+			);
+		}
+
 		return (
 			<section className="space-y-3 rounded-lg border bg-muted/20 p-3">
 				<div className="flex items-center justify-between gap-2">
 					<h3 className="font-medium text-sm">
 						{humanize(label)} <span className="text-muted-foreground">({value.length})</span>
 					</h3>
-					{onRemove && (
-						<Button size="icon" variant="ghost" aria-label={t`Remove ${humanize(label)}`} onClick={onRemove}>
-							<TrashIcon />
-						</Button>
-					)}
+					<div className="flex items-center gap-2">
+						{isCustomSections && (
+							<label className="flex items-center gap-2 text-muted-foreground text-xs">
+								<Trans>Type</Trans>
+								<select
+									aria-label={t`Type`}
+									value={newSectionType}
+									className="h-8 rounded-md border bg-background px-2 text-foreground text-xs"
+									onChange={(event) => setNewSectionType(event.target.value as CustomSectionType)}
+								>
+									{sectionTypeSchema.options.map((type) => (
+										<option key={type} value={type}>
+											{humanize(type)}
+										</option>
+									))}
+								</select>
+							</label>
+						)}
+						{canAddStructuredValue && (
+							<Button
+								type="button"
+								size="sm"
+								variant="outline"
+								onClick={() => {
+									const nextValue = isCustomSections
+										? createCandidateCustomSection(newSectionType)
+										: sectionType
+											? createCandidateSectionItem(sectionType)
+											: undefined;
+									if (nextValue) onChange(path, [...value, nextValue]);
+								}}
+							>
+								<PlusIcon />
+								{isCustomSections ? <Trans>Add section</Trans> : <Trans>Add item</Trans>}
+							</Button>
+						)}
+						{onRemove && (
+							<Button size="icon" variant="ghost" aria-label={t`Remove ${humanize(label)}`} onClick={onRemove}>
+								<TrashIcon />
+							</Button>
+						)}
+					</div>
 				</div>
-				{value.map((item, index) => (
-					<ProfileField
-						key={`${path.join(".")}-${index}`}
-						label={`${humanize(label)} ${index + 1}`}
-						value={item}
-						path={[...path, index]}
-						depth={depth + 1}
-						onChange={onChange}
-						onRemove={() =>
-							onChange(
-								path,
-								value.filter((_, itemIndex) => itemIndex !== index),
-							)
-						}
-					/>
-				))}
+				{value.length === 0 ? (
+					<p className="text-muted-foreground text-xs">
+						<Trans>No data. Use the action above to add a structured item.</Trans>
+					</p>
+				) : (
+					value.map((item, index) => (
+						<ProfileField
+							key={`${path.join(".")}-${index}`}
+							label={`${humanize(label)} ${index + 1}`}
+							value={item}
+							path={[...path, index]}
+							depth={depth + 1}
+							sectionType={sectionType}
+							onChange={onChange}
+							onRemove={() =>
+								onChange(
+									path,
+									value.filter((_, itemIndex) => itemIndex !== index),
+								)
+							}
+						/>
+					))
+				)}
 			</section>
 		);
 	}
 
 	if (typeof value === "object" && value !== null) {
 		const entries = Object.entries(value);
+		const hasSectionVisibility =
+			depth <= 2 &&
+			typeof (value as Record<string, unknown>).hidden === "boolean" &&
+			("items" in value || "content" in value);
+		const visibleEntries = hasSectionVisibility ? entries.filter(([key]) => key !== "hidden") : entries;
+		const resolvedSectionType = isCustomSectionType((value as Record<string, unknown>).type)
+			? ((value as Record<string, unknown>).type as CustomSectionType)
+			: isCustomSectionType(label)
+				? label
+				: sectionType;
 		const content = (
 			<div className={depth <= 1 ? "grid gap-4 md:grid-cols-2" : "space-y-3"}>
-				{entries.map(([key, child]) => (
+				{visibleEntries.map(([key, child]) => (
 					<div
 						key={`${path.join(".")}-${key}`}
 						className={
@@ -189,10 +314,19 @@ function ProfileField({ label, value, path, onChange, onRemove, depth = 0 }: Pro
 								? "md:col-span-2"
 								: ["content", "description"].includes(key)
 									? "md:col-span-2"
-									: undefined
+									: hasSectionVisibility && key === "columns"
+										? "md:col-span-2 md:max-w-[calc(50%-0.5rem)]"
+										: undefined
 						}
 					>
-						<ProfileField label={key} value={child} path={[...path, key]} depth={depth + 1} onChange={onChange} />
+						<ProfileField
+							label={key}
+							value={child}
+							path={[...path, key]}
+							depth={depth + 1}
+							sectionType={key === "items" ? resolvedSectionType : sectionType}
+							onChange={onChange}
+						/>
 					</div>
 				))}
 			</div>
@@ -207,14 +341,31 @@ function ProfileField({ label, value, path, onChange, onRemove, depth = 0 }: Pro
 				>
 					<summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 font-semibold text-sm marker:hidden">
 						<span>{humanize(label)}</span>
-						<span className="text-muted-foreground text-xs group-open:hidden">
-							<Trans>Expand</Trans>
-						</span>
-						<span className="hidden text-muted-foreground text-xs group-open:inline">
-							<Trans>Collapse</Trans>
-						</span>
+						<div className="flex items-center gap-3">
+							{hasSectionVisibility && (
+								<div className="flex items-center gap-2">
+									<span className="text-muted-foreground text-xs">
+										<Trans>Hidden</Trans>
+									</span>
+									<Switch
+										size="sm"
+										aria-label={t`Hidden`}
+										checked={(value as Record<string, boolean>).hidden}
+										onClick={(event) => event.stopPropagation()}
+										onKeyDown={(event) => event.stopPropagation()}
+										onCheckedChange={(checked) => onChange([...path, "hidden"], checked)}
+									/>
+								</div>
+							)}
+							<span className="text-muted-foreground text-xs group-open:hidden">
+								<Trans>Expand</Trans>
+							</span>
+							<span className="hidden text-muted-foreground text-xs group-open:inline">
+								<Trans>Collapse</Trans>
+							</span>
+						</div>
 					</summary>
-					<div className="border-t p-4">{content}</div>
+					{isOpen && <div className="border-t p-4">{content}</div>}
 				</details>
 			);
 		}
@@ -261,11 +412,11 @@ export function CandidateProfileEditor({ value, onChange }: CandidateProfileEdit
 
 	return (
 		<Tabs defaultValue="structured" className="space-y-3">
-			<TabsList className="grid w-full grid-cols-2 sm:w-80">
-				<TabsTrigger value="structured">
+			<TabsList className="grid w-full max-w-full grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] sm:w-80">
+				<TabsTrigger value="structured" className="min-w-0 overflow-hidden text-ellipsis">
 					<Trans>Structured editor</Trans>
 				</TabsTrigger>
-				<TabsTrigger value="json">
+				<TabsTrigger value="json" className="min-w-0 overflow-hidden text-ellipsis">
 					<Trans>Advanced JSON</Trans>
 				</TabsTrigger>
 			</TabsList>

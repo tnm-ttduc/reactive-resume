@@ -246,6 +246,7 @@ msgstr "Add application"
 msgid "Add contact"
 msgstr "Add contact"
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
 #: src/routes/dashboard/templates/$templateId.tsx
 msgid "Add item"
 msgstr "Add item"
@@ -275,6 +276,7 @@ msgstr "Add Provider"
 msgid "Add Role"
 msgstr "Add Role"
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
 #: src/routes/dashboard/templates/$templateId.tsx
 msgid "Add section"
 msgstr "Add section"
@@ -298,6 +300,10 @@ msgstr "Adjust the resume for a remote-first role that values async communicatio
 #: src/features/settings/integrations/components/ai-section.tsx
 msgid "Advanced"
 msgstr "Advanced"
+
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Advanced JSON"
+msgstr "Advanced JSON"
 
 #: src/libs/locale.ts
 msgid "Afrikaans"
@@ -502,6 +508,10 @@ msgstr "Applied on"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/custom-styles.tsx
 msgid "Applied Rules"
 msgstr "Applied Rules"
+
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Apply JSON"
+msgstr "Apply JSON"
 
 #: src/routes/_home/-sections/workflow.tsx
 msgid "Apply with clarity"
@@ -779,8 +789,21 @@ msgid "Candidate imported successfully."
 msgstr "Candidate imported successfully."
 
 #: src/routes/dashboard/candidates/$candidateId.tsx
-msgid "Candidate profile saved."
-msgstr "Candidate profile saved."
+msgid "Candidate name"
+msgstr "Candidate name"
+
+#. placeholder {0}: updated.currentVersion
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "Candidate profile saved as version {0}."
+msgstr "Candidate profile saved as version {0}."
+
+#: src/features/candidates/components/candidate-version-history.tsx
+msgid "Candidate version restored."
+msgstr "Candidate version restored."
+
+#: src/features/candidates/components/candidate-version-history.tsx
+msgid "Candidate versions"
+msgstr "Candidate versions"
 
 #: src/routes/dashboard/-components/sidebar.tsx
 #: src/routes/dashboard/candidates/$candidateId.tsx
@@ -912,6 +935,10 @@ msgstr "Close AI assistant"
 msgid "Cohere"
 msgstr "Cohere"
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Collapse"
+msgstr "Collapse"
+
 #: src/routes/builder/$resumeId/-sidebar/left/sections/custom.tsx
 #: src/routes/builder/$resumeId/-sidebar/left/shared/section-menu.tsx
 msgid "Columns"
@@ -944,6 +971,10 @@ msgstr "Company A–Z"
 #: src/routes/agent/-components/agent-chat.tsx
 msgid "Compare this resume against this role URL and update keywords while keeping the voice concise and credible."
 msgstr "Compare this resume against this role URL and update keywords while keeping the voice concise and credible."
+
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "Complete candidate profile"
+msgstr "Complete candidate profile"
 
 #. Account deletion confirmation dialog confirm action in danger zone
 #. Create API key dialog acknowledgment action after copying
@@ -1051,6 +1082,10 @@ msgstr "Could not import candidate CV."
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
 msgid "Could not reach the AI provider. Please try again."
 msgstr "Could not reach the AI provider. Please try again."
+
+#: src/features/candidates/components/candidate-version-history.tsx
+msgid "Could not restore candidate version."
+msgstr "Could not restore candidate version."
 
 #: src/routes/agent/-components/agent-chat.tsx
 msgid "Could not restore this patch."
@@ -1309,6 +1344,10 @@ msgstr "Current Password"
 #: src/features/applications/components/application-detail-sheet.tsx
 msgid "Current stage"
 msgstr "Current stage"
+
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "Current version"
+msgstr "Current version"
 
 #: src/components/input/color-picker.tsx
 msgid "Custom"
@@ -1649,6 +1688,10 @@ msgstr "Edit keyword"
 msgid "Edit note"
 msgstr "Edit note"
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Edit the complete normalized candidate profile. Apply it here, then save the candidate."
+msgstr "Edit the complete normalized candidate profile. Apply it here, then save the candidate."
+
 #: src/features/resume/export/download-dialog.tsx
 msgid "Editable in Word, Google Docs, and Pages."
 msgstr "Editable in Word, Google Docs, and Pages."
@@ -1668,7 +1711,6 @@ msgid "Education"
 msgstr "Education"
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
-#: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Email"
 msgstr "Email"
 
@@ -1709,6 +1751,10 @@ msgstr "Enabling password protection..."
 #: src/dialogs/auth/enable-two-factor.tsx
 msgid "Enabling two-factor authentication…"
 msgstr "Enabling two-factor authentication…"
+
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "engineering, senior, referral"
+msgstr "engineering, senior, referral"
 
 #: src/libs/locale.ts
 msgid "English"
@@ -1754,6 +1800,10 @@ msgstr "Everything between your experience and your next role."
 msgid "Exit Fullscreen"
 msgstr "Exit Fullscreen"
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Expand"
+msgstr "Expand"
+
 #: src/dialogs/resume/sections/custom.tsx
 #: src/libs/resume/section-title.ts
 #: src/libs/resume/section.tsx
@@ -1796,10 +1846,6 @@ msgstr "Exported pipeline-flow.png"
 #: src/dialogs/candidate/import.tsx
 msgid "Extract candidate content from PDF, Word or JSON. Layout and styling are not imported as a template."
 msgstr "Extract candidate content from PDF, Word or JSON. Layout and styling are not imported as a template."
-
-#: src/routes/dashboard/candidates/$candidateId.tsx
-msgid "Extracted content"
-msgstr "Extracted content"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
 msgid "Failed to analyze resume."
@@ -2207,7 +2253,6 @@ msgid "Heading 6"
 msgstr "Heading 6"
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
-#: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Headline"
 msgstr "Headline"
 
@@ -2226,6 +2271,7 @@ msgstr "Here's your new API key"
 #: src/components/level/combobox.tsx
 #: src/dialogs/resume/sections/language.tsx
 #: src/dialogs/resume/sections/skill.tsx
+#: src/features/candidates/components/candidate-profile-editor.tsx
 msgid "Hidden"
 msgstr "Hidden"
 
@@ -2446,6 +2492,10 @@ msgstr "Interests"
 msgid "Invalid AI provider configuration."
 msgstr "Invalid AI provider configuration."
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Invalid candidate JSON."
+msgstr "Invalid candidate JSON."
+
 #: src/routes/_home/-sections/faq.tsx
 msgid "Is TNM HR Platform available in multiple languages?"
 msgstr "Is TNM HR Platform available in multiple languages?"
@@ -2589,6 +2639,10 @@ msgstr "Last analyzed on {updatedAtLabel}"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/statistics.tsx
 msgid "Last downloaded on {0}"
 msgstr "Last downloaded on {0}"
+
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "Last saved"
+msgstr "Last saved"
 
 #: src/routes/dashboard/applications/index.tsx
 msgid "Last updated"
@@ -2736,6 +2790,7 @@ msgstr "Loading template editor…"
 msgid "Loading threads…"
 msgstr "Loading threads…"
 
+#: src/features/candidates/components/candidate-version-history.tsx
 #: src/routes/builder/$resumeId/-components/version-history.tsx
 msgid "Loading…"
 msgstr "Loading…"
@@ -2746,7 +2801,6 @@ msgstr "Loading…"
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/applications/components/table-view.tsx
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
-#: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Location"
 msgstr "Location"
 
@@ -2884,7 +2938,6 @@ msgstr "Must start with https://"
 #: src/features/auth/pages/register.tsx
 #: src/features/settings/pages/profile.tsx
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
-#: src/routes/dashboard/candidates/$candidateId.tsx
 #: src/routes/dashboard/resumes/index.tsx
 msgid "Name"
 msgstr "Name"
@@ -2960,9 +3013,13 @@ msgstr "No custom templates yet."
 msgid "No data was returned from the AI provider."
 msgstr "No data was returned from the AI provider."
 
-#: src/routes/dashboard/candidates/$candidateId.tsx
-msgid "No list sections were extracted."
-msgstr "No list sections were extracted."
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "No data. Use Advanced JSON to add a new structured item."
+msgstr "No data. Use Advanced JSON to add a new structured item."
+
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "No data. Use the action above to add a structured item."
+msgstr "No data. Use the action above to add a structured item."
 
 #: src/features/settings/authentication/components/passkeys.tsx
 msgid "No passkeys registered yet."
@@ -2989,6 +3046,7 @@ msgstr "No resumes match your search."
 msgid "No resumes yet."
 msgstr "No resumes yet."
 
+#: src/features/candidates/components/candidate-version-history.tsx
 #: src/routes/builder/$resumeId/-components/version-history.tsx
 msgid "No saved versions yet."
 msgstr "No saved versions yet."
@@ -2996,6 +3054,10 @@ msgstr "No saved versions yet."
 #: src/features/applications/components/insights-view.tsx
 msgid "No source data yet."
 msgstr "No source data yet."
+
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "No source documents."
+msgstr "No source documents."
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/custom-styles.tsx
 msgid "No style rules yet."
@@ -3260,7 +3322,6 @@ msgstr "Persian"
 
 #: src/dialogs/resume/sections/reference.tsx
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
-#: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Phone"
 msgstr "Phone"
 
@@ -3330,6 +3391,7 @@ msgid "Portuguese (Portugal)"
 msgstr "Portuguese (Portugal)"
 
 #: src/dialogs/resume/sections/experience.tsx
+#: src/dialogs/resume/sections/project.tsx
 #: src/dialogs/resume/sections/reference.tsx
 msgid "Position"
 msgstr "Position"
@@ -3501,6 +3563,11 @@ msgstr "Remote, Hybrid, a city…"
 msgid "Remove"
 msgstr "Remove"
 
+#. placeholder {0}: humanize(label)
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Remove {0}"
+msgstr "Remove {0}"
+
 #. Screen reader label for button that removes a keyword chip. Variable is the current keyword text.
 #: src/components/input/chip-input.tsx
 msgid "Remove {chip}"
@@ -3584,9 +3651,17 @@ msgstr "Reset your password"
 msgid "Resetting your password..."
 msgstr "Resetting your password..."
 
+#: src/dialogs/resume/sections/project.tsx
+msgid "Responsibilities"
+msgstr "Responsibilities"
+
 #: src/routes/agent/-components/agent-chat.tsx
 msgid "Restore"
 msgstr "Restore"
+
+#: src/features/candidates/components/candidate-version-history.tsx
+msgid "Restore candidate version {version}?"
+msgstr "Restore candidate version {version}?"
 
 #: src/routes/agent/-components/agent-chat.tsx
 msgid "Restore the resume to before this patch? This will roll back this patch and any patches applied after it."
@@ -3595,6 +3670,10 @@ msgstr "Restore the resume to before this patch? This will roll back this patch 
 #: src/routes/builder/$resumeId/-components/version-history.tsx
 msgid "Restore this version?"
 msgstr "Restore this version?"
+
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "Restoring an older snapshot creates another version and preserves the full history."
+msgstr "Restoring an older snapshot creates another version and preserves the full history."
 
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/resume/export/download-dialog.tsx
@@ -3648,8 +3727,8 @@ msgid "Retry"
 msgstr "Retry"
 
 #: src/routes/dashboard/candidates/$candidateId.tsx
-msgid "Review candidate profile"
-msgstr "Review candidate profile"
+msgid "Review and edit every normalized field extracted from the source CV. Each save creates a new version."
+msgstr "Review and edit every normalized field extracted from the source CV. Each save creates a new version."
 
 #: src/routes/_home/-sections/features.tsx
 msgid "Review job fit, strengthen your writing, and surface the experience that matters most for each role."
@@ -3742,10 +3821,6 @@ msgstr "Save & Test Provider"
 msgid "Save & Upload"
 msgstr "Save & Upload"
 
-#: src/routes/dashboard/candidates/$candidateId.tsx
-msgid "Save candidate"
-msgstr "Save candidate"
-
 #: src/features/applications/components/application-form-sheet.tsx
 msgid "Save changes"
 msgstr "Save changes"
@@ -3774,6 +3849,10 @@ msgstr "Save Changes"
 msgid "Save draft"
 msgstr "Save draft"
 
+#: src/routes/dashboard/candidates/$candidateId.tsx
+msgid "Save new version"
+msgstr "Save new version"
+
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "Saved"
 msgstr "Saved"
@@ -3783,6 +3862,7 @@ msgid "Saving candidate profile..."
 msgstr "Saving candidate profile..."
 
 #: src/routes/builder/$resumeId/-components/header.tsx
+#: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Saving…"
 msgstr "Saving…"
 
@@ -3920,6 +4000,10 @@ msgstr "Sending password reset email..."
 #: src/routes/_home/-sections/ai-spotlight.tsx
 msgid "Senior Product Designer"
 msgstr "Senior Product Designer"
+
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Separate values with commas"
+msgstr "Separate values with commas"
 
 #: src/components/input/rich-input.tsx
 msgid "Separator"
@@ -4284,6 +4368,10 @@ msgstr "Strong fit for this role"
 msgid "Strong match"
 msgstr "Strong match"
 
+#: src/features/candidates/components/candidate-profile-editor.tsx
+msgid "Structured editor"
+msgstr "Structured editor"
+
 #: src/routes/dashboard/templates/$templateId.tsx
 msgid "Submit review"
 msgstr "Submit review"
@@ -4333,6 +4421,7 @@ msgstr "Table"
 #: src/dialogs/resume/index.tsx
 #: src/features/applications/components/application-form-sheet.tsx
 #: src/features/applications/components/table-view.tsx
+#: src/routes/dashboard/candidates/$candidateId.tsx
 msgid "Tags"
 msgstr "Tags"
 
@@ -4355,6 +4444,14 @@ msgstr "Tailoring failed."
 #: src/libs/locale.ts
 msgid "Tamil"
 msgstr "Tamil"
+
+#: src/dialogs/resume/sections/project.tsx
+msgid "Team size"
+msgstr "Team size"
+
+#: src/dialogs/resume/sections/project.tsx
+msgid "Technologies"
+msgstr "Technologies"
 
 #: src/libs/locale.ts
 msgid "Telugu"
@@ -4423,6 +4520,10 @@ msgstr "The API key will no longer be able to access your data after deletion. T
 msgid "The command you're looking for doesn't exist."
 msgstr "The command you're looking for doesn't exist."
 
+#: src/features/candidates/components/candidate-version-history.tsx
+msgid "The current data and all earlier versions will be kept. Restoring creates a new version."
+msgstr "The current data and all earlier versions will be kept. Restoring creates a new version."
+
 #. Error shown when AI parsing returns invalid resume structure during import
 #: src/dialogs/resume/import.tsx
 msgid "The imported file could not be parsed into a valid resume."
@@ -4475,10 +4576,6 @@ msgstr "There was a problem while generating the PDF, please try again."
 #: src/features/resume/export/use-resume-export.ts
 msgid "There was a problem while preparing your resume for printing, please try again."
 msgstr "There was a problem while preparing your resume for printing, please try again."
-
-#: src/routes/dashboard/candidates/$candidateId.tsx
-msgid "These fields were extracted from the candidate CV and can be corrected before creating CVs."
-msgstr "These fields were extracted from the candidate CV and can be corrected before creating CVs."
 
 #: src/routes/agent/-components/agent-chat.tsx
 msgid "Thinking"
@@ -4769,6 +4866,7 @@ msgid "Two-Factor Authentication QR Code"
 msgstr "Two-Factor Authentication QR Code"
 
 #: src/dialogs/resume/import.tsx
+#: src/features/candidates/components/candidate-profile-editor.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/design.tsx
 msgid "Type"
 msgstr "Type"
@@ -5040,6 +5138,7 @@ msgstr "Verifying password..."
 msgid "Verifying your email is required when resetting your password."
 msgstr "Verifying your email is required when resetting your password."
 
+#: src/features/candidates/components/candidate-version-history.tsx
 #: src/routes/builder/$resumeId/-components/version-history.tsx
 msgid "Version history"
 msgstr "Version history"

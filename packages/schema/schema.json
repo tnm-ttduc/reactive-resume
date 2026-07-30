@@ -588,9 +588,39 @@
 									"description": {
 										"type": "string",
 										"description": "The description of the project. This should be a HTML-formatted string."
+									},
+									"role": {
+										"type": "string",
+										"description": "The position or role held by the author while working on the project."
+									},
+									"teamSize": {
+										"type": "string",
+										"description": "The size or composition of the team that worked on the project."
+									},
+									"technologies": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "The technologies, tools, frameworks, and platforms used by the project."
+									},
+									"responsibilities": {
+										"type": "string",
+										"description": "The responsibilities and contributions of the author. This should be a HTML-formatted string."
 									}
 								},
-								"required": ["id", "hidden", "name", "period", "website", "description"],
+								"required": [
+									"id",
+									"hidden",
+									"name",
+									"period",
+									"website",
+									"description",
+									"role",
+									"teamSize",
+									"technologies",
+									"responsibilities"
+								],
 								"additionalProperties": false
 							},
 							"description": "The items to display in the projects section."
@@ -1664,9 +1694,39 @@
 										"description": {
 											"type": "string",
 											"description": "The description of the project. This should be a HTML-formatted string."
+										},
+										"role": {
+											"type": "string",
+											"description": "The position or role held by the author while working on the project."
+										},
+										"teamSize": {
+											"type": "string",
+											"description": "The size or composition of the team that worked on the project."
+										},
+										"technologies": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											},
+											"description": "The technologies, tools, frameworks, and platforms used by the project."
+										},
+										"responsibilities": {
+											"type": "string",
+											"description": "The responsibilities and contributions of the author. This should be a HTML-formatted string."
 										}
 									},
-									"required": ["id", "hidden", "name", "period", "website", "description"],
+									"required": [
+										"id",
+										"hidden",
+										"name",
+										"period",
+										"website",
+										"description",
+										"role",
+										"teamSize",
+										"technologies",
+										"responsibilities"
+									],
 									"additionalProperties": false
 								},
 								{

@@ -1950,6 +1950,10 @@ function RouteComponent() {
 	const selectedNode =
 		selectedComposerBlock || selectedComposerRepeat || selectedComposerLayout ? null : selectedContainerNode;
 	const isPageSelected = !selectedId && !selectedBlockId && !selectedRepeatId && !selectedLayoutId;
+	const itemInsertTarget =
+		selectedContainerNode?.type === "section" && selectedContainerNode.body
+			? `${nodeLabel(selectedContainerNode)}${hasSelectedComposerItem ? " · after selected item" : " · end of section"}`
+			: "Select a section first";
 	const previewSelection = useMemo<PreviewSelection>(
 		() => ({
 			nodeId: selectedId,
@@ -2683,7 +2687,7 @@ function RouteComponent() {
 
 			{template.compilerReport && <ImportDiagnostics report={template.compilerReport} />}
 
-			<div className="grid items-start gap-3 xl:grid-cols-[290px_minmax(400px,1fr)_300px]">
+			<div className="grid items-start gap-3 xl:grid-cols-[320px_minmax(400px,1fr)_320px]">
 				<Card className="h-fit xl:sticky xl:top-3">
 					<CardHeader>
 						<CardTitle className="text-base">
@@ -2876,9 +2880,13 @@ function RouteComponent() {
 							</div>
 						</div>
 						<Separator />
-						<div className="grid gap-2">
+						<div className="space-y-3 rounded-lg border bg-muted/30 p-3">
+							<div className="space-y-0.5">
+								<p className="font-medium text-sm">Add content</p>
+								<p className="text-muted-foreground text-xs">Destination: {itemInsertTarget}</p>
+							</div>
 							<div className="space-y-1">
-								<Label htmlFor="template-item-to-add">Item</Label>
+								<Label htmlFor="template-item-to-add">Content type</Label>
 								<div className="flex gap-2">
 									<select
 										id="template-item-to-add"
@@ -2900,15 +2908,16 @@ function RouteComponent() {
 										onClick={addComposerItem}
 									>
 										<PlusIcon />
-										<Trans>Add item</Trans>
+										<Trans>Add content</Trans>
 									</Button>
 								</div>
 								<p className="text-muted-foreground text-xs">
-									Select a section, layout, repeated item or content block to choose where the new item is inserted.
+									Select a section or one of its items to choose the insertion point.
 								</p>
 							</div>
+							<Separator />
 							<div className="space-y-1">
-								<Label htmlFor="template-section-to-add">Section</Label>
+								<Label htmlFor="template-section-to-add">New section</Label>
 								<div className="flex gap-2">
 									<select
 										id="template-section-to-add"
@@ -2925,7 +2934,7 @@ function RouteComponent() {
 									</select>
 									<Button size="sm" variant="outline" onClick={addNode}>
 										<PlusIcon />
-										<Trans>Add section</Trans>
+										<Trans>Add</Trans>
 									</Button>
 								</div>
 							</div>
