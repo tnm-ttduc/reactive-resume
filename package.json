@@ -1,7 +1,7 @@
 {
 	"name": "tnm-hr-platform",
 	"description": "TNM HR Platform helps users create, manage, and share professional resumes.",
-	"version": "5.2.5",
+	"version": "5.2.6",
 	"private": true,
 	"license": "MIT",
 	"packageManager": "pnpm@11.10.0",
