@@ -65,7 +65,9 @@ export const agentThread = pg.pgTable(
 			.text("user_id")
 			.notNull()
 			.references(() => user.id, { onDelete: "cascade" }),
-		aiProviderId: pg.text("ai_provider_id").references(() => aiProvider.id, { onDelete: "set null" }),
+		// Environment-backed providers use a stable virtual ID rather than a row in ai_providers.
+		// Keep this as an unconstrained reference so agent threads can persist either kind of provider.
+		aiProviderId: pg.text("ai_provider_id"),
 		sourceResumeId: pg.text("source_resume_id").references(() => resume.id, { onDelete: "set null" }),
 		workingResumeId: pg.text("working_resume_id").references(() => resume.id, { onDelete: "set null" }),
 		title: pg.text("title").notNull(),

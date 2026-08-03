@@ -1,0 +1,1 @@
+ALTER TABLE "agent_threads" DROP CONSTRAINT "agent_threads_ai_provider_id_ai_providers_id_fkey";
